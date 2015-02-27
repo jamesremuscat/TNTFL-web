@@ -1,7 +1,15 @@
 #!/usr/bin/env python
-from mako.template import Template
+from mako.lookup import TemplateLookup
+from mako import exceptions
 
-print "Content-Type: text/html"
-print
+tl = TemplateLookup(directories=['templates'])
 
-print(Template("hello ${data}!").render(data="world"))
+
+def serve_template(templatename, **kwargs):
+    mytemplate = tl.get_template(templatename)
+    print(mytemplate.render(**kwargs))
+
+try:
+    serve_template("index.mako")
+except:
+    print(exceptions.text_error_template().render())
