@@ -19,10 +19,14 @@ class TableFootballLadder(object):
         if game.redPlayer not in self.players:
             self.players[game.redPlayer] = Player(game.redPlayer)
         red = self.players[game.redPlayer]
+        red.goalsFor = red.goalsFor + game.redScore
+        red.goalsAgainst = red.goalsAgainst + game.blueScore
 
         if game.bluePlayer not in self.players:
             self.players[game.bluePlayer] = Player(game.bluePlayer)
         blue = self.players[game.bluePlayer]
+        blue.goalsFor = blue.goalsFor + game.blueScore
+        blue.goalsAgainst = blue.goalsAgainst + game.redScore
 
         predict = 1 / (1 + 10 ** ((red.elo - blue.elo) / 180))
         result = float(game.blueScore) / (game.blueScore + game.redScore)
@@ -54,6 +58,8 @@ class Player(object):
         self.name = name
         self.elo = 0.0
         self.games = 0
+        self.goalsFor = 0
+        self.goalsAgainst = 0
 
     def game(self, delta, time):
         self.elo += delta
