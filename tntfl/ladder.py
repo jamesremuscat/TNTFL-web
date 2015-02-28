@@ -29,12 +29,15 @@ class TableFootballLadder(object):
         result = float(game.blueScore) / (game.blueScore + game.redScore)
         delta = 25 * (result - predict)
 
+        game.skillChangeToBlue = delta
         blue.game(delta, game.time)
         red.game(-delta, game.time)
         self.games.append(game)
 
 
 class Game(object):
+    skillChangeToBlue = None
+
     def __init__(self, redPlayer, redScore, bluePlayer, blueScore, time):
         self.redPlayer = redPlayer.lower()
         self.redScore = int(redScore)
