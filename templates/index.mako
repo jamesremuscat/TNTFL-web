@@ -36,8 +36,8 @@
           <div class="col-md-4 blue-player">${game.bluePlayer}</div>
           </div>
           <div class="row">
-            <div class="col-md-6">${game.time}</div>
-            <div class="col-md-6">${game.skillChangeToBlue}</div>
+            <div class="col-md-6">${game.formatTime(game.time)}</div>
+            <div class="col-md-6">${"{:.3f}".format(game.skillChangeToBlue)}</div>
           </div>
         </div>
 % endfor

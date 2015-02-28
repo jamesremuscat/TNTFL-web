@@ -1,3 +1,6 @@
+from datetime import date, datetime, timedelta
+
+
 class TableFootballLadder(object):
 
     games = []
@@ -50,6 +53,18 @@ class Game(object):
 
     def __repr__(self):
         return "{redPlayer} {redScore}-{blueScore} {bluePlayer}".format(redPlayer=self.redPlayer, bluePlayer=self.bluePlayer, redScore=self.redScore, blueScore=self.blueScore)
+
+    @staticmethod
+    def formatTime(inTime):
+        time = datetime.fromtimestamp(float(inTime))
+        dateStr = time
+
+        if date.fromtimestamp(float(inTime)) == date.today():
+            dateStr = "%02d:%02d" % (time.hour, time.minute)
+        elif date.fromtimestamp(float(inTime)) > (date.today() - timedelta(7)):
+            dateStr = "%s %02d:%02d" % (("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")[time.weekday()], time.hour, time.minute)
+
+        return dateStr
 
 
 class Player(object):

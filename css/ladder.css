@@ -25,6 +25,14 @@ table.ladder tr:first-child td.ladder-position {
   margin: 10px 0;
 }
 
+.recent-game .red-player {
+  border-radius: 4px 0 0 4px;
+}
+
+.recent-game .blue-player {
+  border-radius: 0 4px 4px 0;
+}
+
 .red-player {
   background-color: red;
 }
