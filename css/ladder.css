@@ -1,0 +1,34 @@
+table.ladder {
+  font-size: x-large;
+}
+
+table.ladder td {
+  vertical-align: middle !important;
+}
+
+td.ladder-position {
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  width: 3em;
+  border-radius: 4px;
+  background-color: blue;
+}
+
+table.ladder tr:first-child td.ladder-position {
+  background-color:red;
+}
+
+.recent-game {
+  text-align: center;
+  font-size: x-large;
+  margin: 10px 0;
+}
+
+.red-player {
+  background-color: red;
+}
+
+.blue-player {
+  background-color: blue;
+}
