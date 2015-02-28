@@ -1,6 +1,3 @@
-from datetime import datetime
-
-
 class TableFootballLadder(object):
 
     games = []
