@@ -5,9 +5,13 @@ from mako import exceptions
 tl = TemplateLookup(directories=['templates'])
 
 
+from tntfl.ladder import TableFootballLadder
+t = TableFootballLadder("ladder.txt")
+
+
 def serve_template(templatename, **kwargs):
     mytemplate = tl.get_template(templatename)
-    print(mytemplate.render(**kwargs))
+    print(mytemplate.render(ladder=t, **kwargs))
 
 try:
     serve_template("index.mako")

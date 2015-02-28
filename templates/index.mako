@@ -1,2 +1,2 @@
 <%inherit file="html.mako" />
-Hello, world
+Ladder has ${len(ladder.games)} games
