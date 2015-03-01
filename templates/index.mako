@@ -15,8 +15,25 @@
       </div>
       <div class="panel-body">
         <table class="table table-striped table-hover ladder">
+        <tr>
+          <th>Pos</th>
+          <th>Player</th>
+          <th>For</th>
+          <th>Against</th>
+          <th>Games</th>
+          <th>GD</th>
+          <th>Skill</th>
+        </tr>
 % for player in sortedLadder:
-      <tr><td class="ladder-position">${loop.index + 1}</td><td>${player.name}</td><td>${"{:.3f}".format(player.elo)}</td></tr>
+      <tr>
+      <td class="ladder-position ${"ladder-first" if loop.index is 0 else "" }">${loop.index + 1}</td>
+      <td class="ladder-name">${player.name}</td>
+      <td class="ladder-stat">${"{:d}".format(player.goalsFor)}</td>
+      <td class="ladder-stat">${"{:d}".format(player.goalsAgainst)}</td>
+      <td class="ladder-stat">${"{:d}".format(player.games)}</td>
+      <td class="ladder-stat">${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst)}</td>
+      <td class="ladder-stat ladder-skill">${"{:.3f}".format(player.elo)}</td>
+      </tr>
 % endfor
         </table>
       </div>

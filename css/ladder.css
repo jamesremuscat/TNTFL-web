@@ -1,12 +1,17 @@
 table.ladder {
-  font-size: x-large;
 }
 
 table.ladder td {
   vertical-align: middle !important;
 }
 
+table.ladder th {
+  font-size: small;
+  text-align: center;
+}
+
 td.ladder-position {
+  font-size: x-large;
   font-weight: bold;
   text-align: center;
   color: white;
@@ -15,8 +20,17 @@ td.ladder-position {
   background-color: blue;
 }
 
-table.ladder tr:first-child td.ladder-position {
+td.ladder-first {
   background-color:red;
+}
+
+td.ladder-stat {
+  text-align: center;
+  font-size: large;
+}
+
+td.ladder-name, td.ladder-skill {
+  font-size: x-large;
 }
 
 .recent-game {
