@@ -47,6 +47,20 @@ td.ladder-name, td.ladder-skill {
   border-radius: 0 4px 4px 0;
 }
 
+.recent-game span.skill-change {
+  border-radius: 0 0 4px 4px;
+  display: inline-block;
+  padding: 1px 5px;
+}
+
+.skill-change-red {
+  background-color: #FFC0C0;
+}
+
+.skill-change-blue {
+  background-color: #C0C0FF;
+}
+
 .red-player {
   background-color: red;
   color: white;
