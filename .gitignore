@@ -57,3 +57,4 @@ target/
 # And the rest
 *.swp
 /ladder.txt
+/ladderExclude

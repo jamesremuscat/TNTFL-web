@@ -1,6 +1,21 @@
 from datetime import date, datetime, timedelta
 
 
+class ExclusionsFile(object):
+
+    def __init__(self, fileName):
+        self.exclusions = []
+        f = open(fileName, 'r')
+        for line in f.readlines():
+            self.exclusions.append(line.strip().lower())
+
+    def contains(self, name):
+        return (name in self.exclusions)
+
+
+exclusions = ExclusionsFile("ladderExclude")
+
+
 class TableFootballLadder(object):
 
     games = []
@@ -79,6 +94,9 @@ class Player(object):
     def game(self, delta, time):
         self.elo += delta
         self.games += 1
+
+    def isActive(self):
+        return (not exclusions.contains(self.name))
 
     def __str__(self):
         return self.__repr__()
