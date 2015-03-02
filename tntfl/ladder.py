@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+from tntfl.aks import CircularSkillBuffer
 
 
 class ExclusionsFile(object):
@@ -48,8 +49,8 @@ class TableFootballLadder(object):
         delta = 25 * (result - predict)
 
         game.skillChangeToBlue = delta
-        blue.game(delta, game.time)
-        red.game(-delta, game.time)
+        blue.game(game)
+        red.game(game)
         self.games.append(game)
 
 
@@ -90,8 +91,18 @@ class Player(object):
         self.games = 0
         self.goalsFor = 0
         self.goalsAgainst = 0
+        self.skillBuffer = CircularSkillBuffer(10)
 
-    def game(self, delta, time):
+    def game(self, game):
+        if self.name == game.redPlayer:
+            delta = -game.skillChangeToBlue
+            opponent = game.bluePlayer
+        elif self.name == game.bluePlayer:
+            delta = game.skillChangeToBlue
+            opponent = game.redPlayer
+        else:
+            return
+        self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta, 'played': opponent})
         self.elo += delta
         self.games += 1
 
