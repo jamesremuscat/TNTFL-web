@@ -1,4 +1,4 @@
-Content-Type: text/html
+<%namespace name="blocks" file="blocks.mako" inheritable="True"/>Content-Type: text/html
 
 <!DOCTYPE html>
 <html lang="en">
