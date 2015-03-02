@@ -14,21 +14,32 @@
         <h2 class="panel-title">Table Football Ladder</h2>
       </div>
       <div class="panel-body">
-        <table class="table table-striped table-hover ladder">
-        <tr>
-          <th>Pos</th>
-          <th>Player</th>
-          <th>For</th>
-          <th>Against</th>
-          <th>Games</th>
-          <th>GD</th>
-          <th>Overrated</th>
-          <th>Skill</th>
-        </tr>
+        <table class="table table-striped table-hover ladder" id="ladder">
+        <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Player</th>
+              <th>For</th>
+              <th>Against</th>
+              <th>Games</th>
+              <th>GD</th>
+              <th>Overrated</th>
+              <th class="headerSortUp">Skill</th>
+            </tr>
+        </thead>
+        <tbody>
 % for player in sortedLadder:
     ${self.blocks.render("ladderEntry", player=player, index=loop.index)}
 % endfor
+          </tbody>
         </table>
+        <script type="text/javascript">
+        $(document).ready(function() 
+    { 
+        $("#ladder").tablesorter(); 
+    } 
+); 
+        </script>
       </div>
     </div>
   </div>

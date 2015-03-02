@@ -70,3 +70,25 @@ td.ladder-name, td.ladder-skill {
   background-color: blue;
   color: white;
 }
+
+#ladder thead {
+  cursor: pointer;
+}
+#ladder thead tr th { 
+  font-weight: bold;
+}
+#ladder thead tr th span { 
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+}
+
+#ladder thead tr th.headerSortUp, #ladder thead tr th.headerSortDown {
+  background: #acc8dd;
+}
+
+#ladder thead tr th.headerSortUp span {
+  background-image: url('up-arrow.png');
+}
+#ladder thead tr th.headerSortDown span {
+  background-image: url('down-arrow.png');
+}
