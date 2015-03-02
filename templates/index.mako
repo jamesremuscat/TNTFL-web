@@ -26,15 +26,7 @@
           <th>Skill</th>
         </tr>
 % for player in sortedLadder:
-      <tr>
-      <td class="ladder-position ${"ladder-first" if loop.index is 0 else "" }">${loop.index + 1}</td>
-      <td class="ladder-name">${player.name}</td>
-      <td class="ladder-stat">${"{:d}".format(player.goalsFor)}</td>
-      <td class="ladder-stat">${"{:d}".format(player.goalsAgainst)}</td>
-      <td class="ladder-stat">${"{:d}".format(player.games)}</td>
-      <td class="ladder-stat">${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst)}</td>
-      <td class="ladder-stat ladder-skill">${"{:.3f}".format(player.elo)}</td>
-      </tr>
+    ${blocks.render("ladderEntry", player=player, index=loop.index)}
 % endfor
         </table>
       </div>
