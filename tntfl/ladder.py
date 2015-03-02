@@ -108,6 +108,12 @@ class Player(object):
 
     def isActive(self):
         return (not exclusions.contains(self.name))
+    
+    def overrated(self):
+        lastSkill = self.skillBuffer.lastSkill()
+        if self.skillBuffer.isFull:
+            return lastSkill - self.skillBuffer.avg()
+        return 0
 
     def __str__(self):
         return self.__repr__()

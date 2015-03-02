@@ -22,6 +22,7 @@
           <th>Against</th>
           <th>Games</th>
           <th>GD</th>
+          <th>Overrated</th>
           <th>Skill</th>
         </tr>
 % for player in sortedLadder:
