@@ -35,8 +35,10 @@ td.ladder-name, td.ladder-skill {
 
 .recent-game {
   text-align: center;
-  font-size: x-large;
   margin: 10px 0;
+}
+.recent-game-result {
+  font-size: x-large;
 }
 
 .recent-game .red-player {

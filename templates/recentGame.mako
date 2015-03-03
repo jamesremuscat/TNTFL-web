@@ -1,5 +1,5 @@
         <div class="recent-game container-fluid">
-          <div class="row">
+          <div class="row recent-game-result">
           <div class="col-md-4 red-player">${game.redPlayer}</div>
           <div class="col-md-4">${game.redScore} - ${game.blueScore}</div>
           <div class="col-md-4 blue-player">${game.bluePlayer}</div>
