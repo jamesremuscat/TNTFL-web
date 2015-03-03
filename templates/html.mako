@@ -21,6 +21,7 @@
 
     <script src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script> 
+    <script type="text/javascript" src="js/jquery.flot.min.js"></script> 
   </head>
   <body>
     ${self.body()}

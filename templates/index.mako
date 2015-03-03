@@ -25,6 +25,7 @@
               <th>GD</th>
               <th>Overrated</th>
               <th class="headerSortUp">Skill</th>
+              <th>Trend</th>
             </tr>
         </thead>
         <tbody>
@@ -36,7 +37,7 @@
         <script type="text/javascript">
         $(document).ready(function() 
     { 
-        $("#ladder").tablesorter(); 
+        $("#ladder").tablesorter({'headers': { 8: { 'sorter': false}}}); 
     } 
 ); 
         </script>
