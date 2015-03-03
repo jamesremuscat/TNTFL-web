@@ -77,18 +77,18 @@ td.ladder-name, td.ladder-skill {
 #ladder thead tr th { 
   font-weight: bold;
 }
-#ladder thead tr th span { 
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
-}
 
 #ladder thead tr th.headerSortUp, #ladder thead tr th.headerSortDown {
-  background: #acc8dd;
+  background: #C0C0FF;
+  background-position: right center;
+  background-repeat: no-repeat;
+  border-radius: 4px 4px 0 0;
 }
 
-#ladder thead tr th.headerSortUp span {
-  background-image: url('up-arrow.png');
+#ladder thead tr th.headerSortUp {
+    background-image: url(asc.gif);
 }
-#ladder thead tr th.headerSortDown span {
-  background-image: url('down-arrow.png');
+
+#ladder thead tr th.headerSortDown {
+    background-image: url(desc.gif);
 }
