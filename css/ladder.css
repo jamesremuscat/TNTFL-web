@@ -61,11 +61,11 @@ div.ladder-trend {
   padding: 1px 5px;
 }
 
-.skill-change-red {
+.skill-change-red, .game-entry .red {
   background-color: #FFC0C0;
 }
 
-.skill-change-blue {
+.skill-change-blue, .game-entry .blue {
   background-color: #C0C0FF;
 }
 
@@ -100,4 +100,16 @@ div.ladder-trend {
 
 #ladder thead tr th.headerSortDown {
     background-image: url(desc.gif);
+}
+
+.game-entry input {
+  text-align: center;
+}
+
+.game-entry .player {
+  width: 6em;
+}
+
+.game-entry .score {
+  width: 3em;
 }
