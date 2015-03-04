@@ -97,6 +97,8 @@ class Player(object):
         self.name = name
         self.elo = 0.0
         self.games = 0
+        self.wins = 0
+        self.losses = 0
         self.goalsFor = 0
         self.goalsAgainst = 0
         self.skillBuffer = CircularSkillBuffer(10)
@@ -105,9 +107,17 @@ class Player(object):
         if self.name == game.redPlayer:
             delta = -game.skillChangeToBlue
             opponent = game.bluePlayer
+            if game.redScore > game.blueScore:
+                self.wins += 1
+            elif game.redScore < game.blueScore:
+                self.losses += 1
         elif self.name == game.bluePlayer:
             delta = game.skillChangeToBlue
             opponent = game.redPlayer
+            if game.redScore < game.blueScore:
+                self.wins += 1
+            elif game.redScore > game.blueScore:
+                self.losses += 1
         else:
             return
         self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta, 'played': opponent})

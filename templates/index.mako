@@ -41,6 +41,8 @@
               <th>For</th>
               <th>Against</th>
               <th>Games</th>
+              <th>Wins</th>
+              <th>Losses</th>
               <th>GD</th>
               <th>Overrated</th>
               <th class="headerSortUp">Skill</th>
@@ -56,7 +58,7 @@
         <script type="text/javascript">
         $(document).ready(function() 
     { 
-        $("#ladder").tablesorter({'headers': { 8: { 'sorter': false}}}); 
+        $("#ladder").tablesorter({'headers': { 10: { 'sorter': false}}}); 
     } 
 ); 
         </script>
