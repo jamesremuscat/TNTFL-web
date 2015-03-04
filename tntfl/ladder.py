@@ -116,7 +116,7 @@ class Player(object):
 
     def isActive(self):
         return (not exclusions.contains(self.name))
-    
+
     def overrated(self):
         lastSkill = self.skillBuffer.lastSkill()
         if self.skillBuffer.isFull:
