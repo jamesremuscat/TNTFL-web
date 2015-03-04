@@ -23,6 +23,7 @@ class TableFootballLadder(object):
     players = {}
 
     def __init__(self, ladderFile):
+        self.ladderFile = ladderFile
         ladder = open(ladderFile, 'r')
         for line in ladder.readlines():
             gameLine = line.split()
@@ -30,6 +31,7 @@ class TableFootballLadder(object):
                 # Red player, red score, blue player, blue score, time
                 game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], gameLine[4])
                 self.addGame(game)
+        ladder.close()
 
     def addGame(self, game):
         if game.redPlayer not in self.players:
@@ -52,6 +54,12 @@ class TableFootballLadder(object):
         blue.game(game)
         red.game(game)
         self.games.append(game)
+
+    def addAndWriteGame(self, game):
+        self.addGame(game)
+        ladder = open(self.ladderFile, 'a')
+        ladder.write("\n%s %s %s %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time))
+        ladder.close()
 
 
 class Game(object):
