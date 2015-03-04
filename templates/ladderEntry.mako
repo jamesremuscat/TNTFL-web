@@ -18,12 +18,8 @@ trendColour = "#0000FF" if trend[0][1] < trend[size - 1][1] else "#FF0000";
       <td class="ladder-stat ladder-trend"><div id="${player.name}_trend" class="ladder-trend">&nbsp;</div></td>
       <script type="text/javascript">
         $(function() {
-
-      var d3 = ${trend};
-
-      $.plot("#${player.name}_trend", [ d3 ], {'legend' : {show: false}, 'xaxis': {show: false}, 'yaxis': {show: false}, 'grid': {'show': false}, 'series': {'shadowSize': 0}, 'colors': ['${trendColour}']});
-
-  });
+          $.plot("#${player.name}_trend", [ ${trend} ], {'legend' : {show: false}, 'xaxis': {show: false}, 'yaxis': {show: false}, 'grid': {'show': false}, 'series': {'shadowSize': 0}, 'colors': ['${trendColour}']});
+        });
 
   
       </script>
