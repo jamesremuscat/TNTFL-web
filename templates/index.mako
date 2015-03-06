@@ -1,7 +1,6 @@
 <%! title = "Table Football Ladder 3.0" %>
 <%inherit file="html.mako" />
 <%
-  sortedLadder = sorted([p for p in ladder.players.values() if p.isActive()], key=lambda x: x.elo, reverse=True)
   recentGames = ladder.games[-10:]
   recentGames.reverse()
 %>
@@ -50,7 +49,7 @@
             </tr>
         </thead>
         <tbody>
-% for player in sortedLadder:
+% for player in ladder.getPlayers():
     ${self.blocks.render("ladderEntry", player=player, index=loop.index)}
 % endfor
           </tbody>

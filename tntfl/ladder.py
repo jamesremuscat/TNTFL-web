@@ -61,6 +61,9 @@ class TableFootballLadder(object):
         ladder.write("\n%s %s %s %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time))
         ladder.close()
 
+    def getPlayers(self):
+        return sorted([p for p in self.players.values() if p.isActive()], key=lambda x: x.elo, reverse=True)
+
 
 class Game(object):
     skillChangeToBlue = None
