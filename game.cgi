@@ -25,5 +25,5 @@ if "method" in form:
                 serve_template("json/game.mako", game=game)
                 found = True
         if not found:
-            print "404 Not Found"
+            print "Status: 404 Not Found"
             print
