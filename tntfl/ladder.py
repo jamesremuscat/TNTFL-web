@@ -119,7 +119,7 @@ class Player(object):
     def __init__(self, name):
         self.name = name
         self.elo = 0.0
-        self.games = 0
+        self.games = []
         self.wins = 0
         self.losses = 0
         self.goalsFor = 0
@@ -145,7 +145,7 @@ class Player(object):
             return
         self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta, 'played': opponent})
         self.elo += delta
-        self.games += 1
+        self.games.append(game)
 
     def isActive(self):
         return (not exclusions.contains(self.name))
