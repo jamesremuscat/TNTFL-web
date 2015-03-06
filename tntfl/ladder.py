@@ -87,8 +87,6 @@ class TableFootballLadder(object):
 
 class Game(object):
     skillChangeToBlue = None
-    bluePosChange = None
-    redPosChange = None
 
     def __init__(self, redPlayer, redScore, bluePlayer, blueScore, time):
         self.redPlayer = redPlayer.lower()
