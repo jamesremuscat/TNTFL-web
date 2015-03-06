@@ -26,9 +26,10 @@
   <body>
     <nav class="navbar navbar-default">
       <div class="container-fluid">
-        <div class="navbar-header">
-          <h3 class="navbar-text">Table Football Ladder</h3>
-        </div>
+        <p class="navbar-text tntfl-header">Table Football Ladder</p>
+        <ul class="nav navbar-nav">
+        <li><a href="${self.attr.base}">Home</a></li>
+      </ul>
     
         <form class="navbar-form navbar-right game-entry" method="post" action="game/add">
           <div class="form-group">
