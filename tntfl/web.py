@@ -1,3 +1,5 @@
+import cgi
+
 from mako.lookup import TemplateLookup
 from mako import exceptions
 
@@ -9,8 +11,13 @@ def serve_template(templatename, **kwargs):
 
 
 def get_template(templatename, **kwargs):
-    mytemplate = tl.get_template(templatename)
+    form = cgi.FieldStorage()
+    if "view" in form and form["view"].value == "json":
+        template = "json/" + templatename
+    else:
+        template = templatename
     try:
+        mytemplate = tl.get_template(template)
         return mytemplate.render(**kwargs)
     except:
         return exceptions.text_error_template().render()
