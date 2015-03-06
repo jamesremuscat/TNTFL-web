@@ -22,7 +22,7 @@
       </div>
       <div class="panel-body">
 % for game in recentGames:
-    ${self.blocks.render("recentGame", game=game)}
+    ${self.blocks.render("recentGame", game=game, base=self.attr.base)}
 % endfor
       </div>
     </div>
