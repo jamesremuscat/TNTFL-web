@@ -16,5 +16,6 @@ def serve_template(templatename, **kwargs):
 
 
 def redirect_302(redirectionTo):
-    print "302 " + redirectionTo
+    print "Status: 302 Found"
+    print "Location: " + redirectionTo
     print

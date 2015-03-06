@@ -16,9 +16,8 @@ if "method" in form:
             if "view" in form and form["view"].value == "json":
                 serve_template("json/game.mako", game=game)
             else:
-                redirect_302("index.cgi")
+                redirect_302("../")
     elif form["method"].value == "view" and "game" in form:
-        print "AAA"
         gameTime = form["game"].value
         found = False
         for game in ladder.games:

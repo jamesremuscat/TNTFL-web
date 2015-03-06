@@ -12,7 +12,7 @@
       <h3 class="navbar-text">Table Football Ladder</h3>
     </div>
 
-    <form class="navbar-form navbar-right game-entry" method="post" action="game.cgi?method=add">
+    <form class="navbar-form navbar-right game-entry" method="post" action="game/add">
       <div class="form-group">
         <input type="text" name="redPlayer" class="form-control red player" placeholder="Red">
         <input type="text" name="redScore" class="form-control red score" placeholder="0" maxlength="2"> - <input type="text" name="blueScore" class="form-control blue score" placeholder="0" maxlength="2">
