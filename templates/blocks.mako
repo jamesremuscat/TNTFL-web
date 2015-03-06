@@ -1,9 +1,6 @@
 <%def name="render(templateFile, **kwargs)">
 <%
-from mako.lookup import TemplateLookup
-from mako import exceptions
-tl = TemplateLookup(directories=['templates'])
-mytemplate = tl.get_template(templateFile + ".mako")
+from tntfl.web import get_template
 %>
-    ${mytemplate.render(ladder=ladder, **kwargs)}
+  ${get_template(templateFile + ".mako", ladder=ladder, **kwargs)}
 </%def>
