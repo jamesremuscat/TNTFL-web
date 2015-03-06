@@ -20,6 +20,19 @@ td.ladder-position {
   background-color: blue;
 }
 
+td.ladder-position.inactive {
+  background-color: #C0C0C0;
+}
+
+tr.inactive {
+  color: #B0B0B0;
+  font-style: italic;
+}
+
+.inactive {
+  display: none;
+}
+
 td.ladder-first {
   background-color:red;
 }
@@ -34,8 +47,8 @@ td.ladder-name, td.ladder-skill {
 }
 
 div.ladder-trend {
-  width:100%;
-  height: 100%;
+  width:3em;
+  height: 2em;
   display: inline-block;
 }
 

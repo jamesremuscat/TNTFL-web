@@ -49,11 +49,21 @@
             </tr>
         </thead>
         <tbody>
+<% rank = 0 %>
 % for player in ladder.getPlayers():
-    ${self.blocks.render("ladderEntry", player=player, index=loop.index)}
+  % if player.isActive():
+    ${self.blocks.render("ladderEntry", player=player, index=rank)}
+    <% rank += 1 %>
+  % else:
+    ${self.blocks.render("ladderEntry", player=player, index=-1)}
+  % endif
 % endfor
           </tbody>
         </table>
+        <div class="controls form">
+          <button class="button_active form-control" onclick="$('.inactive').show(); $('.button_active').hide();">Show inactive</button>
+          <button class="form-control inactive" onclick="$('.inactive').hide(); $('.button_active').show();">Hide inactive</button>
+        </div>
         <script type="text/javascript">
         $(document).ready(function() 
     { 

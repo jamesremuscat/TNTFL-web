@@ -62,7 +62,7 @@ class TableFootballLadder(object):
         ladder.close()
 
     def getPlayers(self):
-        return sorted([p for p in self.players.values() if p.isActive()], key=lambda x: x.elo, reverse=True)
+        return sorted([p for p in self.players.values()], key=lambda x: x.elo, reverse=True)
 
 
 class Game(object):
