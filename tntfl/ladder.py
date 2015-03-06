@@ -51,9 +51,29 @@ class TableFootballLadder(object):
         delta = 25 * (result - predict)
 
         game.skillChangeToBlue = delta
+
+        bluePosBefore = -1
+        redPosBefore = -1
+
+        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive()], key=lambda x: x.elo, reverse=True)):
+            if player.name == game.bluePlayer:
+                bluePosBefore = index
+            elif player.name == game.redPlayer:
+                redPosBefore = index
+
         blue.game(game)
         red.game(game)
         self.games.append(game)
+
+        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive()], key=lambda x: x.elo, reverse=True)):
+            if player.name == game.bluePlayer:
+                bluePosAfter = index
+            elif player.name == game.redPlayer:
+                redPosAfter = index
+        if bluePosBefore > 0:
+            game.bluePosChange = bluePosBefore - bluePosAfter  # It's this way around because a rise in position is to a lower numbered rank.
+        if redPosBefore > 0:
+            game.redPosChange = redPosBefore - redPosAfter
 
     def addAndWriteGame(self, game):
         self.addGame(game)
@@ -67,6 +87,8 @@ class TableFootballLadder(object):
 
 class Game(object):
     skillChangeToBlue = None
+    bluePosChange = None
+    redPosChange = None
 
     def __init__(self, redPlayer, redScore, bluePlayer, blueScore, time):
         self.redPlayer = redPlayer.lower()
