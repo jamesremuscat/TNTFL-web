@@ -24,6 +24,27 @@
     <script type="text/javascript" src="js/jquery.flot.min.js"></script> 
   </head>
   <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <h3 class="navbar-text">Table Football Ladder</h3>
+        </div>
+    
+        <form class="navbar-form navbar-right game-entry" method="post" action="game/add">
+          <div class="form-group">
+            <input type="text" name="redPlayer" class="form-control red player" placeholder="Red">
+            <input type="text" name="redScore" class="form-control red score" placeholder="0" maxlength="2"> - <input type="text" name="blueScore" class="form-control blue score" placeholder="0" maxlength="2">
+            <input type="text" name="bluePlayer" class="form-control blue player" placeholder="Blue">
+            <script type="text/javascript">
+              $(".red.score").change(function() {
+                $(".blue.score").val(10 - $(".red.score").val());
+              })
+            </script>
+          </div>
+          <button type="submit" class="btn btn-default">Add game <span class="glyphicon glyphicon-triangle-right"></span></button>
+        </form>
+      </div><!-- /.container-fluid -->
+    </nav>
     ${self.body()}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
