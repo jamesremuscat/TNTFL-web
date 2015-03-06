@@ -5,4 +5,6 @@ RewriteEngine on
 RewriteRule ^game(.cgi)?/add game.cgi?method=add [QSA]
 RewriteRule ^game(.cgi)?/([0-9]+) game.cgi?method=view&game=$2 [QSA]
 
+RewriteRule ^player(.cgi)?/([a-zA-Z]+) player.cgi?player=$2 [QSA]
+
 RewriteRule (.*)/json$ $1?view=json [QSA,END]
