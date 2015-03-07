@@ -1,5 +1,5 @@
 <tr>
-<td class="ladder-name">${stat.opponent}</td>
+<td class="ladder-name"><a href="${base}player/${stat.opponent}">${stat.opponent}</a></td>
 <td class="ladder-stat">${stat.games}</td>
 <td class="ladder-stat">${stat.wins}</td>
 <td class="ladder-stat">${stat.draws}</td>

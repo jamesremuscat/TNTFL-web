@@ -84,12 +84,12 @@ div.ladder-trend {
   background-color: #C0C0FF;
 }
 
-.red-player {
+.red-player, .red-player a {
   background-color: red;
   color: white;
 }
 
-.blue-player {
+.blue-player, .blue-player a {
   background-color: blue;
   color: white;
 }

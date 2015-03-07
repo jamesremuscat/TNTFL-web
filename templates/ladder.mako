@@ -18,10 +18,10 @@
 <% rank = 0 %>
 % for player in ladder.getPlayers():
   % if player.isActive():
-    ${blocks.render("ladderEntry", player=player, index=rank)}
+    ${blocks.render("ladderEntry", player=player, index=rank, base=base)}
     <% rank += 1 %>
   % else:
-    ${blocks.render("ladderEntry", player=player, index=-1)}
+    ${blocks.render("ladderEntry", player=player, index=-1, base=base)}
   % endif
 % endfor
           </tbody>

@@ -11,7 +11,7 @@
   <div class="col-md-8">
     <div class="panel panel-default">
       <div class="panel-body">
-        ${self.blocks.render("ladder")}
+        ${self.blocks.render("ladder", base=self.attr.base)}
       </div>
     </div>
   </div>
