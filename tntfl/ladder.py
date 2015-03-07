@@ -164,3 +164,28 @@ class Player(object):
 
     def __repr__(self):
         return self.name + ":" + str(self.elo)
+
+
+class PerPlayerStat(object):
+    games = 0
+    goalsFor = 0
+    goalsAgainst = 0
+    skillChange = 0
+    wins = 0
+    losses = 0
+    draws = 0
+
+    def __init__(self, opponent):
+        self.opponent = opponent
+
+    def append(self, goalsFor, goalsAgainst, skillChange):
+        self.games += 1
+        self.goalsFor += goalsFor
+        self.goalsAgainst += goalsAgainst
+        self.skillChange += skillChange
+        if goalsFor > goalsAgainst:
+            self.wins += 1
+        elif goalsFor < goalsAgainst:
+            self.losses += 1
+        else:
+            self.draws += 1

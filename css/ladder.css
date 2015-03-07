@@ -94,26 +94,26 @@ div.ladder-trend {
   color: white;
 }
 
-#ladder th.header {
+.ladder th.header {
   cursor: pointer;
 }
 
-#ladder thead tr th { 
+.ladder thead tr th { 
   font-weight: bold;
 }
 
-#ladder thead tr th.headerSortUp, #ladder thead tr th.headerSortDown {
+.ladder thead tr th.headerSortUp, .ladder thead tr th.headerSortDown {
   background: #C0C0FF;
   background-position: right center;
   background-repeat: no-repeat;
   border-radius: 4px 4px 0 0;
 }
 
-#ladder thead tr th.headerSortUp {
+.ladder thead tr th.headerSortUp {
     background-image: url(asc.gif);
 }
 
-#ladder thead tr th.headerSortDown {
+.ladder thead tr th.headerSortDown {
     background-image: url(desc.gif);
 }
 
