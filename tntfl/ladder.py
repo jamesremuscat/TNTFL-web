@@ -84,6 +84,9 @@ class TableFootballLadder(object):
     def getPlayers(self):
         return sorted([p for p in self.players.values()], key=lambda x: x.elo, reverse=True)
 
+    def getPlayerRank(self, playerName):
+        return [p.name for p in self.getPlayers() if p.isActive()].index(playerName)
+
 
 class Game(object):
     skillChangeToBlue = None

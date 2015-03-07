@@ -128,3 +128,16 @@ div.ladder-trend {
 .game-entry .score {
   width: 3em;
 }
+
+table.player-stats {
+  width: 100%;
+}
+
+table.player-stats td, table.player-stats th {
+  padding: 8px;
+  width: auto;
+}
+
+table.player-stats th {
+  width: 20%;
+}
