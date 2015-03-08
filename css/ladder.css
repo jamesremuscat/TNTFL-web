@@ -95,6 +95,11 @@ div.ladder-trend {
   color: white;
 }
 
+.yellow-stripe, .yellow-stripe a {
+  background-color: #FFFF00;
+  color: black;
+}
+
 .ladder th.header {
   cursor: pointer;
 }
