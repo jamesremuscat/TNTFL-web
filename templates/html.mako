@@ -32,7 +32,7 @@
         <li><a href="${self.attr.base}">Home</a></li>
       </ul>
     
-        <form class="navbar-form navbar-right game-entry" method="post" action="game/add">
+        <form class="navbar-form navbar-right game-entry" method="post" action="${self.attr.base}game/add">
           <div class="form-group">
             <input type="text" name="redPlayer" class="form-control red player" placeholder="Red">
             <input type="text" name="redScore" class="form-control red score" placeholder="0" maxlength="2"> - <input type="text" name="blueScore" class="form-control blue score" placeholder="0" maxlength="2">
