@@ -29,7 +29,7 @@ class TableFootballLadder(object):
             gameLine = line.split()
             if len(gameLine) == 5:
                 # Red player, red score, blue player, blue score, time
-                game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], gameLine[4])
+                game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], int(gameLine[4]))
                 self.addGame(game)
         ladder.close()
 
