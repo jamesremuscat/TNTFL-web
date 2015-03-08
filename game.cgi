@@ -10,8 +10,10 @@ form = cgi.FieldStorage()
 if "method" in form:
     ladder = TableFootballLadder("ladder.txt")
     if form["method"].value == "add":
-        if "bluePlayer" in form and "redPlayer" in form and "redScore" in form and "blueScore" in form:
-            game = Game(form["redPlayer"].value, form["redScore"].value, form["bluePlayer"].value, form["blueScore"].value, time())
+        if "bluePlayer" in form and "redPlayer" in form:
+            redScore = form["redScore"].value if "redScore" in form else 0
+            blueScore = form["blueScore"].value if "blueScore" in form else 0
+            game = Game(form["redPlayer"].value, redScore, form["bluePlayer"].value, blueScore, time())
             ladder.addAndWriteGame(game)
             if "view" in form and form["view"].value == "json":
                 serve_template("game.mako", game=game)
