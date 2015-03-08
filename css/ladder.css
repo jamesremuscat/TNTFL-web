@@ -3,6 +3,18 @@ p.tntfl-header {
   font-weight: bold;
 }
 
+h1.panel-title {
+  font-weight: bold;
+  text-align: center;
+  font-size: 22pt;
+}
+
+h2.panel-title {
+  font-weight: bold;
+  text-align: center;
+  font-size: 18pt;
+}
+
 table.ladder td {
   vertical-align: middle !important;
 }
