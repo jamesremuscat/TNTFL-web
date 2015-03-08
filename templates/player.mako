@@ -20,53 +20,6 @@
 
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h2 class="panel-title">Per-Player Stats</h2>
-      </div>
-<%
-
-from tntfl.ladder import PerPlayerStat
-
-pps = {}
-
-for game in player.games:
-    if game.redPlayer == player.name:
-        if game.bluePlayer not in pps:
-            pps[game.bluePlayer] = PerPlayerStat(game.bluePlayer)
-        pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
-    elif game.bluePlayer == player.name:
-        if game.redPlayer not in pps:
-            pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
-        pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
-%>
-      <div class="panel-body">
-        <table class="table table-striped table-hover ladder" id="pps">
-          <thead>
-              <tr>
-                <th>Opponent</th>
-                <th>Games</th>
-                <th>Wins</th>
-                <th>Draws</th>
-                <th>Losses</th>
-                <th>Goals scored</th>
-                <th>Goals conceded</th>
-                <th>GD</th>
-                <th>Skill change</th>
-              </tr>
-          </thead>
-          <tbody>
-% for stat in pps.values():
-  ${self.blocks.render("perPlayerStat", stat=stat, base=self.attr.base)}
-% endfor          
-          </tbody>
-        </table>
-        <script type="text/javascript">
-        $("#pps").tablesorter({sortList:[[8,1]]}); 
-        </script>
-      </div>
-    </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
         <h2 class="panel-title">Skill Chart</h2>
       </div>
       <div class="panel-body">
@@ -112,6 +65,54 @@ for game in player.games:
         </script>
       </div>
     </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">Per-Player Stats</h2>
+      </div>
+<%
+
+from tntfl.ladder import PerPlayerStat
+
+pps = {}
+
+for game in player.games:
+    if game.redPlayer == player.name:
+        if game.bluePlayer not in pps:
+            pps[game.bluePlayer] = PerPlayerStat(game.bluePlayer)
+        pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
+    elif game.bluePlayer == player.name:
+        if game.redPlayer not in pps:
+            pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
+        pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
+%>
+      <div class="panel-body">
+        <table class="table table-striped table-hover ladder" id="pps">
+          <thead>
+              <tr>
+                <th>Opponent</th>
+                <th>Games</th>
+                <th>Wins</th>
+                <th>Draws</th>
+                <th>Losses</th>
+                <th>Goals scored</th>
+                <th>Goals conceded</th>
+                <th>GD</th>
+                <th>Skill change</th>
+              </tr>
+          </thead>
+          <tbody>
+% for stat in pps.values():
+  ${self.blocks.render("perPlayerStat", stat=stat, base=self.attr.base)}
+% endfor          
+          </tbody>
+        </table>
+        <script type="text/javascript">
+        $("#pps").tablesorter({sortList:[[8,1]]}); 
+        </script>
+      </div>
+    </div>
+    
   </div>
   <div class="col-md-4">
     <div class="panel panel-default">
