@@ -141,3 +141,7 @@ table.player-stats td, table.player-stats th {
 table.player-stats th {
   width: 20%;
 }
+
+#playerchart {
+  height: 200px;
+}

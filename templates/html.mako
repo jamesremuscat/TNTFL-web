@@ -22,6 +22,7 @@
     <script src="${self.attr.base}js/jquery.min.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/jquery.tablesorter.min.js"></script> 
     <script type="text/javascript" src="${self.attr.base}js/jquery.flot.min.js"></script> 
+    <script type="text/javascript" src="${self.attr.base}js/jquery.flot.time.min.js"></script> 
   </head>
   <body>
     <nav class="navbar navbar-default">

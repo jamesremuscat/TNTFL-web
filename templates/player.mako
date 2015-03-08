@@ -70,7 +70,46 @@ for game in player.games:
         <h2 class="panel-title">Skill Chart</h2>
       </div>
       <div class="panel-body">
-        Soon&trade;
+        <div id="playerchart">&nbsp;</div>
+<%
+skill = 0
+skillHistory = []
+for game in player.games:
+  if game.redPlayer == player.name:
+    skill -= game.skillChangeToBlue
+    skillHistory.append([game.time * 1000, skill])
+  elif game.bluePlayer == player.name:
+    skill += game.skillChangeToBlue
+    skillHistory.append([game.time * 1000, skill])
+%>
+        <script type="text/javascript">
+          $(function() {
+            $.plot("#playerchart", [ ${skillHistory} ], {'legend' : {show: false}, 'xaxis': {mode: 'time'}, grid: {hoverable: true}, colors: ['#0000FF']});
+          });
+          
+          $("<div id='tooltip'></div>").css({
+      position: "absolute",
+      display: "none",
+      border: "1px solid #fdd",
+      padding: "2px",
+      "background-color": "#fee",
+      opacity: 0.80
+    }).appendTo("body");
+
+    $("#playerchart").bind("plothover", function (event, pos, item) {
+
+        if (item) {
+          var x = item.datapoint[0].toFixed(2),
+            y = item.datapoint[1].toFixed(2);
+
+          $("#tooltip").html(y)
+            .css({top: item.pageY+5, left: item.pageX+5})
+            .fadeIn(200);
+        } else {
+          $("#tooltip").hide();
+        }
+    });
+        </script>
       </div>
     </div>
   </div>
