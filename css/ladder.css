@@ -29,9 +29,10 @@ td.ladder-position.inactive {
 tr.inactive {
   color: #B0B0B0;
   font-style: italic;
+  display: none;
 }
 
-.inactive {
+button.inactive {
   display: none;
 }
 

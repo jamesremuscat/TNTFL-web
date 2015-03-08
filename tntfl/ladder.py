@@ -85,7 +85,10 @@ class TableFootballLadder(object):
         return sorted([p for p in self.players.values()], key=lambda x: x.elo, reverse=True)
 
     def getPlayerRank(self, playerName):
-        return [p.name for p in self.getPlayers() if p.isActive()].index(playerName)
+        ranked = [p.name for p in self.getPlayers() if p.isActive()]
+        if playerName in ranked:
+            return ranked.index(playerName)
+        return -1
 
 
 class Game(object):
