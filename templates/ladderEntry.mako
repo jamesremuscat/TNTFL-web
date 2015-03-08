@@ -24,7 +24,7 @@ trendColour = "#0000FF" if trend[0][1] < trend[size - 1][1] else "#FF0000";
       <td class="ladder-stat">${"{:d}".format(len(player.games))}</td>
       <td class="ladder-stat">${"{:d}".format(player.wins)}</td>
       <td class="ladder-stat">${"{:d}".format(player.losses)}</td>
-      <td class="ladder-stat">${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst)}</td>
+      <td class="ladder-stat">${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"}</td>
       <td class="ladder-stat">${"{:.3f}".format(player.overrated())}</td>
       <td class="ladder-stat ladder-skill">${"{:.3f}".format(player.elo)}</td>
       <td class="ladder-stat ladder-trend"><div id="${player.name | idsafe}_trend" class="ladder-trend">&nbsp;</div></td>
