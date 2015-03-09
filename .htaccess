@@ -1,10 +1,13 @@
 Options -MultiViews
 
 RewriteEngine on
+RewriteBase /~jrem/tntfl
 
-RewriteRule ^game(.cgi)?/add game.cgi?method=add [QSA]
-RewriteRule ^game(.cgi)?/([0-9]+) game.cgi?method=view&game=$2 [QSA]
+RewriteRule ^game(.cgi)?/([^/]+)$  game/$2/   [R]
+RewriteRule ^game(.cgi)?/add/ game.cgi?method=add [QSA]
+RewriteRule ^game(.cgi)?/([0-9]+)/ game.cgi?method=view&game=$2 [QSA]
 
-RewriteRule ^player(.cgi)?/([a-zA-Z]+) player.cgi?player=$2 [QSA]
+RewriteRule ^player(.cgi)?/([^/]+)$  player/$2/   [R]
+RewriteRule ^player(.cgi)?/([a-zA-Z]+)/ player.cgi?player=$2 [QSA]
 
-RewriteRule (.*)/json$ $1?view=json [QSA,END]
+RewriteRule (.*)/json$ $1?view=json [L]

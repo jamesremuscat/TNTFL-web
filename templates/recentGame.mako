@@ -1,8 +1,8 @@
         <div class="recent-game container-fluid">
           <div class="row recent-game-result">
-          <div class="col-md-4 red-player ${"yellow-stripe" if game.redScore == 10 and game.blueScore == 0 else ""}"><a href="${base}player/${game.redPlayer}">${game.redPlayer}</a></div>
+          <div class="col-md-4 red-player ${"yellow-stripe" if game.redScore == 10 and game.blueScore == 0 else ""}"><a href="${base}player/${game.redPlayer}/">${game.redPlayer}</a></div>
           <div class="col-md-4 ${"yellow-stripe" if game.blueScore == 10 or game.redScore == 10 else ""}">${game.redScore} - ${game.blueScore}</div>
-          <div class="col-md-4 blue-player ${"yellow-stripe" if game.blueScore == 10 and game.redScore == 0 else ""}"><a href="${base}player/${game.bluePlayer}">${game.bluePlayer}</a></div>
+          <div class="col-md-4 blue-player ${"yellow-stripe" if game.blueScore == 10 and game.redScore == 0 else ""}"><a href="${base}player/${game.bluePlayer}/">${game.bluePlayer}</a></div>
           </div>
           <div class="row">
             <div class="col-md-4">${"<span class=\"skill-change skill-change-red\">{:+.3f}</span>".format(-game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}</div>
