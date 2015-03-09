@@ -20,7 +20,7 @@ if "method" in form:
             else:
                 redirect_302("../")
     elif form["method"].value == "view" and "game" in form:
-        gameTime = form["game"].value
+        gameTime = int(form["game"].value)
         found = False
         for game in ladder.games:
             if game.time == gameTime and not found:
