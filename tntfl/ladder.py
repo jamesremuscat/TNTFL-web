@@ -87,7 +87,7 @@ class TableFootballLadder(object):
     def getPlayerRank(self, playerName):
         ranked = [p.name for p in self.getPlayers() if p.isActive()]
         if playerName in ranked:
-            return ranked.index(playerName)
+            return ranked.index(playerName) + 1
         return -1
 
 
