@@ -30,6 +30,7 @@
         <p class="navbar-text tntfl-header">Table Football Ladder</p>
         <ul class="nav navbar-nav">
         <li><a href="${self.attr.base}">Home</a></li>
+        <li><a href="${self.attr.base}api">API</a></li>
       </ul>
     
         <form class="navbar-form navbar-right game-entry" method="post" action="${self.attr.base}game/add">
