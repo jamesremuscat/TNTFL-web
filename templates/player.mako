@@ -12,7 +12,7 @@
         <table class="player-stats">
           <tr><th>Skill</th><td class="ladder-skill">${"{:.3f}".format(player.elo)}</td><th>Current Ranking</th>
 <% rank = ladder.getPlayerRank(player.name) %>
-          <td class="ladder-position ${"inactive" if rank == -1 else ""}">${rank if rank != -1 else "-"}</td>
+          <td class="ladder-position ${"inactive" if rank == -1 else "ladder-first" if rank == 1 else ""}">${rank if rank != -1 else "-"}</td>
           <th>Overrated</th><td>${"{:.3f}".format(player.overrated())}</td></tr>
           <tr><th>Total games</th><td>${len(player.games)}</td></tr>
           <tr><th>Wins</th><td>${player.wins}</td><th>Losses</th><td>${player.losses}</td><th>Draws</th><td>${len(player.games) - player.wins - player.losses}</td></tr>
