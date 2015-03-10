@@ -110,7 +110,7 @@ class Game(object):
     @staticmethod
     def formatTime(inTime):
         time = datetime.fromtimestamp(float(inTime))
-        dateStr = time
+        dateStr = time.strftime("%Y-%m-%d %H:%M")
 
         if date.fromtimestamp(float(inTime)) == date.today():
             dateStr = "%02d:%02d" % (time.hour, time.minute)
