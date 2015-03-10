@@ -160,6 +160,12 @@ table.player-stats th {
   width: 20%;
 }
 
+td.side-preference {
+  text-align: center;
+  color: white;
+  border-radius: 4px;
+}
+
 #playerchart {
   height: 200px;
 }

@@ -131,11 +131,13 @@ class Player(object):
         self.goalsFor = 0
         self.goalsAgainst = 0
         self.skillBuffer = CircularSkillBuffer(10)
+        self.gamesAsRed = 0
 
     def game(self, game):
         if self.name == game.redPlayer:
             delta = -game.skillChangeToBlue
             opponent = game.bluePlayer
+            self.gamesAsRed += 1
             if game.redScore > game.blueScore:
                 self.wins += 1
             elif game.redScore < game.blueScore:
