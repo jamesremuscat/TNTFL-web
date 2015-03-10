@@ -132,6 +132,9 @@ class Player(object):
         self.goalsAgainst = 0
         self.skillBuffer = CircularSkillBuffer(10)
         self.gamesAsRed = 0
+        self.highestSkill = {"time": 0, "skill": 0}
+        self.lowestSkill = {"time": 0, "skill": 0}
+        self.mostSignificantGame = None
 
     def game(self, game):
         if self.name == game.redPlayer:
@@ -153,6 +156,16 @@ class Player(object):
             return
         self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta, 'played': opponent})
         self.elo += delta
+
+        if (self.elo > self.highestSkill["skill"]):
+            self.highestSkill = {"time": game.time, "skill": self.elo}
+
+        if (self.elo < self.lowestSkill["skill"]):
+            self.lowestSkill = {"time": game.time, "skill": self.elo}
+
+        if self.mostSignificantGame is None or abs(delta) > abs(self.mostSignificantGame.skillChangeToBlue):
+            self.mostSignificantGame = game
+
         self.games.append(game)
 
     def isActive(self):

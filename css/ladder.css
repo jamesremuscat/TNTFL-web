@@ -154,6 +154,7 @@ table.player-stats {
 table.player-stats td, table.player-stats th {
   padding: 8px;
   width: auto;
+  vertical-align: top;
 }
 
 table.player-stats th {
