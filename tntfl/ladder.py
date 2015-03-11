@@ -1,3 +1,4 @@
+import time
 from datetime import date, datetime, timedelta
 from tntfl.aks import CircularSkillBuffer
 
@@ -122,6 +123,9 @@ class Game(object):
 
 class Player(object):
 
+    # Number of days inactivity after which players are considered inactive
+    DAYS_INACTIVE = 60
+
     def __init__(self, name):
         self.name = name
         self.elo = 0.0
@@ -169,7 +173,8 @@ class Player(object):
         self.games.append(game)
 
     def isActive(self):
-        return (not exclusions.contains(self.name))
+        #  Using date.* classes is too slow here
+        return (not exclusions.contains(self.name)) and len(self.games) > 0 and (self.games[-1].time > time.time() - (60 * 60 * 24 * self.DAYS_INACTIVE))
 
     def overrated(self):
         lastSkill = self.skillBuffer.lastSkill()
