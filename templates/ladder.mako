@@ -1,4 +1,4 @@
-<%namespace name="blocks" file="blocks.mako" /><table class="table table-striped table-hover ladder" id="ladder">
+<%namespace name="blocks" file="blocks.mako" /><table class="table table-hover ladder" id="ladder">
         <thead>
             <tr>
               <th>Pos</th>
