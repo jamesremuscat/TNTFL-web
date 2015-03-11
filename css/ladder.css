@@ -67,6 +67,10 @@ div.ladder-trend {
   display: inline-block;
 }
 
+.inactive div.ladder-trend {
+  opacity: 0.3;
+}
+
 .recent-game {
   text-align: center;
   margin: 10px 0;
