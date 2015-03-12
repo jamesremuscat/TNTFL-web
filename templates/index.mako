@@ -6,7 +6,6 @@
 %>
 
 <div class="container-fluid">
-<p>Ladder has ${len(ladder.games)} games</p>
 <div class="row">
   <div class="col-md-8">
     <div class="panel panel-default">
