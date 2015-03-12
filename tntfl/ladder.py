@@ -23,6 +23,9 @@ class TableFootballLadder(object):
     games = []
     players = {}
 
+    highSkill = {'player': None, 'skill': 0, time: 0}
+    lowSkill = {'player': None, 'skill': 0, time: 0}
+
     def __init__(self, ladderFile):
         self.ladderFile = ladderFile
         ladder = open(ladderFile, 'r')
@@ -75,6 +78,23 @@ class TableFootballLadder(object):
             game.bluePosChange = bluePosBefore - bluePosAfter  # It's this way around because a rise in position is to a lower numbered rank.
         if redPosBefore > 0:
             game.redPosChange = redPosBefore - redPosAfter
+
+        if blue.elo > self.highSkill['skill']:
+            self.highSkill['skill'] = blue.elo
+            self.highSkill['player'] = blue
+            self.highSkill['time'] = game.time
+        if red.elo > self.highSkill['skill']:
+            self.highSkill['skill'] = red.elo
+            self.highSkill['player'] = red
+            self.highSkill['time'] = game.time
+        if blue.elo < self.lowSkill['skill']:
+            self.lowSkill['skill'] = blue.elo
+            self.lowSkill['player'] = blue
+            self.lowSkill['time'] = game.time
+        if red.elo < self.lowSkill['skill']:
+            self.lowSkill['skill'] = red.elo
+            self.lowSkill['player'] = red
+            self.lowSkill['time'] = game.time
 
     def addAndWriteGame(self, game):
         self.addGame(game)
