@@ -76,3 +76,4 @@ for player in ladder.players.values():
       </div>
     </div>
   </div>
+</div>
