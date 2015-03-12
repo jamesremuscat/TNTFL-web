@@ -12,5 +12,6 @@ RewriteRule ^player(.cgi)?/([a-zA-Z]+)/ player.cgi?player=$2 [QSA]
 
 RewriteRule ^ladder(.cgi)?/? ladder.cgi 
 RewriteRule ^api(.cgi)?/? api.cgi 
+RewriteRule ^stats(.cgi)?/? stats.cgi 
 
 RewriteRule (.*)/json$ $1?view=json [L]
