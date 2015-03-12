@@ -98,8 +98,10 @@ class Game(object):
     def __init__(self, redPlayer, redScore, bluePlayer, blueScore, time):
         self.redPlayer = redPlayer.lower()
         self.redScore = int(redScore)
+        self.redPosChange = 0
         self.bluePlayer = bluePlayer.lower()
         self.blueScore = int(blueScore)
+        self.bluePosChange = 0
         self.time = time
 
     def __str__(self):
