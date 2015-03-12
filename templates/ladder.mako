@@ -1,4 +1,6 @@
-<%namespace name="blocks" file="blocks.mako" /><table class="table table-hover ladder" id="ladder">
+<%namespace name="blocks" file="blocks.mako" />
+<script type="text/javascript" src="js/jquery.floatThead.min.js"></script>
+      <table class="table table-hover ladder" id="ladder">
         <thead>
             <tr>
               <th>Pos</th>
@@ -31,5 +33,6 @@
           <button class="form-control inactive" onclick="$('.inactive').hide(); $('.button_active').show();">Hide inactive</button>
         </div>
         <script type="text/javascript">
-        $("#ladder").tablesorter({'headers': { 10: { 'sorter': false}}}); 
+        $("#ladder").tablesorter({'headers': { 10: { 'sorter': false}}});
+        $("#ladder").floatThead();
         </script>

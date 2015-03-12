@@ -120,6 +120,10 @@ div.ladder-trend {
   cursor: pointer;
 }
 
+.ladder thead {
+  background-color: white;
+}
+
 .ladder thead tr th { 
   font-weight: bold;
 }
