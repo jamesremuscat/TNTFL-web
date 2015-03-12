@@ -175,7 +175,7 @@ td.side-preference {
   border-radius: 4px;
 }
 
-#playerchart {
+#playerchart, #gamesPerDay {
   height: 200px;
 }
 
