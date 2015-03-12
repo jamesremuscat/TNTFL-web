@@ -21,8 +21,22 @@
           <tr><th>Total games</th><td>${len(player.games)}</td><td colspan="2"></td><th>Side Preference</th><td class="side-preference" style="background-color: rgb(${int(round(redness * 255))}, 0, ${int(round((1 - redness) * 255))})">${"{:.2%}".format(redness if redness >= 0.5 else (1-redness))} ${"red" if redness >= 0.5 else "blue"}</td></tr>
           <tr><th>Wins</th><td>${player.wins}</td><th>Losses</th><td>${player.losses}</td><th>Draws</th><td>${len(player.games) - player.wins - player.losses}</td></tr>
           <tr><th>Goals for</th><td>${player.goalsFor}</td><th>Goals against</th><td>${player.goalsAgainst}</td><th>GD/game</th><td>${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"}</td></tr>
-          <tr><th>Highest ever skill</th><td>${"{:.3f}".format(player.highestSkill['skill'])}<br />at <a href="${self.attr.base}game/${player.highestSkill['time']}/">${Game.formatTime(player.highestSkill['time'])}</a></td>
-          <th>Lowest ever skill</th><td>${"{:.3f}".format(player.lowestSkill['skill'])}<br />at <a href="${self.attr.base}game/${player.lowestSkill['time']}/">${Game.formatTime(player.lowestSkill['time'])}</a></td></tr>
+          <tr>
+          <th>Highest ever skill</th>
+          <td>${"{:.3f}".format(player.highestSkill['skill'])}<br />
+% if player.highestSkill['time'] > 0:
+          at <a href="${self.attr.base}game/${player.highestSkill['time']}/">${Game.formatTime(player.highestSkill['time'])}</a></td>
+% else:
+          before first game</td>
+% endif
+          <th>Lowest ever skill</th>
+          <td>${"{:.3f}".format(player.lowestSkill['skill'])}<br />
+% if player.lowestSkill['time'] > 0:
+          at <a href="${self.attr.base}game/${player.lowestSkill['time']}/">${Game.formatTime(player.lowestSkill['time'])}</a></td>
+% else:
+          before first game</td>
+% endif
+          </tr>
         </table>
       </div>
     </div>
