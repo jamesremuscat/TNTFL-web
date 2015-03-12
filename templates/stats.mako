@@ -22,7 +22,7 @@ for player in ladder.players.values():
           <h2 class="panel-title">Stats</h2>
         </div>
         <div class="panel-body">
-          <dl>
+          <dl class="dl-horizontal">
             <dt>Total games</dt>
             <dd>${len(ladder.games)}</dd>
             <dt>Total goals by red</dt>
