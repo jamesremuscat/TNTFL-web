@@ -7,6 +7,7 @@ h1.panel-title {
   font-weight: bold;
   text-align: center;
   font-size: 22pt;
+  padding: 5px 0;
 }
 
 h2.panel-title {
@@ -79,11 +80,11 @@ div.ladder-trend {
   font-size: x-large;
 }
 
-.recent-game .red-player {
+.recent-game .red-player, .headtohead .red-player {
   border-radius: 4px 0 0 4px;
 }
 
-.recent-game .blue-player {
+.recent-game .blue-player, .headtohead .blue-player {
   border-radius: 0 4px 4px 0;
 }
 
@@ -195,4 +196,13 @@ td.side-preference {
   padding-left: 20px;
   border-radius: 0 4px 4px 0;
   background-color: #F5F5F5;
+}
+
+.headtohead td, .headtohead th {
+  width: 33%;
+  text-align: center;
+}
+
+.headtohead .red-player, .headtohead .blue-player {
+  font-weight: bold;
 }

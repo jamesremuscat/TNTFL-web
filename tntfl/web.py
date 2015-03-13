@@ -27,3 +27,8 @@ def redirect_302(redirectionTo):
     print "Status: 302 Found"
     print "Location: " + redirectionTo
     print
+
+
+def fail_404():
+    print "Status: 404 Not Found"
+    print
