@@ -1,10 +1,5 @@
 <%! title = "Table Football Ladder 3.0" %>
 <%inherit file="html.mako" />
-<%
-  recentGames = ladder.games[-10:]
-  recentGames.reverse()
-%>
-
 <div class="container-fluid">
 <div class="row">
   <div class="col-md-8">
@@ -54,9 +49,7 @@
         <h2 class="panel-title">Recent Games</h2>
       </div>
       <div class="panel-body">
-% for game in recentGames:
-    ${self.blocks.render("recentGame", game=game, base=self.attr.base)}
-% endfor
+        ${self.blocks.render("recent", base=self.attr.base)}
       </div>
     </div>
   </div>
