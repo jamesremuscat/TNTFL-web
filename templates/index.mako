@@ -13,7 +13,32 @@
         ${self.blocks.render("ladder", base=self.attr.base)}
       </div>
       <script type="text/javascript">
-        setInterval(function() {$("#ladderHolder").load("ladder.cgi")}, 60000);
+        function getSortOptions(tableQuery) {
+          //returns an array of a tablesorter sort order
+          var hdrorder = new Array();
+          var hdrs = $(tableQuery);
+          var arrayindex = 0;
+          hdrs.each(function (index) {
+              if ($(this).hasClass('headerSortDown')) {
+                  hdrorder[arrayindex] = [index, 0];
+                  arrayindex++;
+              }
+              else if ($(this).hasClass('headerSortUp')) {
+                  hdrorder[arrayindex] = [index, 1];
+                  arrayindex++;
+              }       
+          });
+          
+          if (hdrorder.length == 0 && tableQuery != ".floatThead-table th") {
+        	  return getSortOptions(".floatThead-table th")
+          }
+          
+          return hdrorder;
+        }
+        setInterval(function() {
+        	sortOpts = getSortOptions("#ladder th");
+        	$("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0][0] + "&sortOrder="+sortOpts[0][1])
+        	}, 60000);
       </script>
     </div>
   </div>

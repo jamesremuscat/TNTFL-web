@@ -1,19 +1,28 @@
+<%page args="sortCol=9, sortOrder=1"/>
 <%! from datetime import datetime %>
 <%namespace name="blocks" file="blocks.mako" />
+<%
+headings = [
+    "Pos",
+    "Player",
+    "For",
+    "Against",
+    "Games",
+    "Wins",
+    "Losses",
+    "GD",
+    "Overrated",
+    "Skill",
+    "Trend"
+]
+
+%>
       <table class="table table-hover ladder" id="ladder">
         <thead>
             <tr>
-              <th>Pos</th>
-              <th>Player</th>
-              <th>For</th>
-              <th>Against</th>
-              <th>Games</th>
-              <th>Wins</th>
-              <th>Losses</th>
-              <th>GD</th>
-              <th>Overrated</th>
-              <th class="headerSortUp">Skill</th>
-              <th>Trend</th>
+% for heading in headings:
+              <th class="${"headerSortUp" if sortCol==loop.index and sortOrder==1 else "headerSortDown" if sortCol==loop.index else ""}">${heading}</th>
+% endfor
             </tr>
         </thead>
         <tbody>
@@ -34,6 +43,6 @@
           <button class="form-control inactive" onclick="$('.inactive').hide(); $('.button_active').show();">Hide inactive</button>
         </div>
         <script type="text/javascript">
-        $("#ladder").tablesorter({'headers': { 10: { 'sorter': false}}});
+        $("#ladder").tablesorter({'sortList': [[${sortCol},${sortOrder}]], 'headers': { 10: { 'sorter': false}}});
         $("#ladder").floatThead();
         </script>
