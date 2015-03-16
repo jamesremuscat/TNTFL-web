@@ -48,9 +48,12 @@
       <div class="panel-heading">
         <h2 class="panel-title">Recent Games</h2>
       </div>
-      <div class="panel-body">
+      <div class="panel-body" id="recentHolder">
         ${self.blocks.render("recent", base=self.attr.base)}
       </div>
+      <script type="text/javascript">
+      setInterval(function() {$("#recentHolder").load("recent.cgi")}, 600000);
+      </script>
     </div>
   </div>
 </div>
