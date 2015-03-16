@@ -1,5 +1,5 @@
+<%! from datetime import datetime %>
 <%namespace name="blocks" file="blocks.mako" />
-<script type="text/javascript" src="js/jquery.floatThead.min.js"></script>
       <table class="table table-hover ladder" id="ladder">
         <thead>
             <tr>
@@ -28,6 +28,7 @@
 % endfor
           </tbody>
         </table>
+        <p>Updated at ${datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
         <div class="controls form">
           <button class="button_active form-control" onclick="$('.inactive').show(); $('.button_active').hide();">Show inactive</button>
           <button class="form-control inactive" onclick="$('.inactive').hide(); $('.button_active').show();">Hide inactive</button>

@@ -9,9 +9,12 @@
 <div class="row">
   <div class="col-md-8">
     <div class="panel panel-default">
-      <div class="panel-body">
+      <div class="panel-body" id="ladderHolder">
         ${self.blocks.render("ladder", base=self.attr.base)}
       </div>
+      <script type="text/javascript">
+        setInterval(function() {$("#ladderHolder").load("ladder.cgi")}, 60000);
+      </script>
     </div>
   </div>
   <div class="col-md-4">
