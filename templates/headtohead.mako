@@ -57,6 +57,8 @@ ${self.playerPanel(player1, "red")}
   draws = 0
   player1goals = 0
   player2goals = 0
+  player1doughnuts = 0
+  player2doughnuts = 0
   
   for game in sharedGames:
       if game.redPlayer == player1.name:
@@ -65,12 +67,20 @@ ${self.playerPanel(player1, "red")}
           player2goals += game.blueScore
           if game.redScore > game.blueScore:
               player1wins += 1
+          if game.redScore == 10 and game.blueScore == 0:
+              player1doughnuts += 1
+          if game.redScore == 0 and game.blueScore == 10:
+              player2doughnuts += 1
       elif game.bluePlayer == player1.name:
           swingToPlayer1 += game.skillChangeToBlue
           player1goals += game.blueScore
           player2goals += game.redScore
           if game.redScore < game.blueScore:
               player1wins += 1
+          if game.redScore == 0 and game.blueScore == 10:
+              player1doughnuts += 1
+          if game.redScore == 10 and game.blueScore == 0:
+              player2doughnuts += 1
       if game.redScore == game.blueScore:
           draws += 1
 player2wins = len(sharedGames) - draws - player1wins
@@ -102,6 +112,11 @@ player2wins = len(sharedGames) - draws - player1wins
                <td ${"class=\"red-player\"" if player1wins >= player2wins else ""}>${player1wins}</td>
                <th>Wins</th>
                <td ${"class=\"blue-player\"" if player2wins >= player1wins else ""}>${player2wins}</td>
+             </tr>
+             <tr>
+               <td ${"class=\"red-player\"" if player1doughnuts >= player2doughnuts else ""}>${player1doughnuts}</td>
+               <th>10-0 Wins</th>
+               <td ${"class=\"blue-player\"" if player2doughnuts >= player1doughnuts else ""}>${player2doughnuts}</td>
              </tr>
              <tr>
                <td ${"class=\"red-player\"" if player1goals >= player2goals else ""}>${player1goals}</td>
