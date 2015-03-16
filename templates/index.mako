@@ -44,7 +44,7 @@
         		showInactive = 0
         	}
         	$("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0][0] + "&sortOrder="+sortOpts[0][1] + "&showInactive=" + showInactive)
-        	}, 60000);
+        	}, 600000);
       </script>
     </div>
   </div>
