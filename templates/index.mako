@@ -37,7 +37,13 @@
         }
         setInterval(function() {
         	sortOpts = getSortOptions("#ladder th");
-        	$("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0][0] + "&sortOrder="+sortOpts[0][1])
+        	if ($("tr.inactive")[0].style.display == "table-row") {
+        		showInactive = 1
+        	}
+        	else {
+        		showInactive = 0
+        	}
+        	$("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0][0] + "&sortOrder="+sortOpts[0][1] + "&showInactive=" + showInactive)
         	}, 60000);
       </script>
     </div>

@@ -1,4 +1,4 @@
-<%page args="sortCol=9, sortOrder=1"/>
+<%page args="sortCol=9, sortOrder=1, showInactive=0"/>
 <%! from datetime import datetime %>
 <%namespace name="blocks" file="blocks.mako" />
 <%
@@ -45,4 +45,8 @@ headings = [
         <script type="text/javascript">
         $("#ladder").tablesorter({'sortList': [[${sortCol},${sortOrder}]], 'headers': { 10: { 'sorter': false}}});
         $("#ladder").floatThead();
+        // ${showInactive}
+% if showInactive == "1":
+        $('.inactive').show(); $('.button_active').hide();
+% endif
         </script>
