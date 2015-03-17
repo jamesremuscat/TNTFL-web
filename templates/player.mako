@@ -114,6 +114,7 @@ for game in player.games:
           <thead>
               <tr>
                 <th>Opponent</th>
+                <th></th>
                 <th>Games</th>
                 <th>Wins</th>
                 <th>Draws</th>
@@ -126,12 +127,12 @@ for game in player.games:
           </thead>
           <tbody>
 % for stat in pps.values():
-  ${self.blocks.render("perPlayerStat", stat=stat, base=self.attr.base)}
+  ${self.blocks.render("perPlayerStat", stat=stat, player=player, base=self.attr.base)}
 % endfor          
           </tbody>
         </table>
         <script type="text/javascript">
-        $("#pps").tablesorter({sortList:[[8,1]]}); 
+        $("#pps").tablesorter({sortList:[[9,1]], 'headers': { 1: { 'sorter': false}}}); 
         </script>
       </div>
     </div>
