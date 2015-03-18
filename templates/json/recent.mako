@@ -5,6 +5,6 @@
   recentGames.reverse()
 %>
 % for game in recentGames:
-    {"href": "${self.attr.base}game/${game.time}/json"}${"," if loop.index < len(recentGames) - 1 else ""}
+    ${self.blocks.render("game", game=game, base=self.attr.base)}${"," if loop.index < len(recentGames) - 1 else ""}
 % endfor
 ]
