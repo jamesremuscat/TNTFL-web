@@ -19,6 +19,13 @@
               </ul>
             </li>
             <li>
+              <b>Player games:</b> player/<i>playername</i>/games/json
+              <ul>
+                <li>Example: <a href="${self.attr.base}player/jrem/games/json">${self.attr.base}player/jrem/games/json</a></li>
+                <li>Contains full game data, rather than href links; because of this, responses could be quite large.</li>
+              </ul>
+            </li>
+            <li>
               <b>Game:</b> game/<i>gameid</i>/json
               <ul>
                 <li>Example: <a href="${self.attr.base}game/1223308996/json">${self.attr.base}game/1223308996/json</a></li>
@@ -45,9 +52,9 @@
               </ul>
             </li>
             <li>
-              <b>Recent games:</b> <a href="${self.attr.base}games/recent/json">games/recent/json</a>
+              <b>Recent games:</b> <a href="${self.attr.base}/recent/json">/recent/json</a>
               <ul>
-                <li>Coming soon.</li>
+                <li>Gives hrefs to the ten most recent games.</li>
               </ul>
             </li>
           </ul>
