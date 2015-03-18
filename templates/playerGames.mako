@@ -1,5 +1,5 @@
 <%! title = "Table Football Ladder 3.0" %>
-<%! base = "../../" %>
+<%! base = "../../../" %>
 <%! from tntfl.ladder import Game %>
 <%inherit file="html.mako" />
 <div class="container-fluid">
