@@ -12,9 +12,5 @@
     "wins": ${player.wins},
     "losses": ${player.losses}
   },
-  "games" : [
-% for game in player.games:
-    { "href": "${base}game/${game.time}/" }${"," if loop.index < len (player.games) - 1 else ""}
-% endfor
-  ]
+  "games" : { "href" : "games/json" }
 }
