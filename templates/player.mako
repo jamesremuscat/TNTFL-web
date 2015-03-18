@@ -151,6 +151,7 @@ recentGames.reverse()
 % for game in recentGames:
     ${self.blocks.render("game", game=game, base=self.attr.base)}
 % endfor
+        <a class="pull-right" href="games/">See all games</a>
       </div>
     </div>
     <div class="panel panel-default">
