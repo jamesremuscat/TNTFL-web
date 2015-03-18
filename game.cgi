@@ -16,7 +16,7 @@ if "method" in form:
             game = Game(form["redPlayer"].value, redScore, form["bluePlayer"].value, blueScore, time())
             ladder.addAndWriteGame(game)
             if "view" in form and form["view"].value == "json":
-                serve_template("game.mako", game=game)
+                serve_template("wrappedGame.mako", game=game)
             else:
                 redirect_302("../")
     elif form["method"].value == "view" and "game" in form:
@@ -24,7 +24,7 @@ if "method" in form:
         found = False
         for game in ladder.games:
             if game.time == gameTime and not found:
-                serve_template("game.mako", game=game)
+                serve_template("wrappedGame.mako", game=game)
                 found = True
         if not found:
             print "Status: 404 Not Found"
