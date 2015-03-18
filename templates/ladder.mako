@@ -1,16 +1,17 @@
-<%page args="sortCol=9, sortOrder=1, showInactive=0"/>
+<%page args="sortCol=10, sortOrder=1, showInactive=0"/>
 <%! from datetime import datetime %>
 <%namespace name="blocks" file="blocks.mako" />
 <%
 headings = [
     "Pos",
     "Player",
-    "For",
-    "Against",
     "Games",
     "Wins",
+    "Draws",
     "Losses",
-    "GD",
+    "For",
+    "Against",
+    "Avg. GD",
     "Overrated",
     "Skill",
     "Trend"
@@ -43,7 +44,7 @@ headings = [
           <button class="form-control inactive" onclick="$('.inactive').hide(); $('.button_active').show();">Hide inactive</button>
         </div>
         <script type="text/javascript">
-        $("#ladder").tablesorter({'sortList': [[${sortCol},${sortOrder}]], 'headers': { 10: { 'sorter': false}}});
+        $("#ladder").tablesorter({'sortList': [[${sortCol},${sortOrder}]], 'headers': { 11: { 'sorter': false}}});
         $("#ladder").floatThead();
         // ${showInactive}
 % if showInactive == "1":

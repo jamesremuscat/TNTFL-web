@@ -19,11 +19,12 @@ trendColour = "#0000FF" if trend[0][1] < trend[size - 1][1] else "#FF0000";
       <td class="ladder-position ${"ladder-first" if index is 0 else "" }">${index + 1}</td>
 % endif
       <td class="ladder-name"><a href="${base}player/${player.name}/">${player.name}</a></td>
-      <td class="ladder-stat">${"{:d}".format(player.goalsFor)}</td>
-      <td class="ladder-stat">${"{:d}".format(player.goalsAgainst)}</td>
       <td class="ladder-stat">${"{:d}".format(len(player.games))}</td>
       <td class="ladder-stat">${"{:d}".format(player.wins)}</td>
       <td class="ladder-stat">${"{:d}".format(player.losses)}</td>
+      <td class="ladder-stat">${"{:d}".format(len(player.games) - player.wins - player.losses)}</td>
+      <td class="ladder-stat">${"{:d}".format(player.goalsFor)}</td>
+      <td class="ladder-stat">${"{:d}".format(player.goalsAgainst)}</td>
       <td class="ladder-stat">${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"}</td>
       <td class="ladder-stat">${"{:.3f}".format(player.overrated())}</td>
       <td class="ladder-stat ladder-skill">${"{:.3f}".format(player.elo)}</td>
