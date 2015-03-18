@@ -6,6 +6,6 @@
   recentGames.reverse()
 %>
 % for game in recentGames:
-    ${blocks.render("recentGame", game=game, base=base)}
+    ${blocks.render("game", game=game, base=base)}
 % endfor
 <p>Updated at ${datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>

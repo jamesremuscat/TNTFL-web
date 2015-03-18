@@ -138,7 +138,7 @@ player2wins = len(sharedGames) - draws - player1wins
           </div>
           <div class="panel-body">
   %for game in sharedGames[0:5]:
-      ${self.blocks.render("recentGame", game=game, base=self.attr.base)}
+      ${self.blocks.render("game", game=game, base=self.attr.base)}
   %endfor
           </div>
         </div>
