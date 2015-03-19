@@ -59,7 +59,7 @@ class TableFootballLadder(object):
         bluePosBefore = -1
         redPosBefore = -1
 
-        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive()], key=lambda x: x.elo, reverse=True)):
+        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive(game.time - 1)], key=lambda x: x.elo, reverse=True)):
             if player.name == game.bluePlayer:
                 bluePosBefore = index
             elif player.name == game.redPlayer:
@@ -69,15 +69,22 @@ class TableFootballLadder(object):
         red.game(game)
         self.games.append(game)
 
-        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive()], key=lambda x: x.elo, reverse=True)):
+        bluePosAfter, redPosAfter = -1, -1
+
+        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive(game.time)], key=lambda x: x.elo, reverse=True)):
             if player.name == game.bluePlayer:
                 bluePosAfter = index
+                game.bluePosAfter = bluePosAfter
             elif player.name == game.redPlayer:
                 redPosAfter = index
+                game.redPosAfter = redPosAfter
         if bluePosBefore > 0:
             game.bluePosChange = bluePosBefore - bluePosAfter  # It's this way around because a rise in position is to a lower numbered rank.
         if redPosBefore > 0:
             game.redPosChange = redPosBefore - redPosAfter
+        if bluePosBefore > 0 and redPosBefore > 0:
+            if (bluePosBefore == redPosAfter or redPosBefore == bluePosAfter):
+                game.positionSwap = True
 
         if blue.elo > self.highSkill['skill']:
             self.highSkill['skill'] = blue.elo
@@ -114,14 +121,17 @@ class TableFootballLadder(object):
 
 class Game(object):
     skillChangeToBlue = None
+    positionSwap = False
 
     def __init__(self, redPlayer, redScore, bluePlayer, blueScore, time):
         self.redPlayer = redPlayer.lower()
         self.redScore = int(redScore)
         self.redPosChange = 0
+        self.redPosAfter = -1
         self.bluePlayer = bluePlayer.lower()
         self.blueScore = int(blueScore)
         self.bluePosChange = 0
+        self.bluePosAfter = -1
         self.time = time
 
     def __str__(self):
@@ -194,9 +204,9 @@ class Player(object):
 
         self.games.append(game)
 
-    def isActive(self):
+    def isActive(self, atTime=time.time()):
         #  Using date.* classes is too slow here
-        return (not exclusions.contains(self.name)) and len(self.games) > 0 and (self.games[-1].time > time.time() - (60 * 60 * 24 * self.DAYS_INACTIVE))
+        return (not exclusions.contains(self.name)) and len(self.games) > 0 and (self.games[-1].time > atTime - (60 * 60 * 24 * self.DAYS_INACTIVE))
 
     def overrated(self):
         lastSkill = self.skillBuffer.lastSkill()
