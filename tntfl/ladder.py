@@ -76,10 +76,10 @@ class TableFootballLadder(object):
         for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive(game.time)], key=lambda x: x.elo, reverse=True)):
             if player.name == game.bluePlayer:
                 bluePosAfter = index
-                game.bluePosAfter = bluePosAfter
+                game.bluePosAfter = bluePosAfter + 1  # because it's zero-indexed here
             elif player.name == game.redPlayer:
                 redPosAfter = index
-                game.redPosAfter = redPosAfter
+                game.redPosAfter = redPosAfter + 1
         if bluePosBefore > 0:
             game.bluePosChange = bluePosBefore - bluePosAfter  # It's this way around because a rise in position is to a lower numbered rank.
         if redPosBefore > 0:
