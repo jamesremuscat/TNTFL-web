@@ -1,3 +1,4 @@
+import os.path
 import time
 from datetime import date, datetime, timedelta
 from tntfl.aks import CircularSkillBuffer
@@ -7,9 +8,10 @@ class ExclusionsFile(object):
 
     def __init__(self, fileName):
         self.exclusions = []
-        f = open(fileName, 'r')
-        for line in f.readlines():
-            self.exclusions.append(line.strip().lower())
+        if os.path.exists(fileName):
+            f = open(fileName, 'r')
+            for line in f.readlines():
+                self.exclusions.append(line.strip().lower())
 
     def contains(self, name):
         return (name in self.exclusions)
