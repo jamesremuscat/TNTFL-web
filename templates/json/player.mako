@@ -10,7 +10,8 @@
     "against": ${player.goalsAgainst},
     "games": ${len(player.games)},
     "wins": ${player.wins},
-    "losses": ${player.losses}
+    "losses": ${player.losses},
+    "gamesToday" : ${player.gamesToday}
   },
   "games" : { "href" : "games/json" }
 }

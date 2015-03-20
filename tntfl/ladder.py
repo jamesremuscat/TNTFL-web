@@ -173,6 +173,7 @@ class Player(object):
         self.highestSkill = {"time": 0, "skill": 0}
         self.lowestSkill = {"time": 0, "skill": 0}
         self.mostSignificantGame = None
+        self.gamesToday = 0
 
     def game(self, game):
         if self.name == game.redPlayer:
@@ -203,6 +204,9 @@ class Player(object):
 
         if self.mostSignificantGame is None or abs(delta) > abs(self.mostSignificantGame.skillChangeToBlue):
             self.mostSignificantGame = game
+
+        if date.fromtimestamp(game.time) == date.today():
+            self.gamesToday += 1
 
         self.games.append(game)
 
