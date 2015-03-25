@@ -4,7 +4,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-8">
-      <div class="panel panel-default">
+      <div class="panel panel-default ${"panel-warning" if len(games) > 0 else ""}">
 % if len(games) > 0:
         <div class="panel-heading">
           <h2 class="panel-title">Speculative Ladder</h2>

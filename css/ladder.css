@@ -16,6 +16,10 @@ h2.panel-title {
   font-size: 18pt;
 }
 
+.panel-warning .panel-body, .panel-warning th {
+  background-color: #FAEBCC;
+}
+
 table.ladder td {
   vertical-align: middle !important;
 }
