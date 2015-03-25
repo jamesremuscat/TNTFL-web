@@ -1,7 +1,7 @@
 Options -MultiViews
 
 RewriteEngine on
-RewriteBase /~jrem/tntfl
+#RewriteBase /~jrem/tntfl
 
 RewriteRule (.*)/json$ $1?view=json
 
@@ -19,4 +19,5 @@ RewriteRule ^ladder(.cgi)?/? ladder.cgi
 RewriteRule ^api(.cgi)?/ api.cgi 
 RewriteRule ^stats(.cgi)?/ stats.cgi 
 RewriteRule ^recent(.cgi)?/ recent.cgi
+RewriteRule ^speculate(.cgi)?/ speculate.cgi
 
