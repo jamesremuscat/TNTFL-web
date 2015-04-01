@@ -111,6 +111,12 @@ class TableFootballLadder(object):
         ladder.write("\n%s %s %s %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time))
         ladder.close()
 
+    def writeLadder(self, ladderFile):
+        ladder = open(ladderFile, 'w')
+        for game in self.games:
+            ladder.write("\n%s %s %s %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time))
+        ladder.close()
+
     def getPlayers(self):
         return sorted([p for p in self.players.values()], key=lambda x: x.elo, reverse=True)
 
