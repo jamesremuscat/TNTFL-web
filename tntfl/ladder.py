@@ -45,6 +45,11 @@ class TableFootballLadder(object):
         ladder.close()
 
     def addGame(self, game):
+        self.games.append(game)
+
+        if game.isDeleted():
+            return
+
         if game.redPlayer not in self.players:
             self.players[game.redPlayer] = Player(game.redPlayer)
         red = self.players[game.redPlayer]
@@ -68,10 +73,8 @@ class TableFootballLadder(object):
             elif player.name == game.redPlayer:
                 redPosBefore = index
 
-        if not game.isDeleted():
-            blue.game(game)
-            red.game(game)
-        self.games.append(game)
+        blue.game(game)
+        red.game(game)
 
         bluePosAfter, redPosAfter = -1, -1
 
@@ -133,7 +136,7 @@ class TableFootballLadder(object):
 
 
 class Game(object):
-    skillChangeToBlue = None
+    skillChangeToBlue = 0
     positionSwap = False
     deletedBy = None
     deletedAt = 0

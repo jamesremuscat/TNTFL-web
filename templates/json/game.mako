@@ -1,4 +1,10 @@
 {
+% if game.isDeleted():
+  "deleted" : {
+    "at" : ${game.deletedAt},
+    "by" : ${game.deletedBy}
+  },
+% endif
   "red" : {
     "name" : "${game.redPlayer}",
     "href" : "${base}player/${game.redPlayer | u}/json",

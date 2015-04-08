@@ -1,4 +1,7 @@
         <div class="recent-game container-fluid">
+% if game.isDeleted():
+<p class="bg-danger">This game was deleted by ${game.deletedBy} at ${game.formatTime(game.deletedAt)}</p>
+% endif
           <div class="row recent-game-result">
           <div class="col-md-4 red-player ${"yellow-stripe" if game.redScore == 10 and game.blueScore == 0 else ""}"><a href="${base}player/${game.redPlayer}/">${game.redPlayer}</a></div>
           <div class="col-md-4 ${"yellow-stripe" if game.blueScore == 10 or game.redScore == 10 else ""}">${game.redScore} - ${game.blueScore}</div>
