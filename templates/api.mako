@@ -54,7 +54,7 @@
             <li>
               <b>Recent games:</b> <a href="${self.attr.base}/recent/json">/recent/json</a>
               <ul>
-                <li>Gives hrefs to the ten most recent games.</li>
+                <li>Gives the ten most recent games in full.</li>
               </ul>
             </li>
           </ul>
