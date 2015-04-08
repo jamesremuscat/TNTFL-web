@@ -7,8 +7,8 @@ RewriteRule (.*)/json$ $1?view=json
 
 RewriteRule ^game(.cgi)?/([^/]+)$  game/$2/   [R]
 RewriteRule ^game(.cgi)?/add/ game.cgi?method=add [QSA]
-RewriteRule ^game(.cgi)?/([0-9]+)/ game.cgi?method=view&game=$2 [QSA]
 RewriteRule ^game(.cgi)?/([0-9]+)/delete$ delete.cgi?&game=$2 [QSA]
+RewriteRule ^game(.cgi)?/([0-9]+)/ game.cgi?method=view&game=$2 [QSA]
 
 <Files "delete.cgi">
   AuthType                basic
