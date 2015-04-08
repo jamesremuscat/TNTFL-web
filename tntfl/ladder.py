@@ -37,20 +37,21 @@ class TableFootballLadder(object):
                 # Red player, red score, blue player, blue score, time
                 game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], int(gameLine[4]))
                 self.addGame(game)
+            elif len(gameLine) == 7:
+                game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], int(gameLine[4]))
+                game.deletedBy = gameLine[5]
+                game.deletedAt = gameLine[6]
+                # self.addGame(game)
         ladder.close()
 
     def addGame(self, game):
         if game.redPlayer not in self.players:
             self.players[game.redPlayer] = Player(game.redPlayer)
         red = self.players[game.redPlayer]
-        red.goalsFor = red.goalsFor + game.redScore
-        red.goalsAgainst = red.goalsAgainst + game.blueScore
 
         if game.bluePlayer not in self.players:
             self.players[game.bluePlayer] = Player(game.bluePlayer)
         blue = self.players[game.bluePlayer]
-        blue.goalsFor = blue.goalsFor + game.blueScore
-        blue.goalsAgainst = blue.goalsAgainst + game.redScore
 
         predict = 1 / (1 + 10 ** ((red.elo - blue.elo) / 180))
         result = float(game.blueScore) / (game.blueScore + game.redScore)
@@ -67,8 +68,9 @@ class TableFootballLadder(object):
             elif player.name == game.redPlayer:
                 redPosBefore = index
 
-        blue.game(game)
-        red.game(game)
+        if not game.isDeleted():
+            blue.game(game)
+            red.game(game)
         self.games.append(game)
 
         bluePosAfter, redPosAfter = -1, -1
@@ -114,7 +116,10 @@ class TableFootballLadder(object):
     def writeLadder(self, ladderFile):
         ladder = open(ladderFile, 'w')
         for game in self.games:
-            ladder.write("\n%s %s %s %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time))
+            if game.isDeleted():
+                ladder.write("\n%s %s %s %s %.0f %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time, game.deletedBy, game.deletedAt))
+            else:
+                ladder.write("\n%s %s %s %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time))
         ladder.close()
 
     def getPlayers(self):
@@ -130,6 +135,8 @@ class TableFootballLadder(object):
 class Game(object):
     skillChangeToBlue = None
     positionSwap = False
+    deletedBy = None
+    deletedAt = 0
 
     def __init__(self, redPlayer, redScore, bluePlayer, blueScore, time):
         self.redPlayer = redPlayer.lower()
@@ -147,6 +154,9 @@ class Game(object):
 
     def __repr__(self):
         return "{redPlayer} {redScore}-{blueScore} {bluePlayer}".format(redPlayer=self.redPlayer, bluePlayer=self.bluePlayer, redScore=self.redScore, blueScore=self.blueScore)
+
+    def isDeleted(self):
+        return self.deletedAt > 0
 
     @staticmethod
     def formatTime(inTime):
@@ -190,6 +200,8 @@ class Player(object):
                 self.wins += 1
             elif game.redScore < game.blueScore:
                 self.losses += 1
+            self.goalsFor += game.redScore
+            self.goalsAgainst += game.blueScore
         elif self.name == game.bluePlayer:
             delta = game.skillChangeToBlue
             opponent = game.redPlayer
@@ -197,6 +209,8 @@ class Player(object):
                 self.wins += 1
             elif game.redScore > game.blueScore:
                 self.losses += 1
+            self.goalsFor += game.blueScore
+            self.goalsAgainst += game.redScore
         else:
             return
         self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta, 'played': opponent})
