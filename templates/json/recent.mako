@@ -1,7 +1,7 @@
 <%! base = "../" %>
 <%inherit file="json.mako" />[
 <%
-  recentGames = ladder.games[-limit:]
+  recentGames = [l for l in ladder.games if not l.isDeleted()][-limit:]
   recentGames.reverse()
 %>
 % for game in recentGames:
