@@ -41,7 +41,7 @@ class TableFootballLadder(object):
                 game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], int(gameLine[4]))
                 game.deletedBy = gameLine[5]
                 game.deletedAt = gameLine[6]
-                # self.addGame(game)
+                self.addGame(game)
         ladder.close()
 
     def addGame(self, game):

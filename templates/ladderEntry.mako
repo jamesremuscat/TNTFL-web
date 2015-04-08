@@ -9,7 +9,10 @@ size = player.skillBuffer.size()
 for i in range(0, size):
     trend.append([i, player.skillBuffer.getSkill(i)])
 
-trendColour = "#0000FF" if trend[0][1] < trend[size - 1][1] else "#FF0000";
+if len(trend) > 0:
+  trendColour = "#0000FF" if trend[0][1] < trend[size - 1][1] else "#FF0000";
+else:
+  trendColour = "#000000"
 %>
 % if index == -1:
 <tr class="inactive">
