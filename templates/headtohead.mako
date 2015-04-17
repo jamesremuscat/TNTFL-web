@@ -90,7 +90,7 @@ player2wins = len(sharedGames) - draws - player1wins
            <h2 class="panel-title">Statistics</h2>
          </div>
          <div class="panel-body">
-           <p>Matches played: ${len(sharedGames)}</p>
+           <p>Matches played: ${len(sharedGames)} (${draws} draws)</p>
            <table class="table headtohead">
              <tr>
                <th>${player1.name}</th>
@@ -110,7 +110,7 @@ player2wins = len(sharedGames) - draws - player1wins
              </tr>
              <tr>
                <td ${"class=\"red-player\"" if player1wins >= player2wins else ""}>${player1wins}</td>
-               <th>Wins</th>
+               <th>Wins</small></th>
                <td ${"class=\"blue-player\"" if player2wins >= player1wins else ""}>${player2wins}</td>
              </tr>
              <tr>
