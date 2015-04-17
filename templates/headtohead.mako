@@ -81,6 +81,16 @@ player2wins = len(sharedGames) - draws - player1wins
           <div class="row">
             <div class="col-md-4">
 ${self.playerPanel(player1, "red")}
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h2 class="panel-title">Recent Encounters</h2>
+                </div>
+                <div class="panel-body">
+        %for game in sharedGames[0:5]:
+            ${self.blocks.render("game", game=game, base=self.attr.base)}
+        %endfor
+                </div>
+              </div>
             </div>
             <div class="col-md-4">
               <div class="panel panel-default">
@@ -128,16 +138,6 @@ ${self.playerPanel(player1, "red")}
                       <td class="blue-player">${"{:.0f}".format(10 - predict)}</td>
                     </tr>
                   </table>
-                </div>
-              </div>
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h2 class="panel-title">Recent Encounters</h2>
-                </div>
-                <div class="panel-body">
-        %for game in sharedGames[0:5]:
-            ${self.blocks.render("game", game=game, base=self.attr.base)}
-        %endfor
                 </div>
               </div>
             </div>
