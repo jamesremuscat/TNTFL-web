@@ -53,11 +53,19 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
   player1doughnuts = 0
   player2doughnuts = 0
   
+  histogramData = {'player1': {}, 'player2': {}}
+  
+  for i in range(11):
+      histogramData['player1'][i] = 0
+      histogramData['player2'][i] = 0
+  
   for game in sharedGames:
       if game.redPlayer == player1.name:
           swingToPlayer1 -= game.skillChangeToBlue
           player1goals += game.redScore
           player2goals += game.blueScore
+          histogramData['player1'][game.redScore] += 1
+          histogramData['player2'][game.blueScore] += 1
           if game.redScore > game.blueScore:
               player1wins += 1
           if game.redScore == 10 and game.blueScore == 0:
@@ -68,6 +76,8 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
           swingToPlayer1 += game.skillChangeToBlue
           player1goals += game.blueScore
           player2goals += game.redScore
+          histogramData['player1'][game.blueScore] += 1
+          histogramData['player2'][game.redScore] += 1
           if game.redScore < game.blueScore:
               player1wins += 1
           if game.redScore == 0 and game.blueScore == 10:
@@ -143,6 +153,28 @@ ${self.playerPanel(player1, "red")}
             </div>
             <div class="col-md-4">
 ${self.playerPanel(player2, "blue")}
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h2 class="panel-title">Goal Distribution</h2>
+                </div>
+                <div class="panel-body">
+                  <div id="histogram">
+                  </div>
+                  <script type="text/javascript">
+<%
+player1Histogram = []
+player2Histogram = []
+for goals, tally in histogramData['player1'].iteritems():
+  player1Histogram.append([goals, tally])
+for goals, tally in histogramData['player2'].iteritems():
+  player2Histogram.append([goals, tally * -1])
+%>
+          $(function() {
+            $.plot("#histogram", [ ${player1Histogram}, ${player2Histogram} ], {'legend' : {show: false}, 'xaxis': {'ticks': 10}, grid: {hoverable: true}, colors: ['#FF0000', '#0000FF'], 'series' : {'bars' : {'show': true, 'align': 'center'}}});
+          });
+                  </script>
+                </div>
+              </div>
             </div>
           </div>
 %else:
