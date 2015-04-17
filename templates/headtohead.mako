@@ -42,14 +42,12 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
           <h1 class="panel-title">Head to Head</h1>
         </div>
         <div class="panel-body container-fluid">
+%if player1 and player2:
           <div class="row">
             <div class="col-md-4">
-%if player1:
 ${self.playerPanel(player1, "red")}
-%endif
             </div>
             <div class="col-md-4">
-%if player1 and player2:
 <%
   sharedGames = sorted([g for g in player1.games if g.redPlayer == player2.name or g.bluePlayer == player2.name], key=lambda g:g.time, reverse=True)
   swingToPlayer1 = 0
@@ -142,14 +140,14 @@ player2wins = len(sharedGames) - draws - player1wins
   %endfor
           </div>
         </div>
-%endif
             </div>
             <div class="col-md-4">
-%if player2:
 ${self.playerPanel(player2, "blue")}
-%endif
             </div>
           </div>
+%else:
+<p>Choose two players to view head-to-head information!</p>
+%endif
         </div>
       </div>
     </div>
