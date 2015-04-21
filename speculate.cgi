@@ -33,4 +33,4 @@ if "bluePlayer" in form and "redPlayer" in form:
     serialisedSpecGames += ",{0},{1},{2},{3}".format(form["redPlayer"].value, redScore, blueScore, form["bluePlayer"].value)
 
 games.reverse()
-serve_template("speculate.mako", ladder=ladder, games=games, serialisedSpecGames=serialisedSpecGames)
+serve_template("speculate.mako", ladder=ladder, games=games, serialisedSpecGames=serialisedSpecGames[1:])  # the [1:] eliminates the initial comma.
