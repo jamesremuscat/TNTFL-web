@@ -210,3 +210,7 @@ td.side-preference {
 .headtohead .red-player, .headtohead .blue-player {
   font-weight: bold;
 }
+
+.panel-warning tr:hover {
+  background-color: #FCF8E3 !important;
+}
