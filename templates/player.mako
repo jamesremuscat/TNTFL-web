@@ -14,7 +14,19 @@ winStreak = {
   "count": 0
 }
 
+loseStreak = {
+  "from": 0,
+  "to": 0,
+  "count": 0
+}
+
 currentStreak = {
+  "from": 0,
+  "to": 0,
+  "count": 0
+}
+
+currentLoseStreak = {
   "from": 0,
   "to": 0,
   "count": 0
@@ -32,6 +44,17 @@ for game in player.games:
             winStreak['to'] = currentStreak['to']
             winStreak['count'] = currentStreak['count']
           currentStreak = {"from": 0, "to": 0, "count": 0}
+        if game.redScore < game.blueScore:
+          currentLoseStreak['from'] = game.time if currentLoseStreak['from'] == 0 else currentLoseStreak['from']
+          currentLoseStreak['to'] = game.time
+          currentLoseStreak['count'] += 1
+        else:
+          if currentLoseStreak['count'] >= loseStreak['count']:
+            loseStreak['from'] = currentLoseStreak['from']
+            loseStreak['to'] = currentLoseStreak['to']
+            loseStreak['count'] = currentLoseStreak['count']
+          currentLoseStreak = {"from": 0, "to": 0, "count": 0}
+          
         if game.bluePlayer not in pps:
             pps[game.bluePlayer] = PerPlayerStat(game.bluePlayer)
         pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
@@ -46,6 +69,16 @@ for game in player.games:
             winStreak['to'] = currentStreak['to']
             winStreak['count'] = currentStreak['count']
           currentStreak = {"from": 0, "to": 0, "count": 0}
+        if game.blueScore < game.redScore:
+          currentLoseStreak['from'] = game.time if currentLoseStreak['from'] == 0 else currentLoseStreak['from']
+          currentLoseStreak['to'] = game.time
+          currentLoseStreak['count'] += 1
+        else:
+          if currentLoseStreak['count'] >= loseStreak['count']:
+            loseStreak['from'] = currentLoseStreak['from']
+            loseStreak['to'] = currentLoseStreak['to']
+            loseStreak['count'] = currentLoseStreak['count']
+          currentLoseStreak = {"from": 0, "to": 0, "count": 0}
         if game.redPlayer not in pps:
             pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
         pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
@@ -89,6 +122,9 @@ for game in player.games:
               <th>Longest Winning Streak</th>
               <td>${winStreak['count']}</td>
               <td><a href="${self.attr.base}game/${winStreak['from']}/">${Game.formatTime(winStreak['from'])}</a> to <a href="${self.attr.base}game/${winStreak['to']}/">${Game.formatTime(winStreak['to'])}</a></td>
+              <th>Longest Losing Streak</th>
+              <td>${loseStreak['count']}</td>
+              <td><a href="${self.attr.base}game/${loseStreak['from']}/">${Game.formatTime(loseStreak['from'])}</a> to <a href="${self.attr.base}game/${loseStreak['to']}/">${Game.formatTime(loseStreak['to'])}</a></td>
             </tr>
           </table>
         </div>
