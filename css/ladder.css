@@ -29,18 +29,18 @@ table.ladder th {
   text-align: center;
 }
 
-td.ladder-position {
+.ladder-position {
   font-size: x-large;
   font-weight: bold;
   text-align: center;
   color: white;
   width: 3em;
   border-radius: 4px;
-  background-color: blue;
+  background-color: blue !important;
 }
 
-td.ladder-position.inactive {
-  background-color: #C0C0C0;
+.ladder-position.inactive {
+  background-color: #C0C0C0 !important;
 }
 
 tr.inactive {
@@ -53,8 +53,8 @@ button.inactive {
   display: none;
 }
 
-td.ladder-first {
-  background-color:#D5AB00;
+.ladder-first {
+  background-color:#D5AB00 !important;
 }
 
 td.ladder-stat {
@@ -160,6 +160,33 @@ div.ladder-trend {
   width: 3em;
 }
 
+h3.statbox {
+  font-size: medium;
+  font-weight: bold;
+  text-align: left;
+  margin: 0;
+}
+
+.panel-statbox {
+  border: 0;
+}
+
+.panel-statbox .panel-heading {
+  background-color: #DDDDDD;
+}
+
+.panel-statbox .panel-body {
+  text-align: right;
+  font-size: x-large;
+  font-weight: bold;
+  padding: 5px 10% 5px 5px;
+  background-color: #F5F5F5;
+}
+
+.panel-statbox .ladder-position {
+  width: auto;
+}
+
 table.player-stats {
   width: 100%;
 }
@@ -174,7 +201,7 @@ table.player-stats th {
   width: 18%;
 }
 
-td.side-preference {
+.side-preference {
   text-align: center;
   color: white;
   border-radius: 4px;

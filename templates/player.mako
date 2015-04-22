@@ -100,17 +100,32 @@ else:
           <h1 class="panel-title">${player.name}</h1>
         </div>
         <div class="panel-body">
+<%
+   rank = ladder.getPlayerRank(player.name)
+   redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
+   sideStyle = "background-color: rgb(" + str(int(round(redness * 255))) + ", 0, "  + str(int(round((1 - redness) * 255))) + ")"
+%>
+          <div class="row">
+          ${self.blocks.render("statbox", title="Skill", body="{:.3f}".format(player.elo))}
+          ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=("ladder-position inactive" if rank == -1 else "ladder-position ladder-first" if rank == 1 else "ladder-position"))}
+          ${self.blocks.render("statbox", title="Overrated", body="{:.3f}".format(player.overrated()))}
+          ${self.blocks.render("statbox", title="Side preference", body="{:.2%}".format(redness if redness >= 0.5 else (1-redness)) + (" red" if redness >= 0.5 else " blue"), classes="side-preference", style=sideStyle)}
+          </div>
+          <div class="row">
+          ${self.blocks.render("statbox", title="Total games", body=len(player.games))}
+          ${self.blocks.render("statbox", title="Wins", body=player.wins)}
+          ${self.blocks.render("statbox", title="Losses", body=player.losses)}
+          ${self.blocks.render("statbox", title="Draws", body=(len(player.games) - player.wins - player.losses))}
+          </div>
+          <div class="row">
+          ${self.blocks.render("statbox", title="Games today", body=player.gamesToday)}
+          </div>
+          <div class="row">
+          ${self.blocks.render("statbox", title="Goals for", body=player.goalsFor)}
+          ${self.blocks.render("statbox", title="Goals against", body=player.goalsAgainst)}
+          ${self.blocks.render("statbox", title="GD/game", body=("{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"))}
+          </div>
           <table class="player-stats">
-            <tr><th>Skill</th><td class="ladder-skill">${"{:.3f}".format(player.elo)}</td><th>Current Ranking</th>
-  <% rank = ladder.getPlayerRank(player.name) %>
-            <td class="ladder-position ${"inactive" if rank == -1 else "ladder-first" if rank == 1 else ""}">${rank if rank != -1 else "-"}</td>
-            <th>Overrated</th><td>${"{:.3f}".format(player.overrated())}</td></tr>
-  <%
-    redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
-  %>
-            <tr><th>Total games</th><td>${len(player.games)}</td><th>Games today</th><td>${player.gamesToday}</td><th>Side Preference</th><td class="side-preference" style="background-color: rgb(${int(round(redness * 255))}, 0, ${int(round((1 - redness) * 255))})">${"{:.2%}".format(redness if redness >= 0.5 else (1-redness))} ${"red" if redness >= 0.5 else "blue"}</td></tr>
-            <tr><th>Wins</th><td>${player.wins}</td><th>Losses</th><td>${player.losses}</td><th>Draws</th><td>${len(player.games) - player.wins - player.losses}</td></tr>
-            <tr><th>Goals for</th><td>${player.goalsFor}</td><th>Goals against</th><td>${player.goalsAgainst}</td><th>GD/game</th><td>${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"}</td></tr>
             <tr>
               <th>Highest ever skill</th>
               <td>${"{:.3f}".format(player.highestSkill['skill'])}</td>
