@@ -2,6 +2,54 @@
 <%! base = "../../" %>
 <%! from tntfl.ladder import Game %>
 <%inherit file="html.mako" />
+<%
+
+from tntfl.ladder import PerPlayerStat
+
+pps = {}
+
+winStreak = {
+  "from": 0,
+  "to": 0,
+  "count": 0
+}
+
+currentStreak = {
+  "from": 0,
+  "to": 0,
+  "count": 0
+}
+
+for game in player.games:
+    if game.redPlayer == player.name:
+        if game.redScore > game.blueScore:
+          currentStreak['from'] = game.time if currentStreak['from'] == 0 else currentStreak['from']
+          currentStreak['to'] = game.time
+          currentStreak['count'] += 1
+        else:
+          if currentStreak['count'] >= winStreak['count']:
+            winStreak['from'] = currentStreak['from']
+            winStreak['to'] = currentStreak['to']
+            winStreak['count'] = currentStreak['count']
+          currentStreak = {"from": 0, "to": 0, "count": 0}
+        if game.bluePlayer not in pps:
+            pps[game.bluePlayer] = PerPlayerStat(game.bluePlayer)
+        pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
+    elif game.bluePlayer == player.name:
+        if game.blueScore > game.redScore:
+          currentStreak['from'] = game.time if currentStreak['from'] == 0 else currentStreak['from']
+          currentStreak['to'] = game.time
+          currentStreak['count'] += 1
+        else:
+          if currentStreak['count'] >= winStreak['count']:
+            winStreak['from'] = currentStreak['from']
+            winStreak['to'] = currentStreak['to']
+            winStreak['count'] = currentStreak['count']
+          currentStreak = {"from": 0, "to": 0, "count": 0}
+        if game.redPlayer not in pps:
+            pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
+        pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
+%>
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-8">
@@ -23,19 +71,24 @@
             <tr><th>Goals for</th><td>${player.goalsFor}</td><th>Goals against</th><td>${player.goalsAgainst}</td><th>GD/game</th><td>${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"}</td></tr>
             <tr>
               <th>Highest ever skill</th>
-              <td>${"{:.3f}".format(player.highestSkill['skill'])}<br />
+              <td>${"{:.3f}".format(player.highestSkill['skill'])}</td>
     % if player.highestSkill['time'] > 0:
-              at <a href="${self.attr.base}game/${player.highestSkill['time']}/">${Game.formatTime(player.highestSkill['time'])}</a></td>
+              <td>at <a href="${self.attr.base}game/${player.highestSkill['time']}/">${Game.formatTime(player.highestSkill['time'])}</a></td>
     % else:
-              before first game</td>
+              <td>before first game</td>
     % endif
               <th>Lowest ever skill</th>
-              <td>${"{:.3f}".format(player.lowestSkill['skill'])}<br />
+              <td>${"{:.3f}".format(player.lowestSkill['skill'])}</td>
     % if player.lowestSkill['time'] > 0:
-              at <a href="${self.attr.base}game/${player.lowestSkill['time']}/">${Game.formatTime(player.lowestSkill['time'])}</a></td>
+              <td>at <a href="${self.attr.base}game/${player.lowestSkill['time']}/">${Game.formatTime(player.lowestSkill['time'])}</a></td>
     % else:
-              before first game</td>
+              <td>before first game</td>
     % endif
+            </tr>
+            <tr>
+              <th>Longest Winning Streak</th>
+              <td>${winStreak['count']}</td>
+              <td><a href="${self.attr.base}game/${winStreak['from']}/">${Game.formatTime(winStreak['from'])}</a> to <a href="${self.attr.base}game/${winStreak['to']}/">${Game.formatTime(winStreak['to'])}</a></td>
             </tr>
           </table>
         </div>
@@ -94,22 +147,6 @@
         <div class="panel-heading">
           <h2 class="panel-title">Per-Player Stats</h2>
         </div>
-  <%
-  
-  from tntfl.ladder import PerPlayerStat
-  
-  pps = {}
-  
-  for game in player.games:
-      if game.redPlayer == player.name:
-          if game.bluePlayer not in pps:
-              pps[game.bluePlayer] = PerPlayerStat(game.bluePlayer)
-          pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
-      elif game.bluePlayer == player.name:
-          if game.redPlayer not in pps:
-              pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
-          pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
-  %>
         <div class="panel-body">
           <table class="table table-striped table-hover ladder" id="pps">
             <thead>
