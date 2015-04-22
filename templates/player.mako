@@ -115,14 +115,14 @@ else:
               <th>Highest ever skill</th>
               <td>${"{:.3f}".format(player.highestSkill['skill'])}</td>
     % if player.highestSkill['time'] > 0:
-              <td>at <a href="${self.attr.base}game/${player.highestSkill['time']}/">${Game.formatTime(player.highestSkill['time'])}</a></td>
+              <td>at ${self.blocks.render("gameLink", time=player.highestSkill['time'], base=self.attr.base)}</td>
     % else:
               <td>before first game</td>
     % endif
               <th>Lowest ever skill</th>
               <td>${"{:.3f}".format(player.lowestSkill['skill'])}</td>
     % if player.lowestSkill['time'] > 0:
-              <td>at <a href="${self.attr.base}game/${player.lowestSkill['time']}/">${Game.formatTime(player.lowestSkill['time'])}</a></td>
+              <td>at ${self.blocks.render("gameLink", time=player.lowestSkill['time'], base=self.attr.base)}</a></td>
     % else:
               <td>before first game</td>
     % endif
@@ -131,14 +131,14 @@ else:
               <th>Longest Winning Streak</th>
               <td>${winStreak['count']}</td>
 % if winStreak['count'] > 0:
-              <td><a href="${self.attr.base}game/${winStreak['from']}/">${Game.formatTime(winStreak['from'])}</a> to <a href="${self.attr.base}game/${winStreak['to']}/">${Game.formatTime(winStreak['to'])}</a></td>
+              <td>${self.blocks.render("gameLink", time=winStreak['from'], base=self.attr.base)} to ${self.blocks.render("gameLink", time=winStreak['to'], base=self.attr.base)}</td>
 % else:
               <td />
 % endif
               <th>Longest Losing Streak</th>
               <td>${loseStreak['count']}</td>
 % if loseStreak['count'] > 0:
-              <td><a href="${self.attr.base}game/${loseStreak['from']}/">${Game.formatTime(loseStreak['from'])}</a> to <a href="${self.attr.base}game/${loseStreak['to']}/">${Game.formatTime(loseStreak['to'])}</a></td>
+              <td>${self.blocks.render("gameLink", time=loseStreak['from'], base=self.attr.base)} to ${self.blocks.render("gameLink", time=loseStreak['to'], base=self.attr.base)}</td>
 % else:
               <td />
 % endif
@@ -147,7 +147,7 @@ else:
               <th>Current Streak</th>
               <td>${currentStreak['count']} ${currentStreakType}</td>
 % if currentStreak['count'] > 0:
-              <td><a href="${self.attr.base}game/${currentStreak['from']}/">${Game.formatTime(currentStreak['from'])}</a> to <a href="${self.attr.base}game/${currentStreak['to']}/">${Game.formatTime(currentStreak['to'])}</a></td>
+              <td><td>${self.blocks.render("gameLink", time=currentStreak['from'], base=self.attr.base)} to ${self.blocks.render("gameLink", time=currentStreak['to'], base=self.attr.base)}</td></td>
 % else:
               <td />
 % endif
