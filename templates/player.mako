@@ -20,7 +20,7 @@ loseStreak = {
   "count": 0
 }
 
-currentStreak = {
+currentWinStreak = {
   "from": 0,
   "to": 0,
   "count": 0
@@ -35,15 +35,15 @@ currentLoseStreak = {
 for game in player.games:
     if game.redPlayer == player.name:
         if game.redScore > game.blueScore:
-          currentStreak['from'] = game.time if currentStreak['from'] == 0 else currentStreak['from']
-          currentStreak['to'] = game.time
-          currentStreak['count'] += 1
+          currentWinStreak['from'] = game.time if currentWinStreak['from'] == 0 else currentWinStreak['from']
+          currentWinStreak['to'] = game.time
+          currentWinStreak['count'] += 1
         else:
-          if currentStreak['count'] >= winStreak['count']:
-            winStreak['from'] = currentStreak['from']
-            winStreak['to'] = currentStreak['to']
-            winStreak['count'] = currentStreak['count']
-          currentStreak = {"from": 0, "to": 0, "count": 0}
+          if currentWinStreak['count'] >= winStreak['count']:
+            winStreak['from'] = currentWinStreak['from']
+            winStreak['to'] = currentWinStreak['to']
+            winStreak['count'] = currentWinStreak['count']
+          currentWinStreak = {"from": 0, "to": 0, "count": 0}
         if game.redScore < game.blueScore:
           currentLoseStreak['from'] = game.time if currentLoseStreak['from'] == 0 else currentLoseStreak['from']
           currentLoseStreak['to'] = game.time
@@ -60,14 +60,14 @@ for game in player.games:
         pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
     elif game.bluePlayer == player.name:
         if game.blueScore > game.redScore:
-          currentStreak['from'] = game.time if currentStreak['from'] == 0 else currentStreak['from']
-          currentStreak['to'] = game.time
-          currentStreak['count'] += 1
+          currentWinStreak['from'] = game.time if currentWinStreak['from'] == 0 else currentWinStreak['from']
+          currentWinStreak['to'] = game.time
+          currentWinStreak['count'] += 1
         else:
-          if currentStreak['count'] >= winStreak['count']:
-            winStreak['from'] = currentStreak['from']
-            winStreak['to'] = currentStreak['to']
-            winStreak['count'] = currentStreak['count']
+          if currentWinStreak['count'] >= winStreak['count']:
+            winStreak['from'] = currentWinStreak['from']
+            winStreak['to'] = currentWinStreak['to']
+            winStreak['count'] = currentWinStreak['count']
           currentStreak = {"from": 0, "to": 0, "count": 0}
         if game.blueScore < game.redScore:
           currentLoseStreak['from'] = game.time if currentLoseStreak['from'] == 0 else currentLoseStreak['from']
@@ -82,6 +82,15 @@ for game in player.games:
         if game.redPlayer not in pps:
             pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
         pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
+
+if currentWinStreak['count'] > 0:
+  currentStreak = currentWinStreak
+  currentStreakType = "wins"
+elif currentLoseStreak['count'] > 0:
+  currentStreak = currentLoseStreak
+  currentStreakType = "losses"
+else:
+  currentStreakType = "(last game was a draw)"
 %>
 <div class="container-fluid">
   <div class="row">
@@ -121,14 +130,32 @@ for game in player.games:
             <tr>
               <th>Longest Winning Streak</th>
               <td>${winStreak['count']}</td>
+% if winStreak['count'] > 0:
               <td><a href="${self.attr.base}game/${winStreak['from']}/">${Game.formatTime(winStreak['from'])}</a> to <a href="${self.attr.base}game/${winStreak['to']}/">${Game.formatTime(winStreak['to'])}</a></td>
+% else:
+              <td />
+% endif
               <th>Longest Losing Streak</th>
               <td>${loseStreak['count']}</td>
+% if loseStreak['count'] > 0:
               <td><a href="${self.attr.base}game/${loseStreak['from']}/">${Game.formatTime(loseStreak['from'])}</a> to <a href="${self.attr.base}game/${loseStreak['to']}/">${Game.formatTime(loseStreak['to'])}</a></td>
+% else:
+              <td />
+% endif
+            </tr>
+            <tr>
+              <th>Current Streak</th>
+              <td>${currentStreak['count']} ${currentStreakType}</td>
+% if currentStreak['count'] > 0:
+              <td><a href="${self.attr.base}game/${currentStreak['from']}/">${Game.formatTime(currentStreak['from'])}</a> to <a href="${self.attr.base}game/${currentStreak['to']}/">${Game.formatTime(currentStreak['to'])}</a></td>
+% else:
+              <td />
+% endif
             </tr>
           </table>
         </div>
       </div>
+      ${currentWinStreak} ${currentLoseStreak}
   
       <div class="panel panel-default">
         <div class="panel-heading">
