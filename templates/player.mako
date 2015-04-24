@@ -129,11 +129,11 @@ else:
           ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=player.highestSkill['skill'], time=player.highestSkill['time'], base=self.attr.base), offset=1)}
           ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=player.lowestSkill['skill'], time=player.lowestSkill['time'], base=self.attr.base))}
           </div>
-          <div class="row">
+          <!-- div class="row">
           ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak['count'], currentStreakType), fromDate=currentStreak['from'], toDate=currentStreak['to'], base=self.attr.base))}
           ${self.blocks.render("statbox", title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak['count'], fromDate=winStreak['from'], toDate=winStreak['to'], base=self.attr.base), offset=1)}
           ${self.blocks.render("statbox", title="Longest losing streak", body=get_template("durationStat.mako", value=loseStreak['count'], fromDate=loseStreak['from'], toDate=loseStreak['to'], base=self.attr.base))}
-          </div>
+          </div -->
         </div>
       </div>
       <div class="panel panel-default">
