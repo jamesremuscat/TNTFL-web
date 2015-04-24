@@ -1,6 +1,7 @@
 <%! title = "Table Football Ladder 3.0" %>
 <%! base = "../../" %>
-<%! from tntfl.ladder import Game %>
+<%! from tntfl.ladder import Game
+from tntfl.web import get_template %>
 <%inherit file="html.mako" />
 <%
 
@@ -118,56 +119,20 @@ else:
           ${self.blocks.render("statbox", title="Draws", body=(len(player.games) - player.wins - player.losses))}
           </div>
           <div class="row">
-          ${self.blocks.render("statbox", title="Games today", body=player.gamesToday)}
-          </div>
-          <div class="row">
           ${self.blocks.render("statbox", title="Goals for", body=player.goalsFor)}
           ${self.blocks.render("statbox", title="Goals against", body=player.goalsAgainst)}
           ${self.blocks.render("statbox", title="GD/game", body=("{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"))}
           </div>
-          <table class="player-stats">
-            <tr>
-              <th>Highest ever skill</th>
-              <td>${"{:.3f}".format(player.highestSkill['skill'])}</td>
-    % if player.highestSkill['time'] > 0:
-              <td>at ${self.blocks.render("gameLink", time=player.highestSkill['time'], base=self.attr.base)}</td>
-    % else:
-              <td>before first game</td>
-    % endif
-              <th>Lowest ever skill</th>
-              <td>${"{:.3f}".format(player.lowestSkill['skill'])}</td>
-    % if player.lowestSkill['time'] > 0:
-              <td>at ${self.blocks.render("gameLink", time=player.lowestSkill['time'], base=self.attr.base)}</a></td>
-    % else:
-              <td>before first game</td>
-    % endif
-            </tr>
-            <tr>
-              <th>Longest Winning Streak</th>
-              <td>${winStreak['count']}</td>
-% if winStreak['count'] > 0:
-              <td>${self.blocks.render("gameLink", time=winStreak['from'], base=self.attr.base)} to ${self.blocks.render("gameLink", time=winStreak['to'], base=self.attr.base)}</td>
-% else:
-              <td />
-% endif
-              <th>Longest Losing Streak</th>
-              <td>${loseStreak['count']}</td>
-% if loseStreak['count'] > 0:
-              <td>${self.blocks.render("gameLink", time=loseStreak['from'], base=self.attr.base)} to ${self.blocks.render("gameLink", time=loseStreak['to'], base=self.attr.base)}</td>
-% else:
-              <td />
-% endif
-            </tr>
-            <tr>
-              <th>Current Streak</th>
-              <td>${currentStreak['count']} ${currentStreakType}</td>
-% if currentStreak['count'] > 0:
-              <td><td>${self.blocks.render("gameLink", time=currentStreak['from'], base=self.attr.base)} to ${self.blocks.render("gameLink", time=currentStreak['to'], base=self.attr.base)}</td></td>
-% else:
-              <td />
-% endif
-            </tr>
-          </table>
+          <div class="row">
+          ${self.blocks.render("statbox", title="Games today", body=player.gamesToday)}
+          ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=player.highestSkill['skill'], time=player.highestSkill['time'], base=self.attr.base), offset=1)}
+          ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=player.lowestSkill['skill'], time=player.lowestSkill['time'], base=self.attr.base))}
+          </div>
+          <div class="row">
+          ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak['count'], currentStreakType), fromDate=currentStreak['from'], toDate=currentStreak['to'], base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak['count'], fromDate=winStreak['from'], toDate=winStreak['to'], base=self.attr.base), offset=1)}
+          ${self.blocks.render("statbox", title="Longest losing streak", body=get_template("durationStat.mako", value=loseStreak['count'], fromDate=loseStreak['from'], toDate=loseStreak['to'], base=self.attr.base))}
+          </div>
         </div>
       </div>
       <div class="panel panel-default">

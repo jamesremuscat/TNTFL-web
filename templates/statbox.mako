@@ -1,5 +1,5 @@
-<%page args="title, body, classes='', style=''"/>
-<div class="col-sm-3">
+<%page args="title, body, classes='', style='', offset=0, width=3"/>
+<div class="col-sm-${width} col-md-offset-${offset * width}">
   <div class="panel panel-default panel-statbox">
     <div class="panel-heading">
       <h3 class="statbox">${title}</h3>

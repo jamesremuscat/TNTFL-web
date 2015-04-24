@@ -187,18 +187,10 @@ h3.statbox {
   width: auto;
 }
 
-table.player-stats {
-  width: 100%;
-}
-
-table.player-stats td, table.player-stats th {
-  padding: 8px;
-  width: auto;
-  vertical-align: top;
-}
-
-table.player-stats th {
-  width: 18%;
+.panel-statbox .date {
+  font-size: small;
+  font-weight: normal;
+  display: block;
 }
 
 .side-preference {
