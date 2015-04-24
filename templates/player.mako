@@ -105,11 +105,12 @@ else:
    rank = ladder.getPlayerRank(player.name)
    redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
    sideStyle = "background-color: rgb(" + str(int(round(redness * 255))) + ", 0, "  + str(int(round((1 - redness) * 255))) + ")"
+   gd = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
 %>
           <div class="row">
-          ${self.blocks.render("statbox", title="Skill", body="{:.3f}".format(player.elo))}
           ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=("ladder-position inactive" if rank == -1 else "ladder-position ladder-first" if rank == 1 else "ladder-position"))}
-          ${self.blocks.render("statbox", title="Overrated", body="{:.3f}".format(player.overrated()))}
+          ${self.blocks.render("statbox", title="Skill", body="{:.3f}".format(player.elo))}
+          ${self.blocks.render("statbox", title="Overrated", body="{:.3f}".format(player.overrated()), classes=("positive" if player.overrated() <= 0 else "negative"))}
           ${self.blocks.render("statbox", title="Side preference", body="{:.2%}".format(redness if redness >= 0.5 else (1-redness)) + (" red" if redness >= 0.5 else " blue"), classes="side-preference", style=sideStyle)}
           </div>
           <div class="row">
@@ -121,10 +122,10 @@ else:
           <div class="row">
           ${self.blocks.render("statbox", title="Goals for", body=player.goalsFor)}
           ${self.blocks.render("statbox", title="Goals against", body=player.goalsAgainst)}
-          ${self.blocks.render("statbox", title="GD/game", body=("{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"))}
+          ${self.blocks.render("statbox", title="GD/game", body=("{:.3f}".format(gd)), classes=("positive" if gd >= 0 else "negative"))}
           </div>
           <div class="row">
-          ${self.blocks.render("statbox", title="Games today", body=player.gamesToday)}
+          ${self.blocks.render("statbox", title="Games today", body=player.gamesToday, classes="negative" if player.gamesToday > 3 else "")}
           ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=player.highestSkill['skill'], time=player.highestSkill['time'], base=self.attr.base), offset=1)}
           ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=player.lowestSkill['skill'], time=player.lowestSkill['time'], base=self.attr.base))}
           </div>

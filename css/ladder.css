@@ -173,6 +173,7 @@ h3.statbox {
 
 .panel-statbox .panel-heading {
   background-color: #DDDDDD;
+  padding: 5px 10px;
 }
 
 .panel-statbox .panel-body {
@@ -185,6 +186,14 @@ h3.statbox {
 
 .panel-statbox .ladder-position {
   width: auto;
+}
+
+.panel-statbox .panel-body.positive {
+  background-color: #C0C0FF;
+}
+
+.panel-statbox .panel-body.negative {
+  background-color: #FFC0C0;
 }
 
 .panel-statbox .date {
