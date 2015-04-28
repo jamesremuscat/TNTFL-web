@@ -33,6 +33,8 @@ currentLoseStreak = {
   "count": 0
 }
 
+tenNilWins = 0
+
 for game in player.games:
     if game.redPlayer == player.name:
         if game.redScore > game.blueScore:
@@ -59,6 +61,8 @@ for game in player.games:
         if game.bluePlayer not in pps:
             pps[game.bluePlayer] = PerPlayerStat(game.bluePlayer)
         pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
+        if game.redScore == 10 and game.blueScore == 0:
+            tenNilWins += 1
     elif game.bluePlayer == player.name:
         if game.blueScore > game.redScore:
           currentWinStreak['from'] = game.time if currentWinStreak['from'] == 0 else currentWinStreak['from']
@@ -83,6 +87,8 @@ for game in player.games:
         if game.redPlayer not in pps:
             pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
         pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
+        if game.blueScore == 10 and game.redScore == 0:
+            tenNilWins += 1
 
 if currentWinStreak['count'] > 0:
   currentStreak = currentWinStreak
@@ -126,7 +132,8 @@ else:
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Games today", body=player.gamesToday, classes="negative" if player.gamesToday > 3 else "")}
-          ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=player.highestSkill['skill'], time=player.highestSkill['time'], base=self.attr.base), offset=1)}
+          ${self.blocks.render("statbox", title="10-0 wins", body=tenNilWins)}
+          ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=player.highestSkill['skill'], time=player.highestSkill['time'], base=self.attr.base))}
           ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=player.lowestSkill['skill'], time=player.lowestSkill['time'], base=self.attr.base))}
           </div>
           <!-- div class="row">
