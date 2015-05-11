@@ -29,6 +29,8 @@ class TableFootballLadder(object):
     lowSkill = {'player': None, 'skill': 0, time: 0}
 
     def __init__(self, ladderFile):
+        self.games = []
+        self.players = {}
         self.ladderFile = ladderFile
         ladder = open(ladderFile, 'r')
         for line in ladder.readlines():
@@ -174,6 +176,13 @@ class Game(object):
         return dateStr
 
 
+class Streak(object):
+    def __init__(self):
+        self.count = 0
+        self.fromDate = 0
+        self.toDate = 0
+
+
 class Player(object):
 
     # Number of days inactivity after which players are considered inactive
@@ -248,6 +257,50 @@ class Player(object):
 
     def __repr__(self):
         return self.name + ":" + str(self.elo)
+
+    def wonGame(self, game):
+        return (game.redPlayer == self.name and game.redScore > game.blueScore) or (game.bluePlayer == self.name and game.blueScore > game.redScore)
+
+    def lostGame(self, game):
+        return (game.redPlayer == self.name and game.redScore < game.blueScore) or (game.bluePlayer == self.name and game.blueScore < game.redScore)
+
+    def getStreaks(self):
+        winStreak = Streak()
+
+        loseStreak = Streak()
+
+        currentStreak = Streak()
+
+        lastWon = False
+        lastLost = False
+
+        for game in self.games:
+            wonGame = self.wonGame(game)
+            lostGame = self.lostGame(game)
+
+            if (wonGame != lastWon) or (lostGame != lastLost):
+                # end of streak
+                if lastWon:
+                    if currentStreak.count > winStreak.count:
+                        winStreak = currentStreak
+                if lastLost:
+                    if currentStreak.count > loseStreak.count:
+                        loseStreak = currentStreak
+                currentStreak = Streak()
+                currentStreak.fromDate = game.time
+                currentStreak.toDate = game.time if (wonGame or lostGame) else 0
+                currentStreak.count = 1 if (wonGame or lostGame) else 0
+
+            if (wonGame and lastWon) or (lostGame and lastLost):
+                currentStreak.toDate = game.time
+                currentStreak.count += 1
+
+            lastWon = wonGame
+            lastLost = lostGame
+
+        currentStreakType = "wins" if lastWon else "losses" if lastLost else "(last game was a draw)"
+
+        return {'win': winStreak, 'lose': loseStreak, 'current': currentStreak, 'currentType': currentStreakType}
 
 
 class PerPlayerStat(object):

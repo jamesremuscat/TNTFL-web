@@ -9,95 +9,28 @@ from tntfl.ladder import PerPlayerStat
 
 pps = {}
 
-winStreak = {
-  "from": 0,
-  "to": 0,
-  "count": 0
-}
+streaks = player.getStreaks()
 
-loseStreak = {
-  "from": 0,
-  "to": 0,
-  "count": 0
-}
-
-currentWinStreak = {
-  "from": 0,
-  "to": 0,
-  "count": 0
-}
-
-currentLoseStreak = {
-  "from": 0,
-  "to": 0,
-  "count": 0
-}
+winStreak = streaks['win']
+loseStreak = streaks['lose']
+currentStreak = streaks['current']
+currentStreakType = streaks['currentType']
 
 tenNilWins = 0
 
 for game in player.games:
     if game.redPlayer == player.name:
-        if game.redScore > game.blueScore:
-          currentWinStreak['from'] = game.time if currentWinStreak['from'] == 0 else currentWinStreak['from']
-          currentWinStreak['to'] = game.time
-          currentWinStreak['count'] += 1
-        else:
-          if currentWinStreak['count'] >= winStreak['count']:
-            winStreak['from'] = currentWinStreak['from']
-            winStreak['to'] = currentWinStreak['to']
-            winStreak['count'] = currentWinStreak['count']
-          currentWinStreak = {"from": 0, "to": 0, "count": 0}
-        if game.redScore < game.blueScore:
-          currentLoseStreak['from'] = game.time if currentLoseStreak['from'] == 0 else currentLoseStreak['from']
-          currentLoseStreak['to'] = game.time
-          currentLoseStreak['count'] += 1
-        else:
-          if currentLoseStreak['count'] >= loseStreak['count']:
-            loseStreak['from'] = currentLoseStreak['from']
-            loseStreak['to'] = currentLoseStreak['to']
-            loseStreak['count'] = currentLoseStreak['count']
-          currentLoseStreak = {"from": 0, "to": 0, "count": 0}
-          
         if game.bluePlayer not in pps:
             pps[game.bluePlayer] = PerPlayerStat(game.bluePlayer)
         pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
         if game.redScore == 10 and game.blueScore == 0:
             tenNilWins += 1
     elif game.bluePlayer == player.name:
-        if game.blueScore > game.redScore:
-          currentWinStreak['from'] = game.time if currentWinStreak['from'] == 0 else currentWinStreak['from']
-          currentWinStreak['to'] = game.time
-          currentWinStreak['count'] += 1
-        else:
-          if currentWinStreak['count'] >= winStreak['count']:
-            winStreak['from'] = currentWinStreak['from']
-            winStreak['to'] = currentWinStreak['to']
-            winStreak['count'] = currentWinStreak['count']
-          currentStreak = {"from": 0, "to": 0, "count": 0}
-        if game.blueScore < game.redScore:
-          currentLoseStreak['from'] = game.time if currentLoseStreak['from'] == 0 else currentLoseStreak['from']
-          currentLoseStreak['to'] = game.time
-          currentLoseStreak['count'] += 1
-        else:
-          if currentLoseStreak['count'] >= loseStreak['count']:
-            loseStreak['from'] = currentLoseStreak['from']
-            loseStreak['to'] = currentLoseStreak['to']
-            loseStreak['count'] = currentLoseStreak['count']
-          currentLoseStreak = {"from": 0, "to": 0, "count": 0}
         if game.redPlayer not in pps:
             pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
         pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
         if game.blueScore == 10 and game.redScore == 0:
             tenNilWins += 1
-
-if currentWinStreak['count'] > 0:
-  currentStreak = currentWinStreak
-  currentStreakType = "wins"
-elif currentLoseStreak['count'] > 0:
-  currentStreak = currentLoseStreak
-  currentStreakType = "losses"
-else:
-  currentStreakType = "(last game was a draw)"
 %>
 <div class="container-fluid">
   <div class="row">
@@ -136,11 +69,11 @@ else:
           ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=player.highestSkill['skill'], time=player.highestSkill['time'], base=self.attr.base))}
           ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=player.lowestSkill['skill'], time=player.lowestSkill['time'], base=self.attr.base))}
           </div>
-          <!-- div class="row">
-          ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak['count'], currentStreakType), fromDate=currentStreak['from'], toDate=currentStreak['to'], base=self.attr.base))}
-          ${self.blocks.render("statbox", title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak['count'], fromDate=winStreak['from'], toDate=winStreak['to'], base=self.attr.base), offset=1)}
-          ${self.blocks.render("statbox", title="Longest losing streak", body=get_template("durationStat.mako", value=loseStreak['count'], fromDate=loseStreak['from'], toDate=loseStreak['to'], base=self.attr.base))}
-          </div -->
+          <div class="row">
+          ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak.count, fromDate=winStreak.fromDate, toDate=winStreak.toDate, base=self.attr.base), offset=1)}
+          ${self.blocks.render("statbox", title="Longest losing streak", body=get_template("durationStat.mako", value=loseStreak.count, fromDate=loseStreak.fromDate, toDate=loseStreak.toDate, base=self.attr.base))}
+          </div>
         </div>
       </div>
       <div class="panel panel-default">
