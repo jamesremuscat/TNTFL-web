@@ -4,6 +4,4 @@
 From ${blocks.render("gameLink", time=fromDate, base=base)}<br/>
 to ${blocks.render("gameLink", time=toDate, base=base)}
 </div>
-% else:
--
 % endif
