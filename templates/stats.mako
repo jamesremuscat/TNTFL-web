@@ -5,7 +5,7 @@ from collections import OrderedDict
 from datetime import date, datetime
 from tntfl.ladder import Game %>
 <%inherit file="html.mako" />
-<% msgs = sorted(ladder.games, key=lambda x: abs(x.skillChangeToBlue), reverse=True) %>
+<% msgs = sorted([g for g in ladder.games if not g.isDeleted()], key=lambda x: abs(x.skillChangeToBlue), reverse=True) %>
 <%
 
 def totimestamp(dt, epoch=datetime(1970,1,1)):
