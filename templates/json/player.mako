@@ -4,7 +4,7 @@
   "rank" : ${ladder.getPlayerRank(player.name)},
   "active" : ${"true" if player.isActive() else "false"},
   "skill": ${player.elo},
-  "overrated" : ${player.overrated()}",
+  "overrated" : ${player.overrated()},
   "total" : {
     "for": ${player.goalsFor},
     "against": ${player.goalsAgainst},
