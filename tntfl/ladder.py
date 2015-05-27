@@ -42,7 +42,7 @@ class TableFootballLadder(object):
             elif len(gameLine) == 7:
                 game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], int(gameLine[4]))
                 game.deletedBy = gameLine[5]
-                game.deletedAt = gameLine[6]
+                game.deletedAt = int(gameLine[6])
                 self.addGame(game)
         ladder.close()
 
