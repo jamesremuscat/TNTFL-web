@@ -18,7 +18,7 @@ if "method" in form:
             if "view" in form and form["view"].value == "json":
                 serve_template("wrappedGame.mako", game=game)
             else:
-                redirect_302("../")
+                redirect_302("../" + str(game.time))
     elif form["method"].value == "view" and "game" in form:
         gameTime = int(form["game"].value)
         found = False
