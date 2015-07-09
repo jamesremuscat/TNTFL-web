@@ -251,3 +251,12 @@ h3.statbox {
 .panel-warning tr:hover {
   background-color: #FCF8E3 !important;
 }
+
+.panel-achievement .panel-heading {
+  background-color: #DDDDDD;
+  padding: 5px 10px;
+}
+
+.panel-achievement h3.panel-title {
+  font-weight: bold;
+}
