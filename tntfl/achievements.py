@@ -1,3 +1,5 @@
+from collections import Counter
+
 class Achievement(object):
     pass
 
@@ -86,3 +88,65 @@ class AgainstTheOdds(Achievement):
             return (game.redScore > game.blueScore) and (player.elo - game.skillChangeToBlue) + 50 <= (opponent.elo + game.skillChangeToBlue)
         else:
             return (game.blueScore > game.redScore) and (player.elo + game.skillChangeToBlue) + 50 <= (opponent.elo - game.skillChangeToBlue)
+
+
+class TheBest(Achievement):
+    name = "The Best"
+    descripton = "Be in first place"
+
+    @staticmethod
+    def applies(player, game, opponent):
+        # It would be better if we could query a rankings table or obtain this information from the player
+        rank = game.bluePosAfter if player.name == game.bluePlayer else game.redPosAfter
+        return rank == 1
+
+
+class TheWorst(Achievement):
+    name = "The Worst"
+    description = "Be in last place"
+
+    @staticmethod
+    def applies(player, game, opponent):
+        # It would be better if we could query a rankings table or obtain this information from the player
+        rank = game.bluePosAfter if player.name == game.bluePlayer else game.redPosAfter
+        # Can't do this, need access to rankings table
+        return rank == -1
+
+
+class Improver(Achievement):
+    name = "Improver"
+    description = "Gain 100 skill points from your lowest point"
+
+    @staticmethod
+    def applies(player, game, opponent):
+        return player.elo - player.lowestSkill["skill"] >= 100
+
+
+class Unstable(Achievement):
+    name = "Unstable"
+    description = "See-saw 10 skill points in consecutive games"
+    previousDeltas = {}
+
+    @staticmethod
+    def applies(player, game, opponent):
+        delta = game.bluePosChange if player.name == game.bluePlayer else game.bluePosChange
+        if player.name in Unstable.previousDeltas:
+            previousDelta = Unstable.previousDeltas[player.name]
+            if (previousDelta <= -10 and delta >= 10) or (previousDelta >= 10 and delta <= -10):
+                # Don't care about previousDeltas any more
+                return True
+        Unstable.previousDeltas[player.name] = delta
+        return False
+
+
+class Comrades(Achievement):
+    name = "Comrades"
+    description = "Play 100 games against the same opponent"
+    pairCounts = Counter()
+
+    @staticmethod
+    def applies(player, game, opponent):
+        pair = frozenset([player.name, opponent.name])
+        Comrades.pairCounts[pair] += 1
+        # Each game is counted twice with player/opponent switched, hence need to trigger on 199 and 200
+        return Comrades.pairCounts[pair] >= (100 * 2 - 1)
