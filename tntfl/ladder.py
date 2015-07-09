@@ -163,6 +163,9 @@ class Game(object):
     def isDeleted(self):
         return self.deletedAt > 0
 
+    def timeAsDatetime(self):
+        return datetime.fromtimestamp(self.time)
+
     @staticmethod
     def formatTime(inTime):
         time = datetime.fromtimestamp(float(inTime))

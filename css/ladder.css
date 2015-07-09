@@ -49,6 +49,15 @@ tr.inactive {
   display: none;
 }
 
+tr.nearly-inactive {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+tr.nearly-inactive:hover {
+  opacity: 1;
+}
+
 button.inactive {
   display: none;
 }

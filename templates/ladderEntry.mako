@@ -1,5 +1,7 @@
 <%
 import re
+from datetime import datetime
+from tntfl.ladder import Player
 
 def idsafe(text):
   return re.sub("[^A-Za-z0-9\-_\:\.]", "_", text)
@@ -13,12 +15,20 @@ if len(trend) > 0:
   trendColour = "#0000FF" if trend[0][1] < trend[size - 1][1] else "#FF0000";
 else:
   trendColour = "#000000"
+
+daysAgo = (datetime.now() - player.games[-1].timeAsDatetime()).days
+daysToGo = Player.DAYS_INACTIVE - daysAgo
+nearlyInactive = daysToGo <= 14
 %>
 % if index == -1:
 <tr class="inactive">
       <td class="ladder-position inactive">-</td>
 % else:
-<tr>
+  % if nearlyInactive:
+    <tr class="nearly-inactive" title="Player will become inactive in ${daysToGo} day${"s" if daysToGo > 0 else ""}">
+  % else:
+    <tr>
+  % endif
       <td class="ladder-position ${"ladder-first" if index is 0 else "" }">${index + 1}</td>
 % endif
       <td class="ladder-name"><a href="${base}player/${player.name | u}/">${player.name}</a></td>
