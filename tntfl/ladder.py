@@ -2,6 +2,7 @@ import os.path
 import time
 from datetime import date, datetime, timedelta
 from tntfl.aks import CircularSkillBuffer
+from tntfl.achievements import Achievement
 
 
 class ExclusionsFile(object):
@@ -95,6 +96,9 @@ class TableFootballLadder(object):
             if (bluePosBefore == redPosAfter or redPosBefore == bluePosAfter):
                 game.positionSwap = True
 
+        game.redAchievements = Achievement.getAllForGame(red, game, blue)
+        game.blueAchievements = Achievement.getAllForGame(blue, game, red)
+
         if blue.elo > self.highSkill['skill']:
             self.highSkill['skill'] = blue.elo
             self.highSkill['player'] = blue
@@ -153,6 +157,8 @@ class Game(object):
         self.bluePosChange = 0
         self.bluePosAfter = -1
         self.time = time
+        self.redAchievements = []
+        self.blueAchievements = []
 
     def __str__(self):
         return self.__repr__()

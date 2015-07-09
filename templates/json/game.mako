@@ -11,7 +11,12 @@
     "score" : ${game.redScore},
     "skillChange" : ${-game.skillChangeToBlue},
     "rankChange" : ${game.redPosChange},
-    "newRank" : ${game.redPosAfter}
+    "newRank" : ${game.redPosAfter},
+    "achievements" : [
+    % for achievement in game.redAchievements:
+      "${achievement.name}": "${achievement.description}"${"," if loop.index < len(game.redAchievements) - 1 else ""}
+    % endfor
+    ]
   },
   "blue" : {
     "name" : "${game.bluePlayer}",
@@ -20,6 +25,11 @@
     "skillChange" : ${game.skillChangeToBlue},
     "rankChange" : ${game.bluePosChange},
     "newRank" : ${game.bluePosAfter}
+    "achievements" : [
+    % for achievement in game.blueAchievements:
+      "${achievement.name}": "${achievement.description}"${"," if loop.index < len(game.blueAchievements) - 1 else ""}
+    % endfor
+    ]
   },
   "positionSwap" : ${"true" if game.positionSwap else "false"},
   "date" : ${game.time}
