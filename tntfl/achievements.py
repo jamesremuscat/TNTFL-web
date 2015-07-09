@@ -12,6 +12,7 @@ class Achievement(object):
             for clz in Achievement.__subclasses__():
                 if clz.applies(player, game, opponent):
                     achievements.append(clz)
+                    player.achieve(clz)
         return achievements
 
 

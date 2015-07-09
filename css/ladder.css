@@ -183,6 +183,7 @@ h3.statbox {
 .panel-statbox .panel-heading {
   background-color: #DDDDDD;
   padding: 5px 10px;
+  cursor: default;
 }
 
 .panel-statbox .panel-body {

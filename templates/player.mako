@@ -71,8 +71,9 @@ for game in player.games:
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
-          ${self.blocks.render("statbox", title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak.count, fromDate=winStreak.fromDate, toDate=winStreak.toDate, base=self.attr.base), offset=1)}
+          ${self.blocks.render("statbox", title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak.count, fromDate=winStreak.fromDate, toDate=winStreak.toDate, base=self.attr.base))}
           ${self.blocks.render("statbox", title="Longest losing streak", body=get_template("durationStat.mako", value=loseStreak.count, fromDate=loseStreak.fromDate, toDate=loseStreak.toDate, base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Total achievements", body=str(sum(player.achievements.values())) + '<div class="date"><a href="#achievements">See all</a></div>' )}
           </div>
         </div>
       </div>
@@ -194,6 +195,17 @@ for game in player.games:
   % else:
       <p>This player has not played any games.</p>
   % endif
+      <div class="panel panel-default">
+        <a id="achievements"></a>
+        <div class="panel-heading">
+          <h2 class="panel-title">Achievements</h2>
+        </div>
+        <div class="panel-body">
+      % for ach, count in player.achievements.iteritems():
+      ${self.blocks.render("statbox", title=ach.name, body=count, caption=ach.description)}
+      % endfor
+        </div>
+      </div>
     </div>
   </div>
 </div>

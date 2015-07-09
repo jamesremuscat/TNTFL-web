@@ -211,6 +211,7 @@ class Player(object):
         self.lowestSkill = {"time": 0, "skill": 0}
         self.mostSignificantGame = None
         self.gamesToday = 0
+        self.achievements = {}
 
     def game(self, game):
         if self.name == game.redPlayer:
@@ -250,6 +251,12 @@ class Player(object):
             self.gamesToday += 1
 
         self.games.append(game)
+
+    def achieve(self, achievement):
+        if achievement in self.achievements.keys():
+            self.achievements[achievement] += 1
+        else:
+            self.achievements[achievement] = 1
 
     def isActive(self, atTime=time.time()):
         #  Using date.* classes is too slow here
