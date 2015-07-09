@@ -17,7 +17,7 @@ class Achievement(object):
 
 class FirstGame(Achievement):
     name = "First Game"
-    description = "Enter your first game into the ladder."
+    description = "Enter your first game into the ladder"
 
     @staticmethod
     def applies(player, game, opponent):
@@ -34,3 +34,42 @@ class BeatANewbie(Achievement):
             return game.skillChangeToBlue < 0 and len(opponent.games) == 1
         else:
             return game.skillChangeToBlue > 0 and len(opponent.games) == 1
+
+
+class YellowStripe(Achievement):
+    name = "Flawless Victory"
+    description = "Beat an opponent 10-0"
+
+    @staticmethod
+    def applies(player, game, opponent):
+        if game.redPlayer == player.name:
+            return game.redScore == 10 and game.blueScore == 0
+        else:
+            return game.redScore == 0 and game.blueScore == 10
+
+
+class MostlyHarmless(Achievement):
+    name = "Mostly Harmless"
+    description = "Play 100 games"
+
+    @staticmethod
+    def applies(player, game, opponent):
+        return len(player.games) == 100
+
+
+class Dangerous(Achievement):
+    name = "Dangerous"
+    description = "Play 1,000 games"
+
+    @staticmethod
+    def applies(player, game, opponent):
+        return len(player.games) == 1000
+
+
+class Elite(Achievement):
+    name = "Elite"
+    description = "Play 10,000 games"
+
+    @staticmethod
+    def applies(player, game, opponent):
+        return len(player.games) == 10000
