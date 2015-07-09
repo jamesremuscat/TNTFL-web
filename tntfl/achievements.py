@@ -73,3 +73,15 @@ class Elite(Achievement):
     @staticmethod
     def applies(player, game, opponent):
         return len(player.games) == 10000
+
+
+class AgainstTheOdds(Achievement):
+    name = "Against the Odds"
+    description = "Beat a player 50 or more skillpoints higher than you"
+
+    @staticmethod
+    def applies(player, game, opponent):
+        if game.redPlayer == player.name:
+            return (game.redScore > game.blueScore) and (player.elo - game.skillChangeToBlue) + 50 <= (opponent.elo + game.skillChangeToBlue)
+        else:
+            return (game.blueScore > game.redScore) and (player.elo + game.skillChangeToBlue) + 50 <= (opponent.elo - game.skillChangeToBlue)
