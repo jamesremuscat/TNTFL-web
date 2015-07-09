@@ -15,7 +15,7 @@ class Achievement(object):
         return achievements
 
 
-class FirstGameAchievement(Achievement):
+class FirstGame(Achievement):
     name = "First Game"
     description = "Enter your first game into the ladder."
 
