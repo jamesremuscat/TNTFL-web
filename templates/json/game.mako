@@ -14,7 +14,9 @@
     "newRank" : ${game.redPosAfter},
     "achievements" : [
     % for achievement in game.redAchievements:
-      "${achievement.name}": "${achievement.description}"${"," if loop.index < len(game.redAchievements) - 1 else ""}
+      { "name" : "${achievement.name}",
+       "description" : "${achievement.description}"
+       }${"," if loop.index < len(game.redAchievements) - 1 else ""}
     % endfor
     ]
   },
@@ -27,7 +29,9 @@
     "newRank" : ${game.bluePosAfter}
     "achievements" : [
     % for achievement in game.blueAchievements:
-      "${achievement.name}": "${achievement.description}"${"," if loop.index < len(game.blueAchievements) - 1 else ""}
+      { "name" : "${achievement.name}",
+       "description" : "${achievement.description}"
+       }${"," if loop.index < len(game.redAchievements) - 1 else ""}
     % endfor
     ]
   },
