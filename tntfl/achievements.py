@@ -93,7 +93,7 @@ class AgainstTheOdds(Achievement):
 
 class TheBest(Achievement):
     name = "The Best"
-    descripton = "Be in first place"
+    description = "Be in first place"
 
     @staticmethod
     def applies(player, game, opponent):
