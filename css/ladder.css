@@ -258,6 +258,7 @@ h3.statbox {
   padding: 5px 10px;
 }
 
-.panel-achievement h3.panel-title {
+.panel-achievement h3.statbox {
   font-weight: bold;
+  min-height: 2em;
 }

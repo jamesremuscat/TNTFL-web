@@ -201,9 +201,14 @@ for game in player.games:
           <h2 class="panel-title">Achievements</h2>
         </div>
         <div class="panel-body">
-      % for ach, count in player.achievements.iteritems():
-      ${self.blocks.render("statbox", title=ach.name, body=count, caption=ach.description)}
-      % endfor
+          <div class="row">
+            % for ach, count in player.achievements.iteritems():
+             % if loop.index % 4 == 0:
+             </div><div class="row">
+             % endif
+            ${self.blocks.render("achievement-stat", count=count, ach=ach)}
+            % endfor
+          </div>
         </div>
       </div>
     </div>
