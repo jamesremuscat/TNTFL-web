@@ -96,8 +96,8 @@ class TableFootballLadder(object):
             if (bluePosBefore == redPosAfter or redPosBefore == bluePosAfter):
                 game.positionSwap = True
 
-        game.redAchievements = Achievement.getAllForGame(red, game, blue)
-        game.blueAchievements = Achievement.getAllForGame(blue, game, red)
+        game.redAchievements = Achievement.getAllForGame(red, game, blue, self)
+        game.blueAchievements = Achievement.getAllForGame(blue, game, red, self)
 
         if blue.elo > self.highSkill['skill']:
             self.highSkill['skill'] = blue.elo
