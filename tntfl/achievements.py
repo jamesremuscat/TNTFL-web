@@ -1,5 +1,6 @@
 from collections import Counter
 
+
 class Achievement(object):
     pass
 
@@ -149,4 +150,4 @@ class Comrades(Achievement):
         pair = frozenset([player.name, opponent.name])
         Comrades.pairCounts[pair] += 1
         # Each game is counted twice with player/opponent switched, hence need to trigger on 199 and 200
-        return Comrades.pairCounts[pair] >= (100 * 2 - 1)
+        return 199 <= Comrades.pairCounts[pair] <= 200
