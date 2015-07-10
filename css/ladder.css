@@ -262,3 +262,24 @@ h3.statbox {
   font-weight: bold;
   min-height: 2em;
 }
+
+.panel-achievement .panel-body {
+  text-align: center;
+}
+
+/* Achievement icons */
+
+.achievement-TheBest {
+  background: url("../img/trophy5.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-Comrades {
+  background: url("../img/football120.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-YellowStripe {
+  background: url("../img/yellowstripe.png") top center no-repeat;
+  padding-top: 48px !important;
+}
