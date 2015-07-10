@@ -93,13 +93,14 @@ class AgainstTheOdds(Achievement):
 
 class TheBest(Achievement):
     name = "The Best"
-    description = "Be in first place"
+    description = "Move into first place"
 
     @staticmethod
     def applies(player, game, opponent):
         # It would be better if we could query a rankings table or obtain this information from the player
         rank = game.bluePosAfter if player.name == game.bluePlayer else game.redPosAfter
-        return rank == 1
+        delta = game.bluePosChange if player.name == game.bluePlayer else game.redPosChange
+        return rank == 1 and delta != 0
 
 
 class TheWorst(Achievement):
@@ -120,7 +121,9 @@ class Improver(Achievement):
 
     @staticmethod
     def applies(player, game, opponent):
-        return player.elo - player.lowestSkill["skill"] >= 100
+        threshold = player.lowestSkill["skill"] + 100
+        delta = game.skillChangeToBlue if player.name == game.bluePlayer else -game.skillChangeToBlue
+        return player.elo >= threshold and player.elo - delta < threshold
 
 
 class Unstable(Achievement):
