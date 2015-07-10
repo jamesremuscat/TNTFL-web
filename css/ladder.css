@@ -269,6 +269,8 @@ h3.statbox {
 
 /* Achievement icons */
 
+/* Icons made by Freepik <http://www.freepik.com> from http://www.flaticon.com licensed under CC BY 3.0 <http://creativecommons.org/licenses/by/3.0/> */
+
 .achievement-TheBest {
   background: url("../img/trophy5.png") top center no-repeat;
   padding-top: 48px !important;
@@ -281,5 +283,40 @@ h3.statbox {
 
 .achievement-YellowStripe {
   background: url("../img/yellowstripe.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-BeatANewbie {
+  background: url("../img/blood17.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-Improver {
+  background: url("../img/football86.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-FirstGame {
+  background: url("../img/football81.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-MostlyHarmless {
+  background: url("../img/mostlyharmless.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-Dangerous {
+  background: url("../img/dangerous.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-Elite {
+  background: url("../img/elite.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-AgainstTheOdds {
+  background: url("../img/casino17.png") top center no-repeat;
   padding-top: 48px !important;
 }
