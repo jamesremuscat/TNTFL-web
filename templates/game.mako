@@ -8,13 +8,13 @@
             </div>
             <div class="col-md-1 ${"yellow-stripe" if game.redScore == 10 else ""}">
               % if len(game.redAchievements) > 0:
-                <img src="${base}/img/trophy5_24.png" alt="Achievement unlocked!" title="Achievement unlocked!" />
+                <img src="${base}img/trophy5_24.png" alt="Achievement unlocked!" title="Achievement unlocked!" />
               % endif
             </div>
             <div class="col-md-2 ${"yellow-stripe" if game.blueScore == 10 or game.redScore == 10 else ""}">${game.redScore} - ${game.blueScore}</div>
             <div class="col-md-1 ${"yellow-stripe" if game.blueScore == 10 else ""}">
               % if len(game.blueAchievements) > 0:
-                <img src="${base}/img/trophy5_24.png" alt="Achievement unlocked!" title="Achievement unlocked!" />
+                <img src="${base}img/trophy5_24.png" alt="Achievement unlocked!" title="Achievement unlocked!" />
               % endif
             </div>
             <div class="col-md-4 blue-player ${"yellow-stripe" if game.blueScore == 10 and game.redScore == 0 else ""}">
