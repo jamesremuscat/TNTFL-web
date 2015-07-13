@@ -336,6 +336,16 @@ h3.statbox {
   padding-top: 48px !important;
 }
 
+.achievement-Resident {
+  background: url("../img/family24.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-FestiveCheer {
+  background: url("../img/tree149.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
 .achievement-NightOwl {
   background: url("../img/owl.png") top center no-repeat;
   padding-top: 48px !important;

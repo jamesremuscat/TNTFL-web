@@ -176,8 +176,8 @@ class Comrades(Achievement):
         return 199 <= Comrades.pairCounts[pair] <= 200
 
 
-class Antichrist(Achievement):
-    name = "Antichrist"
+class FestiveCheer(Achievement):
+    name = "Festive Cheer"
     description = "Play a game on 25th December"
 
     def applies(self, player, game, opponent, ladder):
