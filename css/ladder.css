@@ -93,6 +93,11 @@ div.ladder-trend {
   font-size: x-large;
 }
 
+.recent-game-result .col-md-2 {
+  padding: 0;
+  overflow: hidden;
+}
+
 .recent-game .red-player, .headtohead .red-player {
   border-radius: 4px 0 0 4px;
 }
