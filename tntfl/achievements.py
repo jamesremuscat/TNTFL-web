@@ -104,14 +104,13 @@ class TheBest(Achievement):
 
 class TheWorst(Achievement):
     name = "The Worst"
-    description = "Be in last place"
+    description = "Move into last place"
 
     @staticmethod
     def applies(player, game, opponent, ladder):
-        # It would be better if we could query a rankings table or obtain this information from the player
-        rank = game.bluePosAfter if player.name == game.bluePlayer else game.redPosAfter
-        # Can't do this, need access to rankings table
-        return rank == -1
+        delta = game.bluePosChange if player.name == game.bluePlayer else game.redPosChange
+        players = sorted([p for p in ladder.players.values() if p.isActive(atTime=game.time)], key=lambda x: x.elo, reverse=True)
+        return player == players[-1] and delta != 0
 
 
 class Improver(Achievement):

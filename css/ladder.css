@@ -276,6 +276,11 @@ h3.statbox {
   padding-top: 48px !important;
 }
 
+.achievement-TheWorst {
+  background: url("../img/football100.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
 .achievement-Comrades {
   background: url("../img/football120.png") top center no-repeat;
   padding-top: 48px !important;
