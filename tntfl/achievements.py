@@ -60,6 +60,15 @@ class MostlyHarmless(Achievement):
         return len(player.games) == 100
 
 
+class CommittedCoreFiler(Achievement):
+    name = "Committed CoreFiler"
+    description = "Play 500 games"
+
+    @staticmethod
+    def applies(player, game, opponent, ladder):
+        return len(player.games) == 500
+
+
 class Dangerous(Achievement):
     name = "Dangerous"
     description = "Play 1,000 games"
@@ -67,6 +76,15 @@ class Dangerous(Achievement):
     @staticmethod
     def applies(player, game, opponent, ladder):
         return len(player.games) == 1000
+
+
+class Resident(Achievement):
+    name = "Resident"
+    description = "Play 2,000 games"
+
+    @staticmethod
+    def applies(player, game, opponent, ladder):
+        return len(player.games) == 2000
 
 
 class Elite(Achievement):
