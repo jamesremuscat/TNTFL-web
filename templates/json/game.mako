@@ -26,7 +26,7 @@
     "score" : ${game.blueScore},
     "skillChange" : ${game.skillChangeToBlue},
     "rankChange" : ${game.bluePosChange},
-    "newRank" : ${game.bluePosAfter}
+    "newRank" : ${game.bluePosAfter},
     "achievements" : [
     % for achievement in game.blueAchievements:
       { "name" : "${achievement.name}",
