@@ -2,7 +2,6 @@ from collections import Counter
 
 
 class Achievement(object):
-    pass
 
     @staticmethod
     def getAllForGame(player, game, opponent, ladder):
