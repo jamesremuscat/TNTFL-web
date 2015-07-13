@@ -1,4 +1,5 @@
 from collections import Counter
+import datetime
 
 
 class Achievement(object):
@@ -170,3 +171,55 @@ class Comrades(Achievement):
         Comrades.pairCounts[pair] += 1
         # Each game is counted twice with player/opponent switched, hence need to trigger on 199 and 200
         return 199 <= Comrades.pairCounts[pair] <= 200
+
+
+class Antichrist(Achievement):
+    name = "Antichrist"
+    description = "Play a game on 25th December"
+
+    @staticmethod
+    def applies(player, game, opponent, ladder):
+        d = datetime.datetime.fromtimestamp(game.time)
+        return d.month == 12 and d.day == 25
+
+
+class NightOwl(Achievement):
+    name = "Night Owl"
+    description = "Play a game between 0000 and 0300 hours"
+
+    @staticmethod
+    def applies(player, game, opponent, ladder):
+        d = datetime.datetime.fromtimestamp(game.time)
+        return d.hour < 3 or (d.hour == 3 and d.minutes == 0 and d.seconds == 0 and d.microseconds == 0)
+
+
+class Deviant(Achievement):
+    name = "Deviant"
+    description = "Play a game where != 10 goals are scored"
+
+    @staticmethod
+    def applies(player, game, opponent, ladder):
+        return game.redScore + game.blueScore != 10
+
+
+class Dedication(Achievement):
+    name = "Dedication"
+    description = "Play a game at least once every 60 days for a year"
+    sixtyDays = 1000 * 60 * 60 * 24 * 60
+    oneYear = 1000 * 60 * 60 * 24 * 365
+    streaks = {}
+
+    @staticmethod
+    def applies(player, game, opponent, ladder):
+        if player.name in Dedication.streaks:
+            streak = Dedication.streaks[player.name]
+            if game.time - streak[1] <= sixtyDays:
+                if game.time - streak[0] >= oneYear:
+                    # This should be a one-time achievement. Else needs significant rewrite.
+                    return True
+                else:
+                    Dedication.streaks[player.name] = (streak[0], game.time)
+                    return False
+
+            Dedication.streaks[player.name] = (game.time, game.time)
+            return False
