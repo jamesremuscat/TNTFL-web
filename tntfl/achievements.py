@@ -222,6 +222,19 @@ class Dedication(Achievement):
         Dedication.streaks[player.name] = (game.time, game.time)
         return False
 
+        
+class EarlyBird(Achievement):
+    name = "Early Bird"
+    description = "Play and win the first game of the day"
+
+    def applies(self, player, game, opponent, ladder):
+        if len(ladder.games) < 2:
+            return True
+        thisGame = datetime.datetime.fromtimestamp(game.time).date()
+        prevGame = datetime.datetime.fromtimestamp(ladder.games[-2].time).date()
+        won = (game.blueScore > game.redScore) if player.name == game.bluePlayer else (game.blueScore < game.redScore)
+        return thisGame != prevGame and won
+
 
 class PokeMaster(Achievement):
     name = "Pok&#233;Master"
@@ -236,7 +249,7 @@ class PokeMaster(Achievement):
         pokedex = PokeMaster.pokedexes[player.name]
         pokedex.add(score)
         return len(pokedex) == 11
-        
+
 
 for clz in Achievement.__subclasses__():
     Achievement.achievements.append(clz())

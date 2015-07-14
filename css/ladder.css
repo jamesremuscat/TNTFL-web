@@ -355,3 +355,8 @@ h3.statbox {
   background: url("../img/owl.png") top center no-repeat;
   padding-top: 48px !important;
 }
+
+.achievement-EarlyBird {
+  background: url("../img/birds15.png") top center no-repeat;
+  padding-top: 48px !important;
+}
