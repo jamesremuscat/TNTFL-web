@@ -222,7 +222,7 @@ class Dedication(Achievement):
         Dedication.streaks[player.name] = (game.time, game.time)
         return False
 
-        
+
 class EarlyBird(Achievement):
     name = "Early Bird"
     description = "Play and win the first game of the day"
@@ -249,6 +249,30 @@ class PokeMaster(Achievement):
         pokedex = PokeMaster.pokedexes[player.name]
         pokedex.add(score)
         return len(pokedex) == 11
+
+
+class TheDominator(Achievement):
+    name = "The Dominator"
+    description = "Defeat and obtain points from a player in 10 consecutive games"
+
+    def __init__(self):
+        super(TheDominator, self).__init__()
+        self.counts = Counter()
+
+    def applies(self, player, game, opponent, ladder):
+        pairing = (player.name, opponent.name)
+        if self.counts[pairing] == 10:
+            # Can only Dominate a player once.
+            return False
+
+        playerIsBlue = player.name == game.bluePlayer
+        won = game.blueScore > game.redScore if playerIsBlue else game.redScore > game.blueScore
+        won = won and game.skillChangeToBlue > 0 if playerIsBlue else game.skillChangeToBlue < 0
+        if won:
+            self.counts[pairing] += 1
+        else:
+            self.counts[pairing] = 0
+        return self.counts[pairing] == 10
 
 
 for clz in Achievement.__subclasses__():
