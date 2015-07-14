@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, defaultdict
 import datetime
 
 
@@ -222,6 +222,21 @@ class Dedication(Achievement):
         Dedication.streaks[player.name] = (game.time, game.time)
         return False
 
+
+class PokeMaster(Achievement):
+    name = "Pok&#233;Master"
+    description = "Collect all the scores"
+    pokedexes = defaultdict(set)
+
+    @oncePerPlayer
+    def applies(self, player, game, opponent, ladder):
+        if game.redScore + game.blueScore != 10:
+            return False
+        score = game.blueScore if player.name == game.bluePlayer else game.redScore
+        pokedex = PokeMaster.pokedexes[player.name]
+        pokedex.add(score)
+        return len(pokedex) == 11
+        
 
 for clz in Achievement.__subclasses__():
     Achievement.achievements.append(clz())
