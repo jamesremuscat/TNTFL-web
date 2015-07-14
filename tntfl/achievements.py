@@ -149,7 +149,7 @@ class Improver(Achievement):
 
 class Unstable(Achievement):
     name = "Unstable"
-    description = "See-saw 10 skill points in consecutive games"
+    description = "See-saw 5 or more skill points in consecutive games"
     previousDeltas = {}
 
     def applies(self, player, game, opponent, ladder):
@@ -157,7 +157,7 @@ class Unstable(Achievement):
         delta = game.bluePosChange if player.name == game.bluePlayer else game.redPosChange
         if player.name in Unstable.previousDeltas:
             previousDelta = Unstable.previousDeltas[player.name]
-            if (previousDelta <= -10 and delta >= 10) or (previousDelta >= 10 and delta <= -10):
+            if (previousDelta <= -5 and delta >= 5) or (previousDelta >= 5 and delta <= -5):
                 result = True
         Unstable.previousDeltas[player.name] = delta
         return result
@@ -204,23 +204,23 @@ class Deviant(Achievement):
 class Dedication(Achievement):
     name = "Dedication"
     description = "Play a game at least once every 60 days for a year"
-    sixtyDays = 1000 * 60 * 60 * 24 * 60
-    oneYear = 1000 * 60 * 60 * 24 * 365
+    sixtyDays = 60 * 60 * 24 * 60
+    oneYear = 60 * 60 * 24 * 365
     streaks = {}
 
     @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
         if player.name in Dedication.streaks:
             streak = Dedication.streaks[player.name]
-            if game.time - streak[1] <= sixtyDays:
-                if game.time - streak[0] >= oneYear:
+            if game.time - streak[1] <= Dedication.sixtyDays:
+                if game.time - streak[0] >= Dedication.oneYear:
                     return True
                 else:
                     Dedication.streaks[player.name] = (streak[0], game.time)
                     return False
 
-            Dedication.streaks[player.name] = (game.time, game.time)
-            return False
+        Dedication.streaks[player.name] = (game.time, game.time)
+        return False
 
 
 for clz in Achievement.__subclasses__():
