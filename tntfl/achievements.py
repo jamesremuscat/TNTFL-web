@@ -223,5 +223,18 @@ class Dedication(Achievement):
             return False
 
 
+class EarlyBird(Achievement):
+    name = "Early Bird"
+    description = "Play and win the first game of the day"
+
+    def applies(self, player, game, opponent, ladder):
+        if len(ladder.games) < 2:
+            return True
+        thisGame = datetime.datetime.fromtimestamp(game.time).date()
+        prevGame = datetime.datetime.fromtimestamp(ladder.games[-2].time).date()
+        won = (game.blueScore > game.redScore) if player.name == game.bluePlayer else (game.blueScore < game.redScore)
+        return thisGame != prevGame and won
+
+
 for clz in Achievement.__subclasses__():
     Achievement.achievements.append(clz())
