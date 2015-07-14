@@ -118,23 +118,22 @@ class AgainstTheOdds(Achievement):
 
 class TheBest(Achievement):
     name = "The Best"
-    description = "Move into first place"
+    description = "Go first in the rankings"
 
+    @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
-        # It would be better if we could query a rankings table or obtain this information from the player
         rank = game.bluePosAfter if player.name == game.bluePlayer else game.redPosAfter
-        delta = game.bluePosChange if player.name == game.bluePlayer else game.redPosChange
-        return rank == 1 and delta != 0
+        return rank == 1
 
 
 class TheWorst(Achievement):
     name = "The Worst"
-    description = "Move into last place"
+    description = "Go last in the rankings"
 
+    @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
-        delta = game.bluePosChange if player.name == game.bluePlayer else game.redPosChange
-        players = sorted([p for p in ladder.players.values() if p.isActive(atTime=game.time)], key=lambda x: x.elo, reverse=True)
-        return player == players[-1] and delta != 0
+        rank = game.bluePosAfter if player.name == game.bluePlayer else game.redPosAfter
+        return rank == len([p for p in ladder.players.values() if p.isActive(atTime=game.time)]) - 1
 
 
 class Improver(Achievement):
@@ -154,14 +153,14 @@ class Unstable(Achievement):
     previousDeltas = {}
 
     def applies(self, player, game, opponent, ladder):
-        delta = game.bluePosChange if player.name == game.bluePlayer else game.bluePosChange
+        result = False
+        delta = game.bluePosChange if player.name == game.bluePlayer else game.redPosChange
         if player.name in Unstable.previousDeltas:
             previousDelta = Unstable.previousDeltas[player.name]
             if (previousDelta <= -10 and delta >= 10) or (previousDelta >= 10 and delta <= -10):
-                # Don't care about previousDeltas any more
-                return True
+                result = True
         Unstable.previousDeltas[player.name] = delta
-        return False
+        return result
 
 
 class Comrades(Achievement):
@@ -209,12 +208,12 @@ class Dedication(Achievement):
     oneYear = 1000 * 60 * 60 * 24 * 365
     streaks = {}
 
+    @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
         if player.name in Dedication.streaks:
             streak = Dedication.streaks[player.name]
             if game.time - streak[1] <= sixtyDays:
                 if game.time - streak[0] >= oneYear:
-                    # This should be a one-time achievement. Else needs significant rewrite.
                     return True
                 else:
                     Dedication.streaks[player.name] = (streak[0], game.time)
