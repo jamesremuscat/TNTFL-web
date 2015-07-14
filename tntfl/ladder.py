@@ -210,7 +210,7 @@ class Player(object):
         self.highestSkill = {"time": 0, "skill": 0}
         self.lowestSkill = {"time": 0, "skill": 0}
         self.mostSignificantGame = None
-        self.gamesToday = 0
+        self.gamesPerDay = {}
         self.achievements = {}
 
     def game(self, game):
@@ -247,10 +247,23 @@ class Player(object):
         if self.mostSignificantGame is None or abs(delta) > abs(self.mostSignificantGame.skillChangeToBlue):
             self.mostSignificantGame = game
 
-        if date.fromtimestamp(game.time) == date.today():
-            self.gamesToday += 1
+        gameDate = game.timeAsDatetime().date()
+        if gameDate in self.gamesPerDay:
+            self.gamesPerDay[gameDate] += 1
+        else:
+            self.gamesPerDay[gameDate] = 1
 
         self.games.append(game)
+
+    @property
+    def gamesToday(self):
+        today = date.today()
+        return self.gamesOn(today)
+
+    def gamesOn(self, date):
+        if date in self.gamesPerDay:
+            return self.gamesPerDay[date]
+        return 0
 
     def achieve(self, achievement):
         if achievement in self.achievements.keys():

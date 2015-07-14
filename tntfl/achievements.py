@@ -236,5 +236,13 @@ class EarlyBird(Achievement):
         return thisGame != prevGame and won
 
 
+class Slacker(Achievement):
+    name = "Slacker"
+    description = "Play four or more games in one day"
+
+    def applies(self, player, game, opponent, ladder):
+        thisGame = game.timeAsDatetime().date()
+        return player.gamesOn(thisGame) == 4
+
 for clz in Achievement.__subclasses__():
     Achievement.achievements.append(clz())
