@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, defaultdict
 import datetime
 
 
@@ -243,6 +243,46 @@ class Slacker(Achievement):
     def applies(self, player, game, opponent, ladder):
         thisGame = game.timeAsDatetime().date()
         return player.gamesOn(thisGame) == 4
+
+
+class PokeMaster(Achievement):
+    name = "Pok&#233;Master"
+    description = "Collect all the scores"
+    pokedexes = defaultdict(set)
+
+    @oncePerPlayer
+    def applies(self, player, game, opponent, ladder):
+        if game.redScore + game.blueScore != 10:
+            return False
+        score = game.blueScore if player.name == game.bluePlayer else game.redScore
+        pokedex = PokeMaster.pokedexes[player.name]
+        pokedex.add(score)
+        return len(pokedex) == 11
+
+
+class TheDominator(Achievement):
+    name = "The Dominator"
+    description = "Defeat and obtain points from a player in 10 consecutive games"
+
+    def __init__(self):
+        super(TheDominator, self).__init__()
+        self.counts = Counter()
+
+    def applies(self, player, game, opponent, ladder):
+        pairing = (player.name, opponent.name)
+        if self.counts[pairing] == 10:
+            # Can only Dominate a player once.
+            return False
+
+        playerIsBlue = player.name == game.bluePlayer
+        won = game.blueScore > game.redScore if playerIsBlue else game.redScore > game.blueScore
+        won = won and game.skillChangeToBlue > 0 if playerIsBlue else game.skillChangeToBlue < 0
+        if won:
+            self.counts[pairing] += 1
+        else:
+            self.counts[pairing] = 0
+        return self.counts[pairing] == 10
+
 
 for clz in Achievement.__subclasses__():
     Achievement.achievements.append(clz())
