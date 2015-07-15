@@ -365,3 +365,18 @@ h3.statbox {
   background: url("../img/football101.png") top center no-repeat;
   padding-top: 48px !important;
 }
+
+.achievement-TheDominator {
+  background: url("../img/football54.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-Dedication {
+  background: url("../img/football90.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
+.achievement-PokeMaster {
+  background: url("../img/ball80.png") top center no-repeat;
+  padding-top: 48px !important;
+}
