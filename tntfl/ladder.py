@@ -47,19 +47,19 @@ class TableFootballLadder(object):
                 self.addGame(game)
         ladder.close()
 
+    def getPlayer(self, name):
+        if name not in self.players:
+            self.players[name] = Player(name)
+        return self.players[name]
+
     def addGame(self, game):
         self.games.append(game)
 
         if game.isDeleted():
             return
 
-        if game.redPlayer not in self.players:
-            self.players[game.redPlayer] = Player(game.redPlayer)
-        red = self.players[game.redPlayer]
-
-        if game.bluePlayer not in self.players:
-            self.players[game.bluePlayer] = Player(game.bluePlayer)
-        blue = self.players[game.bluePlayer]
+        red = self.getPlayer(game.redPlayer)
+        blue = self.getPlayer(game.bluePlayer)
 
         predict = 1 / (1 + 10 ** ((red.elo - blue.elo) / 180))
         result = float(game.blueScore) / (game.blueScore + game.redScore)
