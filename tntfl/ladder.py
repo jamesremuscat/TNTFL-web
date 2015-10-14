@@ -201,6 +201,7 @@ class Player(object):
         self.name = name
         self.elo = 0.0
         self.games = []
+        self.withinActive = 0
         self.wins = 0
         self.losses = 0
         self.goalsFor = 0
@@ -254,6 +255,7 @@ class Player(object):
             self.gamesPerDay[gameDate] = 1
 
         self.games.append(game)
+        self.withinActive = game.time + (60 * 60 * 24 * self.DAYS_INACTIVE)
 
     @property
     def gamesToday(self):
@@ -273,7 +275,7 @@ class Player(object):
 
     def isActive(self, atTime=time.time()):
         #  Using date.* classes is too slow here
-        return (not exclusions.contains(self.name)) and len(self.games) > 0 and (self.games[-1].time > atTime - (60 * 60 * 24 * self.DAYS_INACTIVE))
+        return (self.withinActive > atTime) and (not exclusions.contains(self.name))
 
     def overrated(self):
         lastSkill = self.skillBuffer.lastSkill()
