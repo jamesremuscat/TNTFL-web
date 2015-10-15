@@ -213,6 +213,7 @@ class Player(object):
         self.mostSignificantGame = None
         self.gamesPerDay = {}
         self.achievements = {}
+        self.excluded = exclusions.contains(name)
 
     def game(self, game):
         if self.name == game.redPlayer:
@@ -275,7 +276,7 @@ class Player(object):
 
     def isActive(self, atTime=time.time()):
         #  Using date.* classes is too slow here
-        return (self.withinActive > atTime) and (not exclusions.contains(self.name))
+        return (self.withinActive > atTime) and (not self.excluded)
 
     def overrated(self):
         lastSkill = self.skillBuffer.lastSkill()
