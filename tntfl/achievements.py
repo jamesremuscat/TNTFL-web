@@ -9,15 +9,12 @@ def oncePerPlayer(applies):
     '''
     def actualApplies(self, player, game, opponent, ladder):
         return applies(self, player, game, opponent, ladder)
-    return lambda self, p, g, o, l: False if p in self.players else actualApplies(self, p, g, o, l)
+    return lambda self, p, g, o, l: False if self.__class__ in p.achievements.keys() else actualApplies(self, p, g, o, l)
 
 
 class Achievement(object):
 
     achievements = []
-
-    def __init__(self):
-        self.players = []
 
     @staticmethod
     def getAllForGame(player, game, opponent, ladder):
@@ -30,7 +27,6 @@ class Achievement(object):
             for clz in Achievement.achievements:
                 if clz.applies(player, game, opponent, ladder):
                     theseAchievements.append(clz.__class__)
-                    clz.players.append(player)
         return theseAchievements
 
 
