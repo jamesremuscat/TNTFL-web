@@ -1,5 +1,6 @@
 import os.path
 import time
+import cPickle as pickle
 from datetime import date, datetime, timedelta
 from tntfl.aks import CircularSkillBuffer
 from tntfl.achievements import Achievement
@@ -33,18 +34,58 @@ class TableFootballLadder(object):
         self.games = []
         self.players = {}
         self.ladderFile = ladderFile
+
+        cacheFile = "cache"
+        if (os.path.exists(cacheFile)):
+            self.loadFromCache(cacheFile)
+
+        cachedGames = len(self.games)
+        self.update(ladderFile)
+
+        if cachedGames < len(self.games):
+            pickle.dump(self.games, open(cacheFile, 'wb'), pickle.HIGHEST_PROTOCOL)
+
+    def loadFromCache(self, cacheFile):
+        self.games = pickle.load(open(cacheFile, 'rb'))
+        for game in self.games:
+            if not game.isDeleted():
+                red = self.getPlayer(game.redPlayer)
+                blue = self.getPlayer(game.bluePlayer)
+                red.game(game)
+                blue.game(game)
+                red.achieve(game.redAchievements)
+                blue.achieve(game.blueAchievements)
+
+    def update(self, ladderFile):
+        mostRecent = 0
+        numGames = len(self.games)
+        if (numGames > 0):
+            mostRecent = self.games[numGames - 1].time
         ladder = open(ladderFile, 'r')
         for line in ladder.readlines():
             gameLine = line.split()
-            if len(gameLine) == 5:
+            if len(gameLine) == 5 and int(gameLine[4]) > mostRecent:
                 # Red player, red score, blue player, blue score, time
                 game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], int(gameLine[4]))
                 self.addGame(game)
             elif len(gameLine) == 7:
-                game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], int(gameLine[4]))
-                game.deletedBy = gameLine[5]
-                game.deletedAt = int(gameLine[6])
-                self.addGame(game)
+                red = gameLine[0]
+                redScore = gameLine[1]
+                blue = gameLine[2]
+                blueScore = gameLine[3]
+                time = int(gameLine[4])
+                deletedBy = gameLine[5]
+                deletedAt = int(gameLine[6])
+                if time > mostRecent:
+                    game = Game(red, redScore, blue, blueScore, time)
+                    game.deletedBy = deletedBy
+                    game.deletedAt = deletedAt
+                    self.addGame(game)
+                else:
+                    for game in self.games:
+                        if game.time == time and game.redPlayer == red and game.redScore == redScore and game.bluePlayer == blue and game.blueScore == blueScore:
+                            game.deletedBy = deletedBy
+                            game.deletedAt = deletedAt
         ladder.close()
 
     def getPlayer(self, name):
@@ -88,6 +129,7 @@ class TableFootballLadder(object):
             elif player.name == game.redPlayer:
                 redPosAfter = index
                 game.redPosAfter = redPosAfter + 1
+
         if bluePosBefore > 0:
             game.bluePosChange = bluePosBefore - bluePosAfter  # It's this way around because a rise in position is to a lower numbered rank.
         if redPosBefore > 0:
@@ -98,6 +140,8 @@ class TableFootballLadder(object):
 
         game.redAchievements = Achievement.getAllForGame(red, game, blue, self)
         game.blueAchievements = Achievement.getAllForGame(blue, game, red, self)
+        red.achieve(game.redAchievements)
+        blue.achieve(game.blueAchievements)
 
         if blue.elo > self.highSkill['skill']:
             self.highSkill['skill'] = blue.elo
@@ -268,11 +312,12 @@ class Player(object):
             return self.gamesPerDay[date]
         return 0
 
-    def achieve(self, achievement):
-        if achievement in self.achievements.keys():
-            self.achievements[achievement] += 1
-        else:
-            self.achievements[achievement] = 1
+    def achieve(self, achievements):
+        for achievement in achievements:
+            if achievement in self.achievements.keys():
+                self.achievements[achievement] += 1
+            else:
+                self.achievements[achievement] = 1
 
     def isActive(self, atTime=time.time()):
         #  Using date.* classes is too slow here

@@ -30,7 +30,6 @@ class Achievement(object):
             for clz in Achievement.achievements:
                 if clz.applies(player, game, opponent, ladder):
                     theseAchievements.append(clz.__class__)
-                    player.achieve(clz.__class__)
                     clz.players.append(player)
         return theseAchievements
 
