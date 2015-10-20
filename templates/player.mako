@@ -62,7 +62,7 @@ for game in player.games:
           <div class="row">
           ${self.blocks.render("statbox", title="Goals for", body=player.goalsFor)}
           ${self.blocks.render("statbox", title="Goals against", body=player.goalsAgainst)}
-          ${self.blocks.render("statbox", title="GD/game", body=("{:.3f}".format(gd)), classes=("positive" if gd >= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Goal ratio", body=("{:.3f}".format(gd)), classes=("positive" if gd >= 0 else "negative"))}
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Games today", body=player.gamesToday, classes="negative" if player.gamesToday > 3 else "")}
