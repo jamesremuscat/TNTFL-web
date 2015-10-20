@@ -5,7 +5,7 @@ from tntfl.web import get_template %>
 <%inherit file="html.mako" />
 <%
 
-from tntfl.ladder import PerPlayerStat
+from tntfl.player import PerPlayerStat
 
 pps = {}
 

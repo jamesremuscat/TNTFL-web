@@ -2,6 +2,7 @@
 
 import cgi
 from tntfl.ladder import TableFootballLadder
+from tntfl.player import Player
 from tntfl.web import serve_template
 
 
