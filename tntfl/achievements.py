@@ -223,13 +223,21 @@ class EarlyBird(Achievement):
     description = "Play and win the first game of the day"
 
     def applies(self, player, game, opponent, ladder):
-        if len(ladder.games) < 2:
+        prevGame = self.getMostRecentGame(game, ladder)
+
+        if prevGame == -1:
             return True
         thisGame = datetime.datetime.fromtimestamp(game.time).date()
-        prevGame = datetime.datetime.fromtimestamp(ladder.games[-2].time).date()
         won = (game.blueScore > game.redScore) if player.name == game.bluePlayer else (game.blueScore < game.redScore)
         return thisGame != prevGame and won
 
+    def getMostRecentGame(self, curGame, ladder):
+        numGames = len(ladder.games)
+        for i in xrange(numGames - 2, 0, -1):
+            game = ladder.games[i]
+            if not game.isDeleted():
+                return datetime.datetime.fromtimestamp(game.time).date()
+        return -1
 
 class Slacker(Achievement):
     name = "Slacker"
