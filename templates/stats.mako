@@ -1,4 +1,4 @@
-<%! title = "Stats | Table Football Ladder 3.0" %>
+<%! title = "Stats | " %>
 <%! base = "../" %>
 <%!
 from collections import OrderedDict

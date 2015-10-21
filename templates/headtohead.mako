@@ -1,4 +1,4 @@
-<%! title = "Head to Head | Table Football Ladder 3.0"
+<%! title = "Head to Head | "
 base = "../../../"
 from tntfl.ladder import Game %>
 <%inherit file="html.mako" />

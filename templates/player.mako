@@ -1,4 +1,4 @@
-<%! title = "Table Football Ladder 3.0" %>
+<%! title = "" %>
 <%! base = "../../" %>
 <%! from tntfl.ladder import Game
 from tntfl.web import get_template %>
