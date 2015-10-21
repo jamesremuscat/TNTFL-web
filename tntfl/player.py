@@ -43,9 +43,6 @@ class Player(object):
         self.goalsAgainst = 0
         self.skillBuffer = CircularSkillBuffer(10)
         self.gamesAsRed = 0
-        self.highestSkill = {"time": 0, "skill": 0}
-        self.lowestSkill = {"time": 0, "skill": 0}
-        self.mostSignificantGame = None
         self.gamesPerDay = {}
         self.achievements = {}
         self.excluded = exclusions.contains(name)
@@ -75,15 +72,6 @@ class Player(object):
         self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta, 'played': opponent})
         self.elo += delta
 
-        if (self.elo > self.highestSkill["skill"]):
-            self.highestSkill = {"time": game.time, "skill": self.elo}
-
-        if (self.elo < self.lowestSkill["skill"]):
-            self.lowestSkill = {"time": game.time, "skill": self.elo}
-
-        if self.mostSignificantGame is None or abs(delta) > abs(self.mostSignificantGame.skillChangeToBlue):
-            self.mostSignificantGame = game
-
         gameDate = game.timeAsDatetime().date()
         if gameDate in self.gamesPerDay:
             self.gamesPerDay[gameDate] += 1
@@ -92,6 +80,33 @@ class Player(object):
 
         self.games.append(game)
         self.withinActive = game.time + (60 * 60 * 24 * self.DAYS_INACTIVE)
+
+    def getSkillBounds(self):
+        highestSkill = {"time": 0, "skill": 0}
+        lowestSkill = {"time": 0, "skill": 0}
+        elo = 0
+        for game in self.games:
+            if self.name == game.redPlayer:
+                delta = -game.skillChangeToBlue
+            else:
+                delta = game.skillChangeToBlue
+            elo += delta
+            if elo > highestSkill["skill"]:
+                highestSkill = {"time": game.time, "skill": elo}
+            elif elo < lowestSkill["skill"]:
+                lowestSkill = {"time": game.time, "skill": elo}
+        return {"highest": highestSkill, "lowest": lowestSkill}
+
+    def mostSignificantGame(self):
+        mostSignificantGame = None
+        for game in self.games:
+            if self.name == game.redPlayer:
+                delta = -game.skillChangeToBlue
+            else:
+                delta = game.skillChangeToBlue
+            if mostSignificantGame is None or abs(delta) > abs(mostSignificantGame.skillChangeToBlue):
+                mostSignificantGame = game
+        return mostSignificantGame
 
     @property
     def gamesToday(self):

@@ -141,7 +141,7 @@ class Improver(Achievement):
 
     @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
-        threshold = player.lowestSkill["skill"] + 100
+        threshold = player.getSkillBounds()['lowest']["skill"] + 100
         delta = game.skillChangeToBlue if player.name == game.bluePlayer else -game.skillChangeToBlue
         return player.elo >= threshold and player.elo - delta < threshold
 

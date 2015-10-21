@@ -9,9 +9,6 @@ class TableFootballLadder(object):
     games = []
     players = {}
 
-    highSkill = {'player': None, 'skill': 0, time: 0}
-    lowSkill = {'player': None, 'skill': 0, time: 0}
-
     def __init__(self, ladderFile):
         self.games = []
         self.players = {}
@@ -125,22 +122,20 @@ class TableFootballLadder(object):
         red.achieve(game.redAchievements)
         blue.achieve(game.blueAchievements)
 
-        if blue.elo > self.highSkill['skill']:
-            self.highSkill['skill'] = blue.elo
-            self.highSkill['player'] = blue
-            self.highSkill['time'] = game.time
-        if red.elo > self.highSkill['skill']:
-            self.highSkill['skill'] = red.elo
-            self.highSkill['player'] = red
-            self.highSkill['time'] = game.time
-        if blue.elo < self.lowSkill['skill']:
-            self.lowSkill['skill'] = blue.elo
-            self.lowSkill['player'] = blue
-            self.lowSkill['time'] = game.time
-        if red.elo < self.lowSkill['skill']:
-            self.lowSkill['skill'] = red.elo
-            self.lowSkill['player'] = red
-            self.lowSkill['time'] = game.time
+    def getSkillBounds(self):
+        highSkill = {'player': None, 'skill': 0, 'time': 0}
+        lowSkill = {'player': None, 'skill': 0, 'time': 0}
+        for player in self.players.values():
+            skill = player.getSkillBounds()
+            if skill['highest']['skill'] > highSkill['skill']:
+                highSkill['player'] = player
+                highSkill['skill'] = skill['highest']['skill']
+                highSkill['time'] = skill['highest']['time']
+            if skill['lowest']['skill'] < lowSkill['skill']:
+                lowSkill['player'] = player
+                lowSkill['skill'] = skill['lowest']['skill']
+                lowSkill['time'] = skill['lowest']['time']
+        return {'highest': highSkill, 'lowest': lowSkill}
 
     def addAndWriteGame(self, game):
         self.addGame(game)

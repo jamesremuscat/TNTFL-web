@@ -23,6 +23,8 @@ activePlayers = 0
 for player in ladder.players.values():
     if player.isActive():
       activePlayers += 1
+
+skillBounds = ladder.getSkillBounds()
 %>
 <div class="container-fluid">
   <div class="row">
@@ -53,9 +55,9 @@ for player in ladder.players.values():
         <div class="panel-body">
           <dl class="dl-horizontal">
             <dt>Highest ever skill</dt>
-            <dd><b>${"{:.3f}".format(ladder.highSkill['skill'])}</b> (<a href="${self.attr.base}player/${ladder.highSkill['player'].name}">${ladder.highSkill['player'].name}</a>, ${self.blocks.render("gameLink", time=ladder.highSkill['time'], base=self.attr.base)})</dd>
+            <dd><b>${"{:.3f}".format(skillBounds['highest']['skill'])}</b> (<a href="${self.attr.base}player/${skillBounds['highest']['player'].name}">${skillBounds['highest']['player'].name}</a>, ${self.blocks.render("gameLink", time=skillBounds['highest']['time'], base=self.attr.base)})</dd>
             <dt>Lowest ever skill</dt>
-            <dd><b>${"{:.3f}".format(ladder.lowSkill['skill'])}</b> (<a href="${self.attr.base}player/${ladder.lowSkill['player'].name}">${ladder.lowSkill['player'].name}</a>, ${self.blocks.render("gameLink", time=ladder.lowSkill['time'], base=self.attr.base)})</dd>
+            <dd><b>${"{:.3f}".format(skillBounds['lowest']['skill'])}</b> (<a href="${self.attr.base}player/${skillBounds['lowest']['player'].name}">${skillBounds['lowest']['player'].name}</a>, ${self.blocks.render("gameLink", time=skillBounds['lowest']['time'], base=self.attr.base)})</dd>
           </dl>
         </div>
       </div>
