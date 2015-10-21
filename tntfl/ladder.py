@@ -63,9 +63,10 @@ class TableFootballLadder(object):
                     self.addGame(game)
                 else:
                     for game in self.games:
-                        if game.time == time and game.redPlayer == red and game.redScore == redScore and game.bluePlayer == blue and game.blueScore == blueScore:
+                        if game.time == time:
                             game.deletedBy = deletedBy
                             game.deletedAt = deletedAt
+                            break
         ladder.close()
 
     def getPlayer(self, name):
