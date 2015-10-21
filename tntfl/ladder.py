@@ -10,7 +10,6 @@ class TableFootballLadder(object):
     players = {}
 
     def __init__(self, ladderFile):
-        ladderFile = "/home/local/jrem/public_html/tntfl/ladder.txt"
         self.games = []
         self.players = {}
         self.ladderFile = ladderFile
