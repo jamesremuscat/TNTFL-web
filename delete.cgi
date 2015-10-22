@@ -19,7 +19,7 @@ if "game" in form:
             if "deleteConfirm" in form and form["deleteConfirm"].value == "true":
                 game.deletedAt = time()
                 game.deletedBy = os.environ["REMOTE_USER"] if "REMOTE_USER" in os.environ else "Unknown"
-                ladder.writeLadder("ladder.txt")
+                ladder.writeLadder()
                 redirect_302("./")
             else:
                 serve_template("deleteGame.mako", game=game)

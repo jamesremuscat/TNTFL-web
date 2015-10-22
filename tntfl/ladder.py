@@ -2,19 +2,19 @@ import os.path
 import cPickle as pickle
 from tntfl.achievements import Achievement
 from tntfl.player import Player
-from tntfl.ladderFile import LadderFile
+from tntfl.gameStore import GameStore
 from tntfl.game import Game
 
 class TableFootballLadder(object):
 
     games = []
     players = {}
-    ladderFile = None
+    gameStore = None
 
     def __init__(self, ladderFilePath):
         self.games = []
         self.players = {}
-        self.ladderFile = LadderFile(ladderFilePath)
+        self.gameStore = GameStore(ladderFilePath)
 
         cacheFile = "cache"
         if os.path.exists(cacheFile):
@@ -42,7 +42,7 @@ class TableFootballLadder(object):
         numGames = len(self.games)
         if numGames > 0:
             mostRecent = self.games[numGames - 1].time
-        loadedGames = self.ladderFile.getGames()
+        loadedGames = self.gameStore.getGames()
         for loadedGame in loadedGames:
             if loadedGame.time > mostRecent:
                 self.addGame(loadedGame)
@@ -125,10 +125,10 @@ class TableFootballLadder(object):
 
     def addAndWriteGame(self, game):
         self.addGame(game)
-        self.ladderFile.appendGame(game)
+        self.gameStore.appendGame(game)
 
-    def writeLadder(self, ladderFile):
-        self.ladderFile.rewriteGames(self.games)
+    def writeLadder(self):
+        self.gameStore.rewriteGames(self.games)
 
     def getPlayers(self):
         return sorted([p for p in self.players.values()], key=lambda x: x.elo, reverse=True)

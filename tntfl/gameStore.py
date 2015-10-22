@@ -1,6 +1,6 @@
 from tntfl.game import Game
 
-class LadderFile(object):
+class GameStore(object):
 
     _ladderfilePath = ""
 
