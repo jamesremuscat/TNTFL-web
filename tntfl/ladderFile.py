@@ -1,3 +1,5 @@
+from tntfl.game import Game
+
 class LadderFile(object):
 
     _ladderfilePath = ""
@@ -5,11 +7,19 @@ class LadderFile(object):
     def __init__(self, ladderFilePath):
         self._ladderFilePath = ladderFilePath
 
-    def getLines(self):
-        lines = None
+    def getGames(self):
+        games = []
         with open(self._ladderFilePath, 'r') as ladder:
-            lines = ladder.readlines()
-        return lines
+            for line in ladder.readlines():
+                gameLine = line.split()
+                # Red player, red score, blue player, blue score, time[, deletedBy, deletedAt]
+                if len(gameLine) == 5 or len(gameLine) == 7:
+                    game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], int(gameLine[4]))
+                    games.append(game)
+                    if len(gameLine) == 7:
+                        game.deletedBy = gameLine[5]
+                        game.deletedAt = int(gameLine[6])
+        return games
 
     def appendGame(self, game):
         with open(self._ladderFilePath, 'a') as ladder:

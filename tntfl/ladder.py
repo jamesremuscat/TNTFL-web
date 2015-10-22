@@ -42,32 +42,16 @@ class TableFootballLadder(object):
         numGames = len(self.games)
         if numGames > 0:
             mostRecent = self.games[numGames - 1].time
-        lines = self.ladderFile.getLines()
-        for line in lines:
-            gameLine = line.split()
-            if len(gameLine) == 5 and int(gameLine[4]) > mostRecent:
-                # Red player, red score, blue player, blue score, time
-                game = Game(gameLine[0], gameLine[1], gameLine[2], gameLine[3], int(gameLine[4]))
-                self.addGame(game)
-            elif len(gameLine) == 7:
-                red = gameLine[0]
-                redScore = gameLine[1]
-                blue = gameLine[2]
-                blueScore = gameLine[3]
-                time = int(gameLine[4])
-                deletedBy = gameLine[5]
-                deletedAt = int(gameLine[6])
-                if time > mostRecent:
-                    game = Game(red, redScore, blue, blueScore, time)
-                    game.deletedBy = deletedBy
-                    game.deletedAt = deletedAt
-                    self.addGame(game)
-                else:
-                    for game in self.games:
-                        if game.time == time:
-                            game.deletedBy = deletedBy
-                            game.deletedAt = deletedAt
-                            break
+        loadedGames = self.ladderFile.getGames()
+        for loadedGame in loadedGames:
+            if loadedGame.time > mostRecent:
+                self.addGame(loadedGame)
+            elif loadedGame.isDeleted():
+                for game in self.games:
+                    if game.time == loadedGame.time:
+                        game.deletedBy = loadedGame.deletedBy
+                        game.deletedAt = loadedGame.deletedAt
+                        break
 
     def getPlayer(self, name):
         if name not in self.players:
