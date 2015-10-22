@@ -4,7 +4,7 @@ import cgi
 import os
 from time import time
 from tntfl.ladder import TableFootballLadder
-from tntfl.web import redirect_302, serve_template
+from tntfl.web import redirect_302, fail_404, serve_template
 
 form = cgi.FieldStorage()
 
@@ -24,5 +24,5 @@ if "game" in form:
             else:
                 serve_template("deleteGame.mako", game=game)
     if not found:
-        print "Status: 404 Not Found"
+        fail_404()
         print

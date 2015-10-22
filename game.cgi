@@ -3,7 +3,7 @@
 import cgi
 from time import time
 from tntfl.ladder import Game, TableFootballLadder
-from tntfl.web import redirect_302, serve_template
+from tntfl.web import redirect_302, fail_404, serve_template
 
 form = cgi.FieldStorage()
 
@@ -27,5 +27,5 @@ if "method" in form:
                 serve_template("wrappedGame.mako", game=game)
                 found = True
         if not found:
-            print "Status: 404 Not Found"
+            fail_404()
             print
