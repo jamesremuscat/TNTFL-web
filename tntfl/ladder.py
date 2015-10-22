@@ -3,23 +3,25 @@ import cPickle as pickle
 from datetime import date, datetime, timedelta
 from tntfl.achievements import Achievement
 from tntfl.player import Player
+from tntfl.ladderFile import LadderFile
 
 class TableFootballLadder(object):
 
     games = []
     players = {}
+    ladderFile = None
 
-    def __init__(self, ladderFile):
+    def __init__(self, ladderFilePath):
         self.games = []
         self.players = {}
-        self.ladderFile = ladderFile
+        self.ladderFile = LadderFile(ladderFilePath)
 
         cacheFile = "cache"
-        if (os.path.exists(cacheFile)):
+        if os.path.exists(cacheFile):
             self.loadFromCache(cacheFile)
 
         cachedGames = len(self.games)
-        self.update(ladderFile)
+        self.update()
 
         if cachedGames < len(self.games):
             pickle.dump(self.games, open(cacheFile, 'wb'), pickle.HIGHEST_PROTOCOL)
@@ -35,13 +37,13 @@ class TableFootballLadder(object):
                 red.achieve(game.redAchievements)
                 blue.achieve(game.blueAchievements)
 
-    def update(self, ladderFile):
+    def update(self):
         mostRecent = 0
         numGames = len(self.games)
-        if (numGames > 0):
+        if numGames > 0:
             mostRecent = self.games[numGames - 1].time
-        ladder = open(ladderFile, 'r')
-        for line in ladder.readlines():
+        lines = self.ladderFile.getLines()
+        for line in lines:
             gameLine = line.split()
             if len(gameLine) == 5 and int(gameLine[4]) > mostRecent:
                 # Red player, red score, blue player, blue score, time
@@ -66,7 +68,6 @@ class TableFootballLadder(object):
                             game.deletedBy = deletedBy
                             game.deletedAt = deletedAt
                             break
-        ladder.close()
 
     def getPlayer(self, name):
         if name not in self.players:
@@ -115,7 +116,7 @@ class TableFootballLadder(object):
         if redPosBefore > 0:
             game.redPosChange = redPosBefore - redPosAfter
         if bluePosBefore > 0 and redPosBefore > 0:
-            if (bluePosBefore == redPosAfter or redPosBefore == bluePosAfter):
+            if bluePosBefore == redPosAfter or redPosBefore == bluePosAfter:
                 game.positionSwap = True
 
         game.redAchievements = Achievement.getAllForGame(red, game, blue, self)
@@ -140,18 +141,10 @@ class TableFootballLadder(object):
 
     def addAndWriteGame(self, game):
         self.addGame(game)
-        ladder = open(self.ladderFile, 'a')
-        ladder.write("\n%s %s %s %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time))
-        ladder.close()
+        self.ladderFile.appendGame(game)
 
     def writeLadder(self, ladderFile):
-        ladder = open(ladderFile, 'w')
-        for game in self.games:
-            if game.isDeleted():
-                ladder.write("\n%s %s %s %s %.0f %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time, game.deletedBy, game.deletedAt))
-            else:
-                ladder.write("\n%s %s %s %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time))
-        ladder.close()
+        self.ladderFile.rewriteGames(self.games)
 
     def getPlayers(self):
         return sorted([p for p in self.players.values()], key=lambda x: x.elo, reverse=True)
