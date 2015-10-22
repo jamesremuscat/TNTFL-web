@@ -11,19 +11,19 @@ class TableFootballLadder(object):
     players = {}
     gameStore = None
 
-    def __init__(self, ladderFilePath):
+    def __init__(self, ladderFilePath, useCache = True):
         self.games = []
         self.players = {}
         self.gameStore = GameStore(ladderFilePath)
 
         cacheFile = "cache"
-        if os.path.exists(cacheFile):
+        if useCache and os.path.exists(cacheFile):
             self.loadFromCache(cacheFile)
 
         cachedGames = len(self.games)
         self.update()
 
-        if cachedGames < len(self.games):
+        if useCache and cachedGames < len(self.games):
             pickle.dump(self.games, open(cacheFile, 'wb'), pickle.HIGHEST_PROTOCOL)
 
     def loadFromCache(self, cacheFile):
