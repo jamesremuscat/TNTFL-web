@@ -3,7 +3,7 @@
 <%!
 from collections import OrderedDict
 from datetime import date, datetime
-from tntfl.ladder import Game
+from tntfl.game import Game
 from tntfl.player import Player %>
 <%inherit file="html.mako" />
 <% msgs = sorted([g for g in ladder.games if not g.isDeleted()], key=lambda x: abs(x.skillChangeToBlue), reverse=True) %>
