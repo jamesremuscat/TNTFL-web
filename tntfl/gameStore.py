@@ -1,3 +1,4 @@
+from time import time
 from tntfl.game import Game
 
 class GameStore(object):
@@ -25,10 +26,20 @@ class GameStore(object):
         with open(self._ladderFilePath, 'a') as ladder:
             self._writeGame(ladder, game)
 
-    def rewriteGames(self, games):
-        with open(self._ladderFilePath, 'w') as ladder:
-            for game in games:
-                self._writeGame(ladder, game)
+    def deleteGame(self, gameTime, deletedBy, deletedAt = time()):
+        games = self.getGames()
+        found = False
+        for game in games:
+            if game.time == gameTime:
+                game.deletedAt = deletedAt
+                game.deletedBy = deletedBy
+                found = True
+                break
+        if found:
+            with open(self._ladderFilePath, 'w') as ladder:
+                for game in games:
+                    self._writeGame(ladder, game)
+        return found
 
     def _writeGame(self, ladder, game):
         toWrite = "\n%s %s %s %s %.0f" % (game.redPlayer, game.redScore, game.bluePlayer, game.blueScore, game.time)

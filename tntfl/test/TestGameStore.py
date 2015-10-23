@@ -11,10 +11,10 @@ class TestGameStore(unittest.TestCase):
             with open(filePath, 'w') as temp:
                 temp.write("\n%s %s %s %s %.0f" % game1)
 
-            store = GameStore(filePath)
-            games = store.getGames()
-            self.assertEqual(len(games), 1)
-            self._assertGame(games[0], game1)
+            sut = GameStore(filePath)
+            result = sut.getGames()
+            self.assertEqual(len(result), 1)
+            self._assertGame(result[0], game1)
         finally:
             os.remove(filePath)
 
@@ -25,10 +25,10 @@ class TestGameStore(unittest.TestCase):
             with open(filePath, 'w') as temp:
                 temp.write("\n%s %s %s %s %.0f %s %.0f" % game1)
 
-            store = GameStore(filePath)
-            games = store.getGames()
-            self.assertEqual(len(games), 1)
-            self._assertGame(games[0], game1)
+            sut = GameStore(filePath)
+            result = sut.getGames()
+            self.assertEqual(len(result), 1)
+            self._assertGame(result[0], game1)
         finally:
             os.remove(filePath)
 
@@ -40,12 +40,12 @@ class TestGameStore(unittest.TestCase):
             with open(filePath, 'w') as temp:
                 temp.write("\n%s %s %s %s %.0f" % game1)
 
-            store = GameStore(filePath)
-            store.appendGame(self._createGame(game2))
-            games = store.getGames()
-            self.assertEqual(len(games), 2)
-            self._assertGame(games[0], game1)
-            self._assertGame(games[1], game2)
+            sut = GameStore(filePath)
+            sut.appendGame(self._createGame(game2))
+            result = sut.getGames()
+            self.assertEqual(len(result), 2)
+            self._assertGame(result[0], game1)
+            self._assertGame(result[1], game2)
         finally:
             os.remove(filePath)
 
@@ -56,15 +56,12 @@ class TestGameStore(unittest.TestCase):
             with open(filePath, 'w') as temp:
                 temp.write("\n%s %s %s %s %.0f" % game1)
 
-            store = GameStore(filePath)
-            games = store.getGames()
-            games[0].deletedBy = "foo"
-            games[0].deletedAt = 1445443861
-            store.rewriteGames(games)
+            sut = GameStore(filePath)
+            sut.deleteGame(1445443858, "foo", 1445443861)
 
-            games = store.getGames()
-            self.assertEqual(len(games), 1)
-            self._assertGame(games[0], game1 + ("foo", 1445443861))
+            result = sut.getGames()
+            self.assertEqual(len(result), 1)
+            self._assertGame(result[0], game1 + ("foo", 1445443861))
         finally:
             os.remove(filePath)
 
@@ -77,32 +74,32 @@ class TestGameStore(unittest.TestCase):
                 temp.write("\n%s %s %s %s %.0f" % game1)
                 temp.write("\n%s %s %s %s %.0f" % game2)
 
-            store = GameStore(filePath)
-            games = store.getGames()
-            self.assertEqual(len(games), 2)
-            self._assertGame(games[0], game1)
-            self._assertGame(games[1], game2)
+            sut = GameStore(filePath)
+            result = sut.getGames()
+            self.assertEqual(len(result), 2)
+            self._assertGame(result[0], game1)
+            self._assertGame(result[1], game2)
 
             game3 = ("bar", 8, "baz", 2, 1445443860)
             game4 = ("bim", 8, "bob", 2, 1445443861)
-            store.appendGame(self._createGame(game3))
-            store.appendGame(self._createGame(game4))
-            games = store.getGames()
-            self.assertEqual(len(games), 4)
-            self._assertGame(games[0], game1)
-            self._assertGame(games[1], game2)
-            self._assertGame(games[2], game3)
-            self._assertGame(games[3], game4)
+            sut.appendGame(self._createGame(game3))
+            sut.appendGame(self._createGame(game4))
 
-            games[2].deletedBy = "baz"
-            games[2].deletedAt = 1445443862
-            store.rewriteGames(games)
-            games = store.getGames()
-            self.assertEqual(len(games), 4)
-            self._assertGame(games[0], game1)
-            self._assertGame(games[1], game2)
-            self._assertGame(games[2], game3 + ("baz", 1445443862))
-            self._assertGame(games[3], game4)
+            result = sut.getGames()
+            self.assertEqual(len(result), 4)
+            self._assertGame(result[0], game1)
+            self._assertGame(result[1], game2)
+            self._assertGame(result[2], game3)
+            self._assertGame(result[3], game4)
+
+            sut.deleteGame(1445443860, "baz", 1445443862)
+
+            result = sut.getGames()
+            self.assertEqual(len(result), 4)
+            self._assertGame(result[0], game1)
+            self._assertGame(result[1], game2)
+            self._assertGame(result[2], game3 + ("baz", 1445443862))
+            self._assertGame(result[3], game4)
         finally:
             os.remove(filePath)
 

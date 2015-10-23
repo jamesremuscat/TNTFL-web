@@ -127,8 +127,8 @@ class TableFootballLadder(object):
         self.addGame(game)
         self.gameStore.appendGame(game)
 
-    def writeLadder(self):
-        self.gameStore.rewriteGames(self.games)
+    def deleteGame(self, gameTime, deletedBy):
+        return self.gameStore.deleteGame(gameTime, deletedBy)
 
     def getPlayers(self):
         return sorted([p for p in self.players.values()], key=lambda x: x.elo, reverse=True)
