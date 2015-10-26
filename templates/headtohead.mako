@@ -1,6 +1,6 @@
 <%! title = "Head to Head | "
 base = "../../../"
-from tntfl.ladder import Game %>
+from tntfl.game import Game %>
 <%inherit file="html.mako" />
 <%
 self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../"

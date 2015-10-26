@@ -1,6 +1,6 @@
 <%! title = "" %>
 <%! base = "../../" %>
-<%! from tntfl.ladder import Game
+<%! from tntfl.game import Game
 from tntfl.web import get_template %>
 <%inherit file="html.mako" />
 <%
