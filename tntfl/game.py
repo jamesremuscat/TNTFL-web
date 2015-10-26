@@ -15,7 +15,7 @@ class Game(object):
         self.blueScore = int(blueScore)
         self.bluePosChange = 0
         self.bluePosAfter = -1
-        self.time = time
+        self.time = int(time)
         self.redAchievements = []
         self.blueAchievements = []
 

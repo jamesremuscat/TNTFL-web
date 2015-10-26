@@ -4,6 +4,7 @@ from time import time
 from tntfl.achievements import Achievement
 from tntfl.player import Player
 from tntfl.gameStore import GameStore
+from tntfl.game import Game
 
 class TableFootballLadder(object):
 
@@ -129,10 +130,16 @@ class TableFootballLadder(object):
                 lowSkill['time'] = skill['lowest']['time']
         return {'highest': highSkill, 'lowest': lowSkill}
 
-    def addAndWriteGame(self, game):
-        self.addGame(game)
-        self._gameStore.appendGame(game)
-        self._writeToCache()
+    def addAndWriteGame(self, redPlayer, redScore, bluePlayer, blueScore):
+        game = None
+        redScore = int(redScore)
+        blueScore = int(blueScore)
+        if redScore >= 0 and blueScore >= 0 and (redScore + blueScore) > 0:
+            game = Game(redPlayer, redScore, bluePlayer, blueScore, int(time()))
+            self.addGame(game)
+            self._gameStore.appendGame(game)
+            self._writeToCache()
+        return game
 
     def deleteGame(self, gameTime, deletedBy):
         return self._gameStore.deleteGame(gameTime, deletedBy)

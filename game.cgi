@@ -14,8 +14,7 @@ if "method" in form:
         if "bluePlayer" in form and "redPlayer" in form:
             redScore = form["redScore"].value if "redScore" in form else 0
             blueScore = form["blueScore"].value if "blueScore" in form else 0
-            game = Game(form["redPlayer"].value, redScore, form["bluePlayer"].value, blueScore, time())
-            ladder.addAndWriteGame(game)
+            game = ladder.addAndWriteGame(form["redPlayer"].value, redScore, form["bluePlayer"].value, blueScore)
             if "view" in form and form["view"].value == "json":
                 serve_template("wrappedGame.mako", game=game)
             else:
