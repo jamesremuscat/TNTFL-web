@@ -44,6 +44,10 @@ class TableFootballLadder(object):
         if self._usingCache:
             pickle.dump(self.games, open(self._cacheFilePath, 'wb'), pickle.HIGHEST_PROTOCOL)
 
+    def _deleteCache(self):
+        if os.path.exists(self._cacheFilePath) and self._usingCache:
+            os.remove(self._cacheFilePath)
+
     def _loadFromStore(self):
         mostRecent = 0
         numGames = len(self.games)
@@ -53,12 +57,6 @@ class TableFootballLadder(object):
         for loadedGame in loadedGames:
             if loadedGame.time > mostRecent:
                 self.addGame(loadedGame)
-            elif loadedGame.isDeleted():
-                for game in self.games:
-                    if game.time == loadedGame.time:
-                        game.deletedBy = loadedGame.deletedBy
-                        game.deletedAt = loadedGame.deletedAt
-                        break
 
     def getPlayer(self, name):
         if name not in self.players:
@@ -142,6 +140,7 @@ class TableFootballLadder(object):
         return game
 
     def deleteGame(self, gameTime, deletedBy):
+        self._deleteCache()
         return self._gameStore.deleteGame(gameTime, deletedBy)
 
     def getPlayers(self):
