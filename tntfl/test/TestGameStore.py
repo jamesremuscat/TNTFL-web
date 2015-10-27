@@ -46,6 +46,8 @@ class TestGameStore(unittest.TestCase):
             self.assertEqual(len(result), 2)
             self._assertGame(result[0], game1)
             self._assertGame(result[1], game2)
+            with open(filePath, 'r') as temp:
+                self.assertMultiLineEqual(temp.read(), "\ntlr 0 cjm 10 1445443858\njma 5 tmm 5 1445443859")
         finally:
             os.remove(filePath)
 
@@ -62,6 +64,8 @@ class TestGameStore(unittest.TestCase):
             result = sut.getGames()
             self.assertEqual(len(result), 1)
             self._assertGame(result[0], game1 + ("foo", 1445443861))
+            with open(filePath, 'r') as temp:
+                self.assertMultiLineEqual(temp.read(), "\ntlr 0 cjm 10 1445443858 foo 1445443861")
         finally:
             os.remove(filePath)
 
@@ -100,6 +104,8 @@ class TestGameStore(unittest.TestCase):
             self._assertGame(result[1], game2)
             self._assertGame(result[2], game3 + ("baz", 1445443862))
             self._assertGame(result[3], game4)
+            with open(filePath, 'r') as temp:
+                self.assertMultiLineEqual(temp.read(), "\ntlr 0 cjm 10 1445443858\nfoo 2 bar 8 1445443859\nbar 8 baz 2 1445443860 baz 1445443862\nbim 8 bob 2 1445443861")
         finally:
             os.remove(filePath)
 
