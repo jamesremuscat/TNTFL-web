@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>${self.attr.title}Table Football Ladder 3.1</title>
+    <title>${self.attr.title}Table Football Ladder 3.2</title>
 
     <!-- Bootstrap -->
     <link href="${self.attr.base}css/bootstrap.min.css" rel="stylesheet">
@@ -20,9 +20,9 @@
     <![endif]-->
 
     <script src="${self.attr.base}js/jquery.min.js"></script>
-    <script type="text/javascript" src="${self.attr.base}js/jquery.tablesorter.min.js"></script> 
-    <script type="text/javascript" src="${self.attr.base}js/jquery.flot.min.js"></script> 
-    <script type="text/javascript" src="${self.attr.base}js/jquery.flot.time.min.js"></script> 
+    <script type="text/javascript" src="${self.attr.base}js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="${self.attr.base}js/jquery.flot.min.js"></script>
+    <script type="text/javascript" src="${self.attr.base}js/jquery.flot.time.min.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/jquery.floatThead.min.js"></script>
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li><a href="${self.attr.base}speculate/">Speculate</a></li>
         <li><a href="${self.attr.base}api/">API</a></li>
       </ul>
-    
+
         <form class="navbar-form navbar-right game-entry" method="post" action="${self.attr.base}game/add/">
           <div class="form-group">
             <input type="text" name="redPlayer" class="form-control red player" placeholder="Red">
