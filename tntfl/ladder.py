@@ -133,10 +133,10 @@ class TableFootballLadder(object):
         redScore = int(redScore)
         blueScore = int(blueScore)
         if redScore >= 0 and blueScore >= 0 and (redScore + blueScore) > 0:
+            self._deleteCache()
             game = Game(redPlayer, redScore, bluePlayer, blueScore, int(time()))
             self.addGame(game)
             self._gameStore.appendGame(game)
-            self._writeToCache()
         return game
 
     def deleteGame(self, gameTime, deletedBy):
