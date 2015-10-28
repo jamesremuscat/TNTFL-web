@@ -1,4 +1,4 @@
-<%! base = "../../../" %>
+<%! base = "" %>
 <%
 def accept(game):
     return (not fromTime or game.time >= fromTime) and (not toTime or game.time <= toTime)
