@@ -48,11 +48,14 @@ class TestPages(TestDeployment):
         self.assertTrue("<!DOCTYPE html>" in response.read())
 
 class TestApi(TestDeployment):
-    def testGame(self):
-        response = self._getJsonFrom('game/1223308996/json')
-        
+    def testGameJson(self):
+        page = 'game/1223308996/json'
+        response = self._getJsonFrom(page)
+
         self.assertEqual(response['red']['name'], 'jrem')
         self.assertEqual(response['red']['href'], '../../player/jrem/json')
+        urlToPlayer = urlparse.urljoin(self._page(page), response['red']['href'])
+        self.assertEqual(urlToPlayer, urlparse.urljoin(self.urlBase, "player/jrem/json"))
         self.assertEqual(response['red']['score'], 10)
         self.assertEqual(response['red']['skillChange'], 14.8698309141)
         self.assertEqual(response['red']['rankChange'], 0)
@@ -74,26 +77,44 @@ class TestApi(TestDeployment):
         self.assertEqual(response['blue']['newRank'], 14)
         self.assertEqual(response['blue']['achievements'], [])
 
-    def testPlayerApiReachable(self):
-        response = self._getJsonFrom('player/jrem/json')
+        self.assertEqual(response['positionSwap'], False)
+        self.assertEqual(response['date'], 1223308996)
 
-    def testPlayerGamesApiReachable(self):
-        response = self._getJsonFrom('player/jrem/games/json')
+    def testPlayerJson(self):
+        page = 'player/ndt/json'
+        response = self._getJsonFrom(page)
+        self.assertEqual(response['name'], "ndt")
+        self.assertEqual(response['rank'], -1)
+        self.assertEqual(response['active'], False)
+        self.assertEqual(response['skill'], 65.7308777725)
+        self.assertEqual(response['overrated'], -20.2998078551)
+        urlToPlayer = urlparse.urljoin(self._page(page), response['games']['href'])
+        self.assertEqual(urlToPlayer, urlparse.urljoin(self.urlBase, "player/ndt/games/json"))
+        self.assertEqual(response['total']['for'], 2895)
+        self.assertEqual(response['total']['against'], 2005)
+        self.assertEqual(response['total']['games'], 490)
+        self.assertEqual(response['total']['wins'], 286)
+        self.assertEqual(response['total']['losses'], 96)
+        self.assertEqual(response['total']['gamesToday'], 0)
 
-    def testLadderApiReachable(self):
+    def testPlayerGamesJsonReachable(self):
+        response = self._getJsonFrom('player/ndt/games/json')
+        self.assertEqual(len(response), 490)
+
+    def testLadderJsonReachable(self):
         response = self._getJsonFrom('ladder/json')
 
-    def testRecentApiReachable(self):
+    def testRecentJsonReachable(self):
         response = self._getJsonFrom('recent/json')
 
-    def testGames(self):
+    def testGamesJson(self):
         page = 'games.cgi?view=json;from=1120830176;to=1120840777'
         response = self._getJsonFrom(page)
         self.assertEqual(len(response), 3)
 
         self.assertEqual(response[0]['red']['name'], 'lefh')
         self.assertEqual(response[0]['red']['href'], 'player/lefh/json')
-        urlToPlayer = urlparse.urljoin(urlparse.urljoin(self.urlBase, page), response[0]['red']['href'])
+        urlToPlayer = urlparse.urljoin(self._page(page), response[0]['red']['href'])
         self.assertEqual(urlToPlayer, urlparse.urljoin(self.urlBase, "player/lefh/json"))
         self.assertEqual(response[0]['red']['score'], 5)
         self.assertEqual(response[0]['red']['skillChange'], -0.497657033239)
@@ -103,8 +124,6 @@ class TestApi(TestDeployment):
 
         self.assertEqual(response[0]['blue']['name'], 'pdw')
         self.assertEqual(response[0]['blue']['href'], 'player/pdw/json')
-        urlToPlayer = urlparse.urljoin(urlparse.urljoin(self.urlBase, page), response[0]['blue']['href'])
-        self.assertEqual(urlToPlayer, urlparse.urljoin(self.urlBase, "player/pdw/json"))
         self.assertEqual(response[0]['blue']['score'], 5)
         self.assertEqual(response[0]['blue']['skillChange'], 0.497657033239)
         self.assertEqual(response[0]['blue']['rankChange'], 0)
