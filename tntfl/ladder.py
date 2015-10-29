@@ -23,9 +23,8 @@ class TableFootballLadder(object):
         self._loadFromCache()
         numCachedGames = len(self.games)
 
-        self._loadFromStore()
-
-        if numCachedGames < len(self.games):
+        if numCachedGames == 0:
+            self._loadFromStore()
             self._writeToCache()
 
     def _loadFromCache(self):
@@ -49,14 +48,9 @@ class TableFootballLadder(object):
             os.remove(self._cacheFilePath)
 
     def _loadFromStore(self):
-        mostRecent = 0
-        numGames = len(self.games)
-        if numGames > 0:
-            mostRecent = self.games[numGames - 1].time
         loadedGames = self._gameStore.getGames()
         for loadedGame in loadedGames:
-            if loadedGame.time > mostRecent:
-                self.addGame(loadedGame)
+            self.addGame(loadedGame)
 
     def getPlayer(self, name):
         if name not in self.players:
