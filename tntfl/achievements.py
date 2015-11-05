@@ -240,14 +240,6 @@ class EarlyBird(Achievement):
                 return datetime.datetime.fromtimestamp(game.time).date()
         return -1
 
-class Slacker(Achievement):
-    name = "Slacker"
-    description = "Play four or more games in one day"
-
-    def applies(self, player, game, opponent, ladder):
-        thisGame = game.timeAsDatetime().date()
-        return player.gamesOn(thisGame) == 4
-
 
 class PokeMaster(Achievement):
     name = "Pok&#233;Master"
