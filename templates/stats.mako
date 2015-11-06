@@ -121,15 +121,5 @@ for day, tally in gamesPerDay.iteritems():
       </div>
     </div>
   </div>
-
-<%
-achievements = {}
-for ach in Achievement.achievements:
-    achievements[ach.__class__] = 0
-
-for player in ladder.getPlayers():
-    for name, amount in player.achievements.items():
-        achievements[name] += amount
-%>
-  ${blocks.render("achievementList", achievements=sorted(achievements.iteritems(), reverse=True, key=lambda t: t[1]))}
+  ${blocks.render("achievementList", achievements=sorted(ladder.getAchievements().iteritems(), reverse=True, key=lambda t: t[1]))}
 </div>
