@@ -207,9 +207,23 @@ for game in player.games:
              % if loop.index % 4 == 0:
              </div><div class="row">
              % endif
-            ${self.blocks.render("achievement-stat", count=len(games), ach=ach)}
+            ${self.blocks.render("achievement-stat", games=list(reversed(games)), ach=ach)}
             % endfor
           </div>
+          <script>
+              function togglecollapse(name){
+                var element = document.getElementById(name + '-collapse');
+                var image = document.getElementById(name + '-arrow');
+                if (element.style.display == "block"){
+                    element.style.display = "none";
+                    image.src = "../../img/arrow-down.png";
+                }
+                else{
+                    element.style.display = "block";
+                    image.src = "../../img/arrow-up.png";
+                }
+          }
+        </script>
         </div>
       </div>
     </div>

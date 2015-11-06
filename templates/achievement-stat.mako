@@ -4,10 +4,13 @@
     <div class="panel-heading">
       <h3 class="statbox">${ach.name}</h3>
     </div>
-    <div class="panel-body achievement-${ach.__name__}"">
+    <div class="panel-body achievement-${ach.__name__}">
       ${len(games)}
-      <div class="achievement-games">
-      <ul class="list-unstyled ">
+      <img src="../../img/arrow-down.png"
+           id="achievement-${ach.__name__}-arrow"
+           onclick="togglecollapse('achievement-${ach.__name__}')"
+       />
+      <ul class="list-unstyled achievement-games" id="achievement-${ach.__name__}-collapse">
 %for game in games:
         <li>
             <a href="../../game/${game.time}">${game.formatTime(game.time)}</a>
@@ -15,6 +18,6 @@
 %endfor
       </ul>
       </div>
-    </div>
+
   </div>
 </div>

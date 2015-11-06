@@ -273,7 +273,7 @@ h3.statbox {
 }
 
 .achievement-games {
-  display:block;
+  display:none;
   font-weight: normal;
   font-size: small;
   border-width: 1px;
@@ -281,6 +281,7 @@ h3.statbox {
   border-color: #DDD;
   max-height:200px;
   overflow: auto;
+  margin:0px;
 }
 
 .achievement-games li:nth-child(odd) {
