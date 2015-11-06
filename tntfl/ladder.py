@@ -1,7 +1,7 @@
 import os.path
 import cPickle as pickle
 from time import time
-from tntfl.achievements import Achievement
+from tntfl.achievements import Achievements
 from tntfl.player import Player
 from tntfl.gameStore import GameStore
 from tntfl.game import Game
@@ -13,12 +13,15 @@ class TableFootballLadder(object):
     _gameStore = None
     _cacheFilePath = "cache"
     _usingCache = True
+    achievements = None
 
     def __init__(self, ladderFilePath, useCache = True):
         self.games = []
         self.players = {}
         self._gameStore = GameStore(ladderFilePath)
         self._usingCache = useCache
+
+        self.achievements = Achievements()
 
         self._loadFromCache()
         numCachedGames = len(self.games)
@@ -36,8 +39,8 @@ class TableFootballLadder(object):
                     blue = self.getPlayer(game.bluePlayer)
                     red.game(game)
                     blue.game(game)
-                    red.achieve(game.redAchievements)
-                    blue.achieve(game.blueAchievements)
+                    red.achieve(game.redAchievements, game)
+                    blue.achieve(game.blueAchievements, game)
 
     def _writeToCache(self):
         if self._usingCache:
@@ -102,10 +105,10 @@ class TableFootballLadder(object):
             if bluePosBefore == redPosAfter or redPosBefore == bluePosAfter:
                 game.positionSwap = True
 
-        game.redAchievements = Achievement.getAllForGame(red, game, blue, self)
-        game.blueAchievements = Achievement.getAllForGame(blue, game, red, self)
-        red.achieve(game.redAchievements)
-        blue.achieve(game.blueAchievements)
+        game.redAchievements = self.achievements.getAllForGame(red, game, blue, self)
+        game.blueAchievements = self.achievements.getAllForGame(blue, game, red, self)
+        red.achieve(game.redAchievements, game)
+        blue.achieve(game.blueAchievements, game)
 
     def getSkillBounds(self):
         highSkill = {'player': None, 'skill': 0, 'time': 0}
@@ -145,3 +148,13 @@ class TableFootballLadder(object):
         if playerName in ranked:
             return ranked.index(playerName) + 1
         return -1
+
+    def getAchievements(self):
+        achievements = {}
+        for ach in self.achievements.achievements:
+            achievements[ach.__class__] = 0
+
+        for player in self.players.values():
+            for name, games in player.achievements.iteritems():
+                achievements[name] += len(games)
+        return achievements

@@ -272,6 +272,22 @@ h3.statbox {
   text-align: center;
 }
 
+.achievement-games {
+  display:none;
+  font-weight: normal;
+  font-size: small;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #DDD;
+  max-height:200px;
+  overflow: auto;
+  margin:0px;
+}
+
+.achievement-games li:nth-child(odd) {
+  background-color: #FFFFFF;
+}
+
 /* Achievement icons */
 
 /* Icons made by Freepik <http://www.freepik.com> from http://www.flaticon.com licensed under CC BY 3.0 <http://creativecommons.org/licenses/by/3.0/> */

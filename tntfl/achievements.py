@@ -14,21 +14,7 @@ def oncePerPlayer(applies):
 
 
 class Achievement(object):
-
-    achievements = []
-
-    @staticmethod
-    def getAllForGame(player, game, opponent, ladder):
-        '''
-        Identifies all achievements unlocked by player in game against opponent.
-        This method should be called AFTER Player.game() has been called with game for BOTH players.
-        '''
-        theseAchievements = []
-        if player.games[-1] == game:
-            for clz in Achievement.achievements:
-                if clz.applies(player, game, opponent, ladder):
-                    theseAchievements.append(clz.__class__)
-        return theseAchievements
+    pass
 
 
 class FirstGame(Achievement):
@@ -323,5 +309,21 @@ class BossFight(Achievement):
         return False
 
 
-for clz in Achievement.__subclasses__():
-    Achievement.achievements.append(clz())
+class Achievements(object):
+    achievements = []
+
+    def __init__(self):
+        for clz in Achievement.__subclasses__():
+            self.achievements.append(clz())
+
+    def getAllForGame(self, player, game, opponent, ladder):
+        '''
+        Identifies all achievements unlocked by player in game against opponent.
+        This method should be called AFTER Player.game() has been called with game for BOTH players.
+        '''
+        theseAchievements = []
+        if player.games[-1] == game:
+            for clz in self.achievements:
+                if clz.applies(player, game, opponent, ladder):
+                    theseAchievements.append(clz.__class__)
+        return theseAchievements

@@ -113,12 +113,12 @@ class Player(object):
             return self.gamesPerDay[date]
         return 0
 
-    def achieve(self, achievements):
+    def achieve(self, achievements, game):
         for achievement in achievements:
             if achievement in self.achievements.keys():
-                self.achievements[achievement] += 1
+                self.achievements[achievement].append(game)
             else:
-                self.achievements[achievement] = 1
+                self.achievements[achievement] = [game]
 
     def isActive(self, atTime=time.time()):
         #  Using date.* classes is too slow here
