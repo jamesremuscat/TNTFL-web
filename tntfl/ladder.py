@@ -39,8 +39,8 @@ class TableFootballLadder(object):
                     blue = self.getPlayer(game.bluePlayer)
                     red.game(game)
                     blue.game(game)
-                    red.achieve(game.redAchievements)
-                    blue.achieve(game.blueAchievements)
+                    red.achieve(game.redAchievements, game)
+                    blue.achieve(game.blueAchievements, game)
 
     def _writeToCache(self):
         if self._usingCache:
@@ -107,8 +107,8 @@ class TableFootballLadder(object):
 
         game.redAchievements = self.achievements.getAllForGame(red, game, blue, self)
         game.blueAchievements = self.achievements.getAllForGame(blue, game, red, self)
-        red.achieve(game.redAchievements)
-        blue.achieve(game.blueAchievements)
+        red.achieve(game.redAchievements, game)
+        blue.achieve(game.blueAchievements, game)
 
     def getSkillBounds(self):
         highSkill = {'player': None, 'skill': 0, 'time': 0}
@@ -155,6 +155,6 @@ class TableFootballLadder(object):
             achievements[ach.__class__] = 0
 
         for player in self.players.values():
-            for name, amount in player.achievements.iteritems():
-                achievements[name] += amount
+            for name, games in player.achievements.iteritems():
+                achievements[name] += len(games)
         return achievements
