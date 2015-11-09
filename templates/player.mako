@@ -65,7 +65,7 @@ for game in player.games:
           ${self.blocks.render("statbox", title="Goal ratio", body=("{:.3f}".format(gd)), classes=("positive" if gd >= 0 else "negative"))}
           </div>
           <div class="row">
-          ${self.blocks.render("statbox", title="Games today", body=player.gamesToday, classes="negative" if player.gamesToday > 3 else "")}
+          ${self.blocks.render("statbox", title="Games today", body=player.gamesToday)}
           ${self.blocks.render("statbox", title="10-0 wins", body=tenNilWins)}
           ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['highest']['skill'], time=skillBounds['highest']['time'], base=self.attr.base))}
           ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['lowest']['skill'], time=skillBounds['lowest']['time'], base=self.attr.base))}
@@ -87,7 +87,7 @@ for game in player.games:
   <%
   skill = 0
   skillHistory = []
-  
+
   for game in player.games:
     if game.redPlayer == player.name:
       skill -= game.skillChangeToBlue
@@ -100,7 +100,7 @@ for game in player.games:
             $(function() {
               $.plot("#playerchart", [ ${skillHistory} ], {'legend' : {show: false}, 'xaxis': {mode: 'time'}, grid: {hoverable: true}, colors: ['#0000FF']});
             });
-            
+
             $("<div id='tooltip'></div>").css({
         position: "absolute",
         display: "none",
@@ -109,13 +109,13 @@ for game in player.games:
         "background-color": "#fee",
         opacity: 0.80
       }).appendTo("body");
-  
+
       $("#playerchart").bind("plothover", function (event, pos, item) {
-  
+
           if (item) {
             var x = item.datapoint[0].toFixed(2),
               y = item.datapoint[1].toFixed(2);
-  
+
             $("#tooltip").html(y)
               .css({top: item.pageY+5, left: item.pageX+5})
               .fadeIn(200);
@@ -126,7 +126,7 @@ for game in player.games:
           </script>
         </div>
       </div>
-  
+
       <div class="panel panel-default">
         <div class="panel-heading">
           <h2 class="panel-title">Per-Player Stats</h2>
@@ -150,15 +150,15 @@ for game in player.games:
             <tbody>
   % for stat in pps.values():
     ${self.blocks.render("perPlayerStat", stat=stat, player=player, base=self.attr.base)}
-  % endfor          
+  % endfor
             </tbody>
           </table>
           <script type="text/javascript">
-          $("#pps").tablesorter({sortList:[[9,1]], 'headers': { 1: { 'sorter': false}}}); 
+          $("#pps").tablesorter({sortList:[[9,1]], 'headers': { 1: { 'sorter': false}}});
           </script>
         </div>
       </div>
-      
+
     </div>
     <div class="col-md-4">
   % if len(player.games) > 0:
