@@ -2,7 +2,7 @@ import os.path
 import cPickle as pickle
 from time import time
 from tntfl.achievements import Achievements
-from tntfl.player import Player
+from tntfl.player import Player, Streak
 from tntfl.gameStore import GameStore
 from tntfl.game import Game
 
@@ -124,6 +124,19 @@ class TableFootballLadder(object):
                 lowSkill['skill'] = skill['lowest']['skill']
                 lowSkill['time'] = skill['lowest']['time']
         return {'highest': highSkill, 'lowest': lowSkill}
+
+    def getStreaks(self):
+        winning = {'player': None, 'streak': Streak()}
+        losing = {'player': None, 'streak': Streak()}
+        for player in self.players.values():
+            streaks = player.getStreaks()
+            if streaks['win'].count > winning['streak'].count:
+                winning['player'] = player
+                winning['streak'] = streaks['win']
+            if streaks['lose'].count > losing['streak'].count:
+                losing['player'] = player
+                losing['streak'] = streaks['lose']
+        return {'win': winning, 'lose': losing}
 
     def addAndWriteGame(self, redPlayer, redScore, bluePlayer, blueScore):
         game = None
