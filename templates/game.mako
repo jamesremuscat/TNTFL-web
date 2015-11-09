@@ -30,10 +30,10 @@ bluesStripe = game.blueScore == 10 and game.redScore == 0
     </div>
   </div>
   <div class="row">
-    <div class="col-md-2">${"<span class=\"skill-change skill-change-red\" title=\"Ladder rank change\">{:+}</span>".format(game.redPosChange) if game.redPosChange != 0 else ""}</div>
-    <div class="col-md-2">${"<span class=\"skill-change skill-change-red\" title=\"Skill change\">{:+.3f}</span>".format(-game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}</div>
+    <div class="col-md-2">${"<span class='skill-change skill-change-red' title='Ladder rank change'>{:+}</span>".format(game.redPosChange) if game.redPosChange != 0 else ""}</div>
+    <div class="col-md-2">${"<span class='skill-change skill-change-red' title='Skill change'>{:+.3f}</span>".format(-game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}</div>
     <div class="col-md-4"><a href="${base}game/${game.time}/">${game.formatTime(game.time)}</a></div>
-    <div class="col-md-2">${"<span class=\"skill-change skill-change-blue\" title=\"Skill change\">{:+.3f}</span>".format(game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}</div>
-    <div class="col-md-2">${"<span class=\"skill-change skill-change-blue\" title=\"Ladder rank change\">{:+}</span>".format(game.bluePosChange) if game.bluePosChange != 0 else ""}</div>
+    <div class="col-md-2">${"<span class='skill-change skill-change-blue' title='Skill change'>{:+.3f}</span>".format(game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}</div>
+    <div class="col-md-2">${"<span class='skill-change skill-change-blue' title='Ladder rank change'>{:+}</span>".format(game.bluePosChange) if game.bluePosChange != 0 else ""}</div>
   </div>
 </div>
