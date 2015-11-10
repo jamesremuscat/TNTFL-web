@@ -34,7 +34,6 @@ class Player(object):
     def game(self, game):
         if self.name == game.redPlayer:
             delta = -game.skillChangeToBlue
-            opponent = game.bluePlayer
             self.gamesAsRed += 1
             if game.redScore > game.blueScore:
                 self.wins += 1
@@ -44,7 +43,6 @@ class Player(object):
             self.goalsAgainst += game.blueScore
         elif self.name == game.bluePlayer:
             delta = game.skillChangeToBlue
-            opponent = game.redPlayer
             if game.redScore < game.blueScore:
                 self.wins += 1
             elif game.redScore > game.blueScore:
@@ -53,7 +51,7 @@ class Player(object):
             self.goalsAgainst += game.redScore
         else:
             return
-        self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta, 'played': opponent})
+        self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta})
         self.elo += delta
 
         if (self.elo > self.highestSkill["skill"]):
