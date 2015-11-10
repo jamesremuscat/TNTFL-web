@@ -51,8 +51,8 @@ class Player(object):
             self.goalsAgainst += game.redScore
         else:
             return
-        self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta})
         self.elo += delta
+        self.skillBuffer.put(self.elo)
 
         if (self.elo > self.highestSkill["skill"]):
             self.highestSkill = {"time": game.time, "skill": self.elo}
@@ -105,8 +105,8 @@ class Player(object):
         return self.withinActive > atTime
 
     def overrated(self):
-        lastSkill = self.skillBuffer.lastSkill()
         if self.skillBuffer.isFull:
+            lastSkill = self.skillBuffer.lastSkill()
             return lastSkill - self.skillBuffer.avg()
         return 0
 
