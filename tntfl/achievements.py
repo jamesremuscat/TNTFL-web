@@ -93,9 +93,9 @@ class AgainstTheOdds(Achievement):
 
     def applies(self, player, game, opponent, ladder):
         if game.redPlayer == player.name:
-            return (game.redScore > game.blueScore) and (player.elo - game.skillChangeToBlue) + 50 <= (opponent.elo + game.skillChangeToBlue)
+            return (game.redScore > game.blueScore) and (player.elo + game.skillChangeToBlue) + 50 <= (opponent.elo - game.skillChangeToBlue)
         else:
-            return (game.blueScore > game.redScore) and (player.elo + game.skillChangeToBlue) + 50 <= (opponent.elo - game.skillChangeToBlue)
+            return (game.blueScore > game.redScore) and (player.elo - game.skillChangeToBlue) + 50 <= (opponent.elo + game.skillChangeToBlue)
 
 
 class TheBest(Achievement):
