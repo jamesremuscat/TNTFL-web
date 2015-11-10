@@ -23,24 +23,23 @@ class TableFootballLadder(object):
 
         self.achievements = Achievements()
 
-        self._loadFromCache()
-        numCachedGames = len(self.games)
-
-        if numCachedGames == 0:
+        loaded = self._loadFromCache()
+        if not loaded:
             self._loadFromStore()
             self._writeToCache()
 
     def _loadFromCache(self):
         if os.path.exists(self._cacheFilePath) and self._usingCache:
             self.games = pickle.load(open(self._cacheFilePath, 'rb'))
-            for game in self.games:
-                if not game.isDeleted():
-                    red = self.getPlayer(game.redPlayer)
-                    blue = self.getPlayer(game.bluePlayer)
-                    red.game(game)
-                    blue.game(game)
-                    red.achieve(game.redAchievements, game)
-                    blue.achieve(game.blueAchievements, game)
+            for game in [g for g in self.games if not g.isDeleted()]:
+                red = self.getPlayer(game.redPlayer)
+                blue = self.getPlayer(game.bluePlayer)
+                red.game(game)
+                blue.game(game)
+                red.achieve(game.redAchievements, game)
+                blue.achieve(game.blueAchievements, game)
+            return True
+        return False
 
     def _writeToCache(self):
         if self._usingCache:
