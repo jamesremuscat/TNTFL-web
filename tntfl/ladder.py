@@ -69,46 +69,49 @@ class TableFootballLadder(object):
         red = self.getPlayer(game.redPlayer)
         blue = self.getPlayer(game.bluePlayer)
 
-        predict = 1 / (1 + 10 ** ((red.elo - blue.elo) / 180))
-        result = float(game.blueScore) / (game.blueScore + game.redScore)
-        delta = 25 * (result - predict)
+        self._calculateSkillChange(red, game, blue)
 
-        game.skillChangeToBlue = delta
-
-        bluePosBefore = -1
-        redPosBefore = -1
-
-        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive(game.time - 1)], key=lambda x: x.elo, reverse=True)):
-            if player.name == game.bluePlayer:
-                bluePosBefore = index
-            elif player.name == game.redPlayer:
-                redPosBefore = index
+        posBefore = self._getPositions(game.redPlayer, game.bluePlayer, game.time - 1)
 
         blue.game(game)
         red.game(game)
 
-        bluePosAfter, redPosAfter = -1, -1
+        posAfter = self._getPositions(game.redPlayer, game.bluePlayer, game.time)
+        game.bluePosAfter = posAfter['blue'] + 1 # because it's zero-indexed here
+        game.redPosAfter = posAfter['red'] + 1
 
-        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive(game.time)], key=lambda x: x.elo, reverse=True)):
-            if player.name == game.bluePlayer:
-                bluePosAfter = index
-                game.bluePosAfter = bluePosAfter + 1  # because it's zero-indexed here
-            elif player.name == game.redPlayer:
-                redPosAfter = index
-                game.redPosAfter = redPosAfter + 1
-
-        if bluePosBefore > 0:
-            game.bluePosChange = bluePosBefore - bluePosAfter  # It's this way around because a rise in position is to a lower numbered rank.
-        if redPosBefore > 0:
-            game.redPosChange = redPosBefore - redPosAfter
-        if bluePosBefore > 0 and redPosBefore > 0:
-            if bluePosBefore == redPosAfter or redPosBefore == bluePosAfter:
+        if posBefore['blue'] > 0:
+            game.bluePosChange = posBefore['blue'] - posAfter['blue']  # It's this way around because a rise in position is to a lower numbered rank.
+        if posBefore['red'] > 0:
+            game.redPosChange = posBefore['red'] - posAfter['red']
+        if posBefore['blue'] > 0 and posBefore['red'] > 0:
+            if posBefore['blue'] == posAfter['red'] or posBefore['red'] == posAfter['blue']:
                 game.positionSwap = True
 
         game.redAchievements = self.achievements.getAllForGame(red, game, blue, self)
         game.blueAchievements = self.achievements.getAllForGame(blue, game, red, self)
         red.achieve(game.redAchievements, game)
         blue.achieve(game.blueAchievements, game)
+
+    def _calculateSkillChange(self, red, game, blue):
+        predict = 1 / (1 + 10 ** ((red.elo - blue.elo) / 180))
+        result = float(game.blueScore) / (game.blueScore + game.redScore)
+        delta = 25 * (result - predict)
+        game.skillChangeToBlue = delta
+
+    def _getPositions(self, redPlayer, bluePlayer, time):
+        bluePos = -1
+        redPos = -1
+        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive(time)], key=lambda x: x.elo, reverse=True)):
+            if player.name == bluePlayer:
+                bluePos = index
+                if redPos != -1:
+                    break
+            elif player.name == redPlayer:
+                redPos = index
+                if bluePos != -1:
+                    break
+        return {'blue': bluePos, 'red': redPos}
 
     def getSkillBounds(self):
         highSkill = {'player': None, 'skill': 0, 'time': 0}
