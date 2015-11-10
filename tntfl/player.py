@@ -1,23 +1,6 @@
 import time
-import os.path
 from datetime import date
 from tntfl.aks import CircularSkillBuffer
-
-
-class ExclusionsFile(object):
-
-    def __init__(self, fileName):
-        self.exclusions = []
-        if os.path.exists(fileName):
-            f = open(fileName, 'r')
-            for line in f.readlines():
-                self.exclusions.append(line.strip().lower())
-
-    def contains(self, name):
-        return (name in self.exclusions)
-
-
-exclusions = ExclusionsFile("ladderExclude")
 
 
 class Streak(object):
@@ -47,7 +30,6 @@ class Player(object):
         self.lowestSkill = {"time": 0, "skill": 0}
         self.gamesPerDay = {}
         self.achievements = {}
-        self.excluded = exclusions.contains(name)
 
     def game(self, game):
         if self.name == game.redPlayer:
@@ -122,7 +104,7 @@ class Player(object):
 
     def isActive(self, atTime=time.time()):
         #  Using date.* classes is too slow here
-        return (self.withinActive > atTime) and (not self.excluded)
+        return self.withinActive > atTime
 
     def overrated(self):
         lastSkill = self.skillBuffer.lastSkill()
