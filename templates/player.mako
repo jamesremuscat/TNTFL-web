@@ -63,20 +63,20 @@ for game in player.games:
           <div class="row">
           ${self.blocks.render("statbox", title="Goals for", body=player.goalsFor)}
           ${self.blocks.render("statbox", title="Goals against", body=player.goalsAgainst)}
-          ${self.blocks.render("statbox", title="Goal ratio", body=("{:.3f}".format(gd)), classes=("positive" if gd >= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Goal ratio", body=("{:.3f}".format(goalRatio)), classes=("positive" if goalRatio >= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="10-0 wins", body=tenNilWins)}
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Games today", body=player.gamesToday)}
-          ${self.blocks.render("statbox", title="10-0 wins", body=tenNilWins)}
-          ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['highest']['skill'], time=skillBounds['highest']['time'], base=self.attr.base))}
-          ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['lowest']['skill'], time=skillBounds['lowest']['time'], base=self.attr.base))}
           ${self.blocks.render("statbox", title="Skill change today", body="{:.3f}".format(skillChange), classes=("positive" if skillChange >= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Total achievements", body=str(sum([len(g) for g in player.achievements.values()])) + '<div class="date"><a href="#achievements">See all</a></div>' )}
           </div>
           <div class="row">
-          ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['highest']['skill'], time=skillBounds['highest']['time'], base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['lowest']['skill'], time=skillBounds['lowest']['time'], base=self.attr.base))}
           ${self.blocks.render("statbox", title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak.count, fromDate=winStreak.fromDate, toDate=winStreak.toDate, base=self.attr.base))}
           ${self.blocks.render("statbox", title="Longest losing streak", body=get_template("durationStat.mako", value=loseStreak.count, fromDate=loseStreak.fromDate, toDate=loseStreak.toDate, base=self.attr.base))}
-          ${self.blocks.render("statbox", title="Total achievements", body=str(sum([len(g) for g in player.achievements.values()])) + '<div class="date"><a href="#achievements">See all</a></div>' )}
           </div>
         </div>
       </div>
