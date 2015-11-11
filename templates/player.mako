@@ -1,13 +1,40 @@
-<%! title = "" %>
-<%! base = "../../" %>
-<%! from tntfl.game import Game
-from tntfl.web import get_template %>
-<%inherit file="html.mako" />
-<%
-
+<%!
+title = ""
+base = "../../"
+from tntfl.game import Game
+from tntfl.web import get_template
 from tntfl.player import PerPlayerStat
 
-pps = {}
+def getNumYellowStripes(player):
+    return len([g for g in player.games if (g.redPlayer == player.name and g.redScore == 10 and g.blueScore == 0) or (g.bluePlayer == player.name and g.blueScore == 10 and g.redScore == 0)])
+
+def getPerPlayerStats(player):
+    pps = {}
+    for game in player.games:
+        if game.redPlayer == player.name:
+            if game.bluePlayer not in pps:
+                pps[game.bluePlayer] = PerPlayerStat(game.bluePlayer)
+            pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
+        elif game.bluePlayer == player.name:
+            if game.redPlayer not in pps:
+                pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
+            pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
+    return pps
+
+def getSkillHistory(player):
+    skill = 0
+    skillHistory = []
+    for game in player.games:
+        if game.redPlayer == player.name:
+            skill -= game.skillChangeToBlue
+            skillHistory.append([game.time * 1000, skill])
+        elif game.bluePlayer == player.name:
+            skill += game.skillChangeToBlue
+            skillHistory.append([game.time * 1000, skill])
+    return skillHistory
+%>
+<%inherit file="html.mako" />
+<%
 
 streaks = player.getStreaks()
 
@@ -16,21 +43,18 @@ loseStreak = streaks['lose']
 currentStreak = streaks['current']
 currentStreakType = streaks['currentType']
 
-tenNilWins = 0
+tenNilWins = getNumYellowStripes(player)
+pps = getPerPlayerStats(player)
+rank = ladder.getPlayerRank(player.name)
+redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
+sideStyle = "background-color: rgb(" + str(int(round(redness * 255))) + ", 0, "  + str(int(round((1 - redness) * 255))) + ")"
+goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
+skillBounds = player.getSkillBounds()
+skillChange = player.skillChangeToday()
+skillHistory = getSkillHistory(player)
 
-for game in player.games:
-    if game.redPlayer == player.name:
-        if game.bluePlayer not in pps:
-            pps[game.bluePlayer] = PerPlayerStat(game.bluePlayer)
-        pps[game.bluePlayer].append(game.redScore, game.blueScore, -game.skillChangeToBlue)
-        if game.redScore == 10 and game.blueScore == 0:
-            tenNilWins += 1
-    elif game.bluePlayer == player.name:
-        if game.redPlayer not in pps:
-            pps[game.redPlayer] = PerPlayerStat(game.redPlayer)
-        pps[game.redPlayer].append(game.blueScore, game.redScore, game.skillChangeToBlue)
-        if game.blueScore == 10 and game.redScore == 0:
-            tenNilWins += 1
+recentGames = player.games[-5:]
+recentGames.reverse()
 %>
 <div class="container-fluid">
   <div class="row">
@@ -40,14 +64,6 @@ for game in player.games:
           <h1 class="panel-title">${player.name}</h1>
         </div>
         <div class="panel-body">
-<%
-   rank = ladder.getPlayerRank(player.name)
-   redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
-   sideStyle = "background-color: rgb(" + str(int(round(redness * 255))) + ", 0, "  + str(int(round((1 - redness) * 255))) + ")"
-   goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
-   skillBounds = player.getSkillBounds()
-   skillChange = player.skillChangeToday()
-%>
           <div class="row">
           ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=("ladder-position inactive" if rank == -1 else "ladder-position ladder-first" if rank == 1 else "ladder-position"))}
           ${self.blocks.render("statbox", title="Skill", body="{:.3f}".format(player.elo))}
@@ -86,18 +102,6 @@ for game in player.games:
         </div>
         <div class="panel-body">
           <div id="playerchart">&nbsp;</div>
-  <%
-  skill = 0
-  skillHistory = []
-
-  for game in player.games:
-    if game.redPlayer == player.name:
-      skill -= game.skillChangeToBlue
-      skillHistory.append([game.time * 1000, skill])
-    elif game.bluePlayer == player.name:
-      skill += game.skillChangeToBlue
-      skillHistory.append([game.time * 1000, skill])
-  %>
           <script type="text/javascript">
             $(function() {
               $.plot("#playerchart", [ ${skillHistory} ], {'legend' : {show: false}, 'xaxis': {mode: 'time'}, grid: {hoverable: true}, colors: ['#0000FF']});
@@ -169,10 +173,6 @@ for game in player.games:
           <h2 class="panel-title">Recent Games</h2>
         </div>
         <div class="panel-body">
-  <%
-  recentGames = player.games[-5:]
-  recentGames.reverse()
-  %>
   % for game in recentGames:
       ${self.blocks.render("game", game=game, base=self.attr.base)}
   % endfor

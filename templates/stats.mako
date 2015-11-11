@@ -1,34 +1,48 @@
-<%! title = "Stats | " %>
-<%! base = "../" %>
 <%!
+title = "Stats | "
+base = "../"
 from collections import OrderedDict
 from datetime import date, datetime
 from tntfl.game import Game
 from tntfl.player import Player
 from tntfl.achievements import Achievement
-%>
-<%inherit file="html.mako" />
-<%namespace name="blocks" file="blocks.mako" />
-<% msgs = sorted([g for g in ladder.games if not g.isDeleted()], key=lambda x: abs(x.skillChangeToBlue), reverse=True) %>
-<%
 
 def totimestamp(dt, epoch=datetime(1970,1,1)):
     td = dt - epoch
     return int(td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e6
 
+def getGamesPerDay(ladder):
+    gamesPerDay = OrderedDict()
+    for game in ladder.games:
+        day = datetime.fromtimestamp(game.time).replace(hour=0, minute=0, second=0, microsecond=0)
+        if day not in gamesPerDay:
+          gamesPerDay[day] = 0
+        gamesPerDay[day] += 1
+    plotData = []
+    for day, tally in gamesPerDay.iteritems():
+        plotData.append([totimestamp(day) * 1000, tally])
+    return plotData
+
+def getMostSignificantGames(games):
+    return sorted([g for g in games if not g.isDeleted()], key=lambda x: abs(x.skillChangeToBlue), reverse=True)
+
+def getNumActivePlayers(players):
+    return len([p for p in players.values() if p.isActive()])
+%>
+<%inherit file="html.mako" />
+<%namespace name="blocks" file="blocks.mako" />
+<%
 redGoals = 0
 blueGoals = 0
 for game in ladder.games:
     redGoals += game.redScore
     blueGoals += game.blueScore
 
-activePlayers = 0
-for player in ladder.players.values():
-    if player.isActive():
-      activePlayers += 1
-
+mostSignificantGames = getMostSignificantGames(ladder.games)
+activePlayers = getNumActivePlayers(ladder.players)
 skillBounds = ladder.getSkillBounds()
 streaks = ladder.getStreaks()
+plotData = getGamesPerDay(ladder)
 %>
 <div class="container-fluid">
   <div class="row">
@@ -76,7 +90,7 @@ streaks = ladder.getStreaks()
           <h2 class="panel-title">Most Significant Games</h2>
         </div>
         <div class="panel-body">
-% for game in msgs[0:5]:
+% for game in mostSignificantGames[0:5]:
     ${self.blocks.render("game", game=game, base=self.attr.base)}
 % endfor
         </div>
@@ -88,7 +102,7 @@ streaks = ladder.getStreaks()
           <h2 class="panel-title">Least Significant Games</h2>
         </div>
         <div class="panel-body">
-% for game in msgs[-5:]:
+% for game in mostSignificantGames[-5:]:
     ${self.blocks.render("game", game=game, base=self.attr.base)}
 % endfor
         </div>
@@ -104,22 +118,6 @@ streaks = ladder.getStreaks()
         <div class="panel-body">
           <div id="gamesPerDay">&nbsp;</div>
           <script type="text/javascript">
-<%
-
-gamesPerDay = OrderedDict()
-
-for game in ladder.games:
-    day = datetime.fromtimestamp(game.time).replace(hour=0, minute=0, second=0, microsecond=0)
-    if day not in gamesPerDay:
-      gamesPerDay[day] = 0
-    gamesPerDay[day] += 1
-
-plotData = []
-
-for day, tally in gamesPerDay.iteritems():
-    plotData.append([totimestamp(day) * 1000, tally])
-
-%>
           $.plot("#gamesPerDay", [ ${plotData} ], {'legend' : {show: false}, 'xaxis': {mode: 'time'}, grid: {hoverable: true}, colors: ['#0000FF']});
           </script>
         </div>

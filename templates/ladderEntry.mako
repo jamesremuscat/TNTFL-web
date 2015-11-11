@@ -1,4 +1,4 @@
-<%
+<%!
 import re
 from datetime import datetime
 from tntfl.player import Player
@@ -6,16 +6,19 @@ from tntfl.player import Player
 def idsafe(text):
   return re.sub("[^A-Za-z0-9\-_\:\.]", "_", text)
 
-trend = []
-size = player.skillBuffer.size()
-for i in range(0, size):
-    trend.append([i, player.skillBuffer.getSkill(i)])
-
-if len(trend) > 0:
-  trendColour = "#0000FF" if trend[0][1] < trend[size - 1][1] else "#FF0000";
-else:
-  trendColour = "#000000"
-
+def getTrend(player):
+    trend = []
+    size = player.skillBuffer.size()
+    for i in range(0, size):
+        trend.append([i, player.skillBuffer.getSkill(i)])
+    if len(trend) > 0:
+      trendColour = "#0000FF" if trend[0][1] < trend[size - 1][1] else "#FF0000";
+    else:
+      trendColour = "#000000"
+    return {'trend':trend, 'colour':trendColour}
+%>
+<%
+trend = getTrend(player)
 daysAgo = (datetime.now() - player.games[-1].timeAsDatetime()).days
 daysToGo = Player.DAYS_INACTIVE - daysAgo
 nearlyInactive = daysToGo <= 14
@@ -44,9 +47,7 @@ nearlyInactive = daysToGo <= 14
       <td class="ladder-stat ladder-trend"><div id="${player.name | idsafe}_trend" class="ladder-trend">&nbsp;</div></td>
       <script type="text/javascript">
         $(function() {
-          $.plot("#${player.name | idsafe}_trend", [ ${trend} ], {'legend' : {show: false}, 'xaxis': {show: false}, 'yaxis': {show: false}, 'grid': {'show': false}, 'series': {'shadowSize': 0}, 'colors': ['${trendColour}']});
+          $.plot("#${player.name | idsafe}_trend", [ ${trend['trend']} ], {'legend' : {show: false}, 'xaxis': {show: false}, 'yaxis': {show: false}, 'grid': {'show': false}, 'series': {'shadowSize': 0}, 'colors': ['${trend["colour"]}']});
         });
-
-  
       </script>
       </tr>
