@@ -55,6 +55,7 @@ skillHistory = getSkillHistory(player)
 
 recentGames = player.games[-5:]
 recentGames.reverse()
+ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
 %>
 <div class="container-fluid">
   <div class="row">
@@ -65,7 +66,7 @@ recentGames.reverse()
         </div>
         <div class="panel-body">
           <div class="row">
-          ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=("ladder-position inactive" if rank == -1 else "ladder-position ladder-first" if rank == 1 else "ladder-position"))}
+          ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=(ladderPositionCSS))}
           ${self.blocks.render("statbox", title="Skill", body="{:.3f}".format(player.elo))}
           ${self.blocks.render("statbox", title="Overrated", body="{:.3f}".format(player.overrated()), classes=("positive" if player.overrated() <= 0 else "negative"))}
           ${self.blocks.render("statbox", title="Side preference", body="{:.2%}".format(redness if redness >= 0.5 else (1-redness)) + (" red" if redness >= 0.5 else " blue"), classes="side-preference", style=sideStyle)}

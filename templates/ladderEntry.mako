@@ -19,21 +19,16 @@ def getTrend(player):
 %>
 <%
 trend = getTrend(player)
+
 daysAgo = (datetime.now() - player.games[-1].timeAsDatetime()).days
 daysToGo = Player.DAYS_INACTIVE - daysAgo
 nearlyInactive = daysToGo <= 14
+ladderRowCSS = "inactive" if index == -1 else "nearly-inactive" if nearlyInactive else ""
+ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
+ladderPositionCSS = "ladder-position" + (" inactive" if index == -1 else " ladder-first" if index == 0 else "")
 %>
-% if index == -1:
-<tr class="inactive">
-      <td class="ladder-position inactive">-</td>
-% else:
-  % if nearlyInactive:
-    <tr class="nearly-inactive" title="Player will become inactive in ${daysToGo} day${"s" if daysToGo > 0 else ""}">
-  % else:
-    <tr>
-  % endif
-      <td class="ladder-position ${"ladder-first" if index is 0 else "" }">${index + 1}</td>
-% endif
+    <tr class="${ladderRowCSS}" title="${ladderRowTitle}">
+      <td class="${ladderPositionCSS}">${index + 1 if index != -1 else "-"}</td>
       <td class="ladder-name"><a href="${base}player/${player.name | u}/">${player.name}</a></td>
       <td class="ladder-stat">${"{:d}".format(len(player.games))}</td>
       <td class="ladder-stat">${"{:d}".format(player.wins)}</td>
@@ -50,4 +45,4 @@ nearlyInactive = daysToGo <= 14
           $.plot("#${player.name | idsafe}_trend", [ ${trend['trend']} ], {'legend' : {show: false}, 'xaxis': {show: false}, 'yaxis': {show: false}, 'grid': {'show': false}, 'series': {'shadowSize': 0}, 'colors': ['${trend["colour"]}']});
         });
       </script>
-      </tr>
+    </tr>
