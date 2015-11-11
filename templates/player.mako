@@ -44,8 +44,9 @@ for game in player.games:
    rank = ladder.getPlayerRank(player.name)
    redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
    sideStyle = "background-color: rgb(" + str(int(round(redness * 255))) + ", 0, "  + str(int(round((1 - redness) * 255))) + ")"
-   gd = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
+   goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
    skillBounds = player.getSkillBounds()
+   skillChange = player.skillChangeToday()
 %>
           <div class="row">
           ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=("ladder-position inactive" if rank == -1 else "ladder-position ladder-first" if rank == 1 else "ladder-position"))}
@@ -69,6 +70,7 @@ for game in player.games:
           ${self.blocks.render("statbox", title="10-0 wins", body=tenNilWins)}
           ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['highest']['skill'], time=skillBounds['highest']['time'], base=self.attr.base))}
           ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['lowest']['skill'], time=skillBounds['lowest']['time'], base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Skill change today", body="{:.3f}".format(skillChange), classes=("positive" if skillChange >= 0 else "negative"))}
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}

@@ -93,6 +93,13 @@ class Player(object):
             return self.gamesPerDay[date]
         return 0
 
+    def skillChangeToday(self):
+        today = date.today()
+        skillChange = 0
+        for game in [g for g in self.games if g.timeAsDatetime().date() == today]:
+            skillChange += game.skillChangeToBlue if game.bluePlayer == self.name else -game.skillChangeToBlue
+        return skillChange
+
     def achieve(self, achievements, game):
         for achievement in achievements:
             if achievement in self.achievements.keys():
