@@ -28,7 +28,6 @@ class Player(object):
         self.gamesAsRed = 0
         self.highestSkill = {"time": 0, "skill": 0}
         self.lowestSkill = {"time": 0, "skill": 0}
-        self.gamesPerDay = {}
         self.achievements = {}
 
     def game(self, game):
@@ -60,12 +59,6 @@ class Player(object):
         if (self.elo < self.lowestSkill["skill"]):
             self.lowestSkill = {"time": game.time, "skill": self.elo}
 
-        gameDate = game.timeAsDatetime().date()
-        if gameDate in self.gamesPerDay:
-            self.gamesPerDay[gameDate] += 1
-        else:
-            self.gamesPerDay[gameDate] = 1
-
         self.games.append(game)
         self.withinActive = game.time + (60 * 60 * 24 * self.DAYS_INACTIVE)
 
@@ -89,9 +82,7 @@ class Player(object):
         return self.gamesOn(today)
 
     def gamesOn(self, date):
-        if date in self.gamesPerDay:
-            return self.gamesPerDay[date]
-        return 0
+        return len([g for g in self.games if g.timeAsDatetime().date() == date])
 
     def skillChangeToday(self):
         today = date.today()
