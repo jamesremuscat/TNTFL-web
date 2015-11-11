@@ -145,7 +145,7 @@ for game in player.games:
                   <th>Losses</th>
                   <th>Goals scored</th>
                   <th>Goals conceded</th>
-                  <th>GD</th>
+                  <th>Goal Ratio</th>
                   <th>Skill change</th>
                 </tr>
             </thead>
