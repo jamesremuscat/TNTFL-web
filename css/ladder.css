@@ -143,7 +143,7 @@ div.ladder-trend {
   background-color: white;
 }
 
-.ladder thead tr th { 
+.ladder thead tr th {
   font-weight: bold;
 }
 
@@ -270,6 +270,7 @@ h3.statbox {
 
 .panel-achievement .panel-body {
   text-align: center;
+  padding: 0px;
 }
 
 .achievement-games {
