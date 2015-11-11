@@ -104,19 +104,19 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
        %endif
                     </tr>
                     <tr>
-                      <td ${"class=\"red-player\"" if player1wins >= player2wins else ""}>${player1wins}</td>
+                      <td ${"class='red-player'" if player1wins >= player2wins else ""}>${player1wins}</td>
                       <th>Wins</small></th>
-                      <td ${"class=\"blue-player\"" if player2wins >= player1wins else ""}>${player2wins}</td>
+                      <td ${"class='blue-player'" if player2wins >= player1wins else ""}>${player2wins}</td>
                     </tr>
                     <tr>
-                      <td ${"class=\"red-player\"" if player1doughnuts >= player2doughnuts else ""}>${player1doughnuts}</td>
+                      <td ${"class='red-player'" if player1yellowStripes >= player2yellowStripes else ""}>${player1yellowStripes}</td>
                       <th>10-0 Wins</th>
-                      <td ${"class=\"blue-player\"" if player2doughnuts >= player1doughnuts else ""}>${player2doughnuts}</td>
+                      <td ${"class='blue-player'" if player2yellowStripes >= player1yellowStripes else ""}>${player2yellowStripes}</td>
                     </tr>
                     <tr>
-                      <td ${"class=\"red-player\"" if player1goals >= player2goals else ""}>${player1goals}</td>
+                      <td ${"class='red-player'" if player1goals >= player2goals else ""}>${player1goals}</td>
                       <th>Goals</th>
-                      <td ${"class=\"blue-player\"" if player2goals >= player1goals else ""}>${player2goals}</td>
+                      <td ${"class='blue-player'" if player2goals >= player1goals else ""}>${player2goals}</td>
                     </tr>
                     <tr>
                       <td class="red-player">${"{:.0f}".format(10 - predict)}</td>
