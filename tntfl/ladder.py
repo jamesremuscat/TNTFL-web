@@ -92,8 +92,12 @@ class TableFootballLadder(object):
         red.achieve(game.redAchievements, game)
         blue.achieve(game.blueAchievements, game)
 
+    #returns blueScore/10
+    def predict(self, red, blue):
+        return 1 / (1 + 10 ** ((red.elo - blue.elo) / 180))
+
     def _calculateSkillChange(self, red, game, blue):
-        predict = 1 / (1 + 10 ** ((red.elo - blue.elo) / 180))
+        predict = self.predict(red, blue)
         result = float(game.blueScore) / (game.blueScore + game.redScore)
         delta = 25 * (result - predict)
         game.skillChangeToBlue = delta

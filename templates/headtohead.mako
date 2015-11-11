@@ -2,6 +2,41 @@
 title = "Head to Head | "
 base = "../../../"
 from tntfl.game import Game
+
+def getSharedGames(player1, player2):
+    return sorted([g for g in player1.games if g.redPlayer == player2.name or g.bluePlayer == player2.name], key=lambda g:g.time, reverse=True)
+
+def getNumYellowStripes(player, games):
+    return len([g for g in games if (g.redPlayer == player.name and g.redScore == 10 and g.blueScore == 0) or (g.bluePlayer == player.name and g.blueScore == 10 and g.redScore == 0)])
+
+def getNumWins(player, games):
+    return len([g for g in games if (g.redPlayer == player.name and g.redScore > g.blueScore) or (g.bluePlayer == player.name and g.blueScore > g.redScore)])
+
+def getNumGoals(player, games):
+    return sum(g.redScore if g.redPlayer == player.name else g.blueScore for g in games)
+
+def getSkillChange(player, games):
+    return sum(g.skillChangeToBlue if g.bluePlayer == player.name else -g.skillChangeToBlue for g in games)
+
+def getHistograms(player1, player2, sharedGames):
+    histogramData = {'player1': {}, 'player2': {}}
+    for i in range(11):
+        histogramData['player1'][i] = 0
+        histogramData['player2'][i] = 0
+    for game in sharedGames:
+        if game.redPlayer == player1.name:
+            histogramData['player1'][game.redScore] += 1
+            histogramData['player2'][game.blueScore] += 1
+        elif game.bluePlayer == player1.name:
+            histogramData['player1'][game.blueScore] += 1
+            histogramData['player2'][game.redScore] += 1
+    player1Histogram = []
+    player2Histogram = []
+    for goals, tally in histogramData['player1'].iteritems():
+        player1Histogram.append([goals, tally])
+    for goals, tally in histogramData['player2'].iteritems():
+        player2Histogram.append([goals, tally * -1])
+    return {'player1': player1Histogram, 'player2': player2Histogram}
 %>
 <%inherit file="html.mako" />
 <%
@@ -18,49 +53,17 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
         <div class="panel-body container-fluid">
 %if player1 and player2:
 <%
-  sharedGames = sorted([g for g in player1.games if g.redPlayer == player2.name or g.bluePlayer == player2.name], key=lambda g:g.time, reverse=True)
-  swingToPlayer1 = 0
-  player1wins = 0
-  draws = 0
-  player1goals = 0
-  player2goals = 0
-  player1doughnuts = 0
-  player2doughnuts = 0
-
-  histogramData = {'player1': {}, 'player2': {}}
-
-  for i in range(11):
-      histogramData['player1'][i] = 0
-      histogramData['player2'][i] = 0
-
-  for game in sharedGames:
-      if game.redPlayer == player1.name:
-          swingToPlayer1 -= game.skillChangeToBlue
-          player1goals += game.redScore
-          player2goals += game.blueScore
-          histogramData['player1'][game.redScore] += 1
-          histogramData['player2'][game.blueScore] += 1
-          if game.redScore > game.blueScore:
-              player1wins += 1
-          if game.redScore == 10 and game.blueScore == 0:
-              player1doughnuts += 1
-          if game.redScore == 0 and game.blueScore == 10:
-              player2doughnuts += 1
-      elif game.bluePlayer == player1.name:
-          swingToPlayer1 += game.skillChangeToBlue
-          player1goals += game.blueScore
-          player2goals += game.redScore
-          histogramData['player1'][game.blueScore] += 1
-          histogramData['player2'][game.redScore] += 1
-          if game.redScore < game.blueScore:
-              player1wins += 1
-          if game.redScore == 0 and game.blueScore == 10:
-              player1doughnuts += 1
-          if game.redScore == 10 and game.blueScore == 0:
-              player2doughnuts += 1
-      if game.redScore == game.blueScore:
-          draws += 1
-player2wins = len(sharedGames) - draws - player1wins
+    sharedGames = getSharedGames(player1, player2)
+    draws = len([g for g in sharedGames if g.redScore == g.blueScore])
+    player1wins = getNumWins(player1, sharedGames)
+    player2wins = len(sharedGames) - draws - player1wins
+    player1goals = getNumGoals(player1, sharedGames)
+    player2goals = getNumGoals(player2, sharedGames)
+    player1yellowStripes = getNumYellowStripes(player1, sharedGames)
+    player2yellowStripes = getNumYellowStripes(player2, sharedGames)
+    swingToPlayer1 = getSkillChange(player1, sharedGames)
+    histograms = getHistograms(player1, player2, sharedGames)
+    predict = ladder.predict(player1, player2) * 10
 %>
           <div class="row">
             <div class="col-md-4">
@@ -115,11 +118,10 @@ player2wins = len(sharedGames) - draws - player1wins
                       <th>Goals</th>
                       <td ${"class=\"blue-player\"" if player2goals >= player1goals else ""}>${player2goals}</td>
                     </tr>
-       <% predict = 10 / (1 + 10 ** ((player2.elo - player1.elo) / 180)) %>
                     <tr>
-                      <td class="red-player">${"{:.0f}".format(predict)}</td>
+                      <td class="red-player">${"{:.0f}".format(10 - predict)}</td>
                       <th>Predicted Result</th>
-                      <td class="blue-player">${"{:.0f}".format(10 - predict)}</td>
+                      <td class="blue-player">${"{:.0f}".format(predict)}</td>
                     </tr>
                   </table>
                 </div>
@@ -135,17 +137,9 @@ player2wins = len(sharedGames) - draws - player1wins
                   <div id="histogram">
                   </div>
                   <script type="text/javascript">
-<%
-player1Histogram = []
-player2Histogram = []
-for goals, tally in histogramData['player1'].iteritems():
-  player1Histogram.append([goals, tally])
-for goals, tally in histogramData['player2'].iteritems():
-  player2Histogram.append([goals, tally * -1])
-%>
-          $(function() {
-            $.plot("#histogram", [ ${player1Histogram}, ${player2Histogram} ], {'legend' : {show: false}, 'xaxis': {'ticks': 10}, grid: {hoverable: true}, colors: ['#FF0000', '#0000FF'], 'series' : {'bars' : {'show': true, 'align': 'center'}}});
-          });
+                  $(function() {
+                    $.plot("#histogram", [ ${histograms['player1']}, ${histograms['player2']} ], {'legend' : {show: false}, 'xaxis': {'ticks': 10}, grid: {hoverable: true}, colors: ['#FF0000', '#0000FF'], 'series' : {'bars' : {'show': true, 'align': 'center'}}});
+                  });
                   </script>
                 </div>
               </div>

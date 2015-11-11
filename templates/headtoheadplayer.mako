@@ -2,6 +2,9 @@
 <%!
 from tntfl.game import Game
 %>
+<%
+skillBounds = player.getSkillBounds()
+%>
               <div class="panel panel-default headtohead">
                   <h1 class="${colour}-player panel-title">${player.name}</h1>
                   <div class="panel-body">
@@ -13,9 +16,6 @@ from tntfl.game import Game
                     </tr>
                               <tr>
           <th>Highest ever skill</th>
-<%
-skillBounds = player.getSkillBounds()
-%>
           <td>${"{:.3f}".format(skillBounds['highest']['skill'])}<br />
 % if skillBounds['highest']['time'] > 0:
           at <a href="${base}game/${skillBounds['highest']['time']}/">${Game.formatTime(skillBounds['highest']['time'])}</a></td>
