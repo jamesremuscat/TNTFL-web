@@ -1,23 +1,6 @@
 import time
-import os.path
 from datetime import date
 from tntfl.aks import CircularSkillBuffer
-
-
-class ExclusionsFile(object):
-
-    def __init__(self, fileName):
-        self.exclusions = []
-        if os.path.exists(fileName):
-            f = open(fileName, 'r')
-            for line in f.readlines():
-                self.exclusions.append(line.strip().lower())
-
-    def contains(self, name):
-        return (name in self.exclusions)
-
-
-exclusions = ExclusionsFile("ladderExclude")
 
 
 class Streak(object):
@@ -47,12 +30,10 @@ class Player(object):
         self.lowestSkill = {"time": 0, "skill": 0}
         self.gamesPerDay = {}
         self.achievements = {}
-        self.excluded = exclusions.contains(name)
 
     def game(self, game):
         if self.name == game.redPlayer:
             delta = -game.skillChangeToBlue
-            opponent = game.bluePlayer
             self.gamesAsRed += 1
             if game.redScore > game.blueScore:
                 self.wins += 1
@@ -62,7 +43,6 @@ class Player(object):
             self.goalsAgainst += game.blueScore
         elif self.name == game.bluePlayer:
             delta = game.skillChangeToBlue
-            opponent = game.redPlayer
             if game.redScore < game.blueScore:
                 self.wins += 1
             elif game.redScore > game.blueScore:
@@ -71,8 +51,8 @@ class Player(object):
             self.goalsAgainst += game.redScore
         else:
             return
-        self.skillBuffer.put({'oldskill': self.elo, 'skill': self.elo + delta, 'played': opponent})
         self.elo += delta
+        self.skillBuffer.put(self.elo)
 
         if (self.elo > self.highestSkill["skill"]):
             self.highestSkill = {"time": game.time, "skill": self.elo}
@@ -122,11 +102,11 @@ class Player(object):
 
     def isActive(self, atTime=time.time()):
         #  Using date.* classes is too slow here
-        return (self.withinActive > atTime) and (not self.excluded)
+        return self.withinActive > atTime
 
     def overrated(self):
-        lastSkill = self.skillBuffer.lastSkill()
         if self.skillBuffer.isFull:
+            lastSkill = self.skillBuffer.lastSkill()
             return lastSkill - self.skillBuffer.avg()
         return 0
 
