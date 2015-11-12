@@ -1,3 +1,4 @@
+<%page args="player, rank, base"/>
 <%!
 import re
 from datetime import datetime
@@ -23,15 +24,15 @@ trend = getTrend(player)
 daysAgo = (datetime.now() - player.games[-1].timeAsDatetime()).days
 daysToGo = Player.DAYS_INACTIVE - daysAgo
 nearlyInactive = daysToGo <= 14
-ladderRowCSS = "inactive" if index == -1 else "nearly-inactive" if nearlyInactive else ""
+ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""
 ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
-ladderPositionCSS = "ladder-position" + (" inactive" if index == -1 else " ladder-first" if index == 0 else "")
+ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
 
 draws = len(player.games) - player.wins - player.losses
 goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
 %>
     <tr class="${ladderRowCSS}" title="${ladderRowTitle}">
-      <td class="${ladderPositionCSS}">${index + 1 if index != -1 else "-"}</td>
+      <td class="${ladderPositionCSS}">${rank if rank != -1 else "-"}</td>
       <td class="ladder-name"><a href="${base}player/${player.name | u}/">${player.name}</a></td>
       <td class="ladder-stat">${"{:d}".format(len(player.games))}</td>
       <td class="ladder-stat">${"{:d}".format(player.wins)}</td>

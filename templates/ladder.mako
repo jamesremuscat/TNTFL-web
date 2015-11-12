@@ -19,7 +19,7 @@ headings = [
 
 def rankPlayers(players):
     ranked = []
-    rank = 0
+    rank = 1
     for player in players:
         if player.isActive():
             ranked.append([rank, player])
@@ -42,7 +42,7 @@ ranked = rankPlayers(ladder.getPlayers())
         </thead>
         <tbody>
 % for player in ranked:
-    ${blocks.render("ladderEntry", player=player[1], index=player[0], base=base)}
+    ${blocks.render("ladderEntry", player=player[1], rank=player[0], base=base)}
 % endfor
           </tbody>
         </table>
