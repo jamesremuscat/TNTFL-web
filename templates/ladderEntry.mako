@@ -26,17 +26,20 @@ nearlyInactive = daysToGo <= 14
 ladderRowCSS = "inactive" if index == -1 else "nearly-inactive" if nearlyInactive else ""
 ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
 ladderPositionCSS = "ladder-position" + (" inactive" if index == -1 else " ladder-first" if index == 0 else "")
+
+draws = len(player.games) - player.wins - player.losses
+goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
 %>
     <tr class="${ladderRowCSS}" title="${ladderRowTitle}">
       <td class="${ladderPositionCSS}">${index + 1 if index != -1 else "-"}</td>
       <td class="ladder-name"><a href="${base}player/${player.name | u}/">${player.name}</a></td>
       <td class="ladder-stat">${"{:d}".format(len(player.games))}</td>
       <td class="ladder-stat">${"{:d}".format(player.wins)}</td>
-      <td class="ladder-stat">${"{:d}".format(len(player.games) - player.wins - player.losses)}</td>
+      <td class="ladder-stat">${"{:d}".format(draws)}</td>
       <td class="ladder-stat">${"{:d}".format(player.losses)}</td>
       <td class="ladder-stat">${"{:d}".format(player.goalsFor)}</td>
       <td class="ladder-stat">${"{:d}".format(player.goalsAgainst)}</td>
-      <td class="ladder-stat">${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"}</td>
+      <td class="ladder-stat">${"{:.3f}".format(goalRatio)}</td>
       <td class="ladder-stat">${"{:.3f}".format(player.overrated())}</td>
       <td class="ladder-stat ladder-skill">${"{:.3f}".format(player.elo)}</td>
       <td class="ladder-stat ladder-trend"><div id="${player.name | idsafe}_trend" class="ladder-trend">&nbsp;</div></td>
