@@ -1,7 +1,7 @@
 <%page args="sortCol=10, sortOrder=1, showInactive=0"/>
-<%! from datetime import datetime %>
-<%namespace name="blocks" file="blocks.mako" />
-<%
+<%!
+from datetime import datetime
+
 headings = [
     "Pos",
     "Player",
@@ -18,6 +18,7 @@ headings = [
 ]
 
 %>
+<%namespace name="blocks" file="blocks.mako" />
       <table class="table table-hover ladder" id="ladder">
         <thead>
             <tr>
