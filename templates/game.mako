@@ -1,3 +1,4 @@
+<%page args="game, base"/>
 <%
 redsStripe = game.redScore == 10 and game.blueScore == 0
 bluesStripe = game.blueScore == 10 and game.redScore == 0
