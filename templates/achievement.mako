@@ -1,3 +1,4 @@
+<%page args="ach"/>
 <div class="panel panel-default panel-achievement">
   <div class="panel-heading">
     <h3 class="panel-title">${ach.name}</h3>
