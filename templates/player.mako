@@ -37,22 +37,25 @@ def getSkillHistory(player):
 <%
 
 streaks = player.getStreaks()
-
 winStreak = streaks['win']
 loseStreak = streaks['lose']
 currentStreak = streaks['current']
 currentStreakType = streaks['currentType']
 
+overratedClass = "positive" if player.overrated() <= 0 else "negative"
 tenNilWins = getNumYellowStripes(player)
 pps = getPerPlayerStats(player)
 rank = ladder.getPlayerRank(player.name)
 redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
 sideStyle = "background-color: rgb(" + str(int(round(redness * 255))) + ", 0, "  + str(int(round((1 - redness) * 255))) + ")"
 goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
+goalRatioClass = "positive" if goalRatio >= 0 else "negative"
 skillBounds = player.getSkillBounds()
 skillChange = player.skillChangeToday()
+skillChangeClass = "positive" if skillChange >= 0 else "negative"
 skillHistory = getSkillHistory(player)
 rankChange = player.rankChangeToday()
+rankChangeClass = "positive" if RankChange >= 0 else "negative"
 
 recentGames = player.games[-5:]
 recentGames.reverse()
@@ -67,9 +70,9 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
         </div>
         <div class="panel-body">
           <div class="row">
-          ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=(ladderPositionCSS))}
+          ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=ladderPositionCSS)}
           ${self.blocks.render("statbox", title="Skill", body="{:.3f}".format(player.elo))}
-          ${self.blocks.render("statbox", title="Overrated", body="{:.3f}".format(player.overrated()), classes=("positive" if player.overrated() <= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Overrated", body="{:.3f}".format(player.overrated()), classes=overratedClass)}
           ${self.blocks.render("statbox", title="Side preference", body="{:.2%}".format(redness if redness >= 0.5 else (1-redness)) + (" red" if redness >= 0.5 else " blue"), classes="side-preference", style=sideStyle)}
           </div>
           <div class="row">
@@ -81,13 +84,13 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
           <div class="row">
           ${self.blocks.render("statbox", title="Goals for", body=player.goalsFor)}
           ${self.blocks.render("statbox", title="Goals against", body=player.goalsAgainst)}
-          ${self.blocks.render("statbox", title="Goal ratio", body=("{:.3f}".format(goalRatio)), classes=("positive" if goalRatio >= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Goal ratio", body=("{:.3f}".format(goalRatio)), classes=goalRatioClass)}
           ${self.blocks.render("statbox", title="10-0 wins", body=tenNilWins)}
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Games today", body=player.gamesToday)}
-          ${self.blocks.render("statbox", title="Skill change today", body="{:.3f}".format(skillChange), classes=("positive" if skillChange >= 0 else "negative"))}
-          ${self.blocks.render("statbox", title="Rank change today", body=rankChange, classes=("positive" if RankChange >= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Skill change today", body="{:.3f}".format(skillChange), classes=skillChangeClass)}
+          ${self.blocks.render("statbox", title="Rank change today", body=rankChange, classes=rankChangeClass)}
           ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
           </div>
           <div class="row">
