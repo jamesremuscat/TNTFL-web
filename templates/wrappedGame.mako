@@ -1,5 +1,7 @@
-<%! title = "" %>
-<%! base = "../../" %>
+<%!
+title = ""
+base = "../../"
+%>
 <%inherit file="html.mako" />
 ${self.blocks.render("game", game=game, base=self.attr.base)}
 <div class="recent-game container-fluid">

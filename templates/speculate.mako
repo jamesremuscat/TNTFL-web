@@ -1,5 +1,7 @@
-<%! title = "Speculate | " %>
-<%! base = "../" %>
+<%!
+title = "Speculate | "
+base = "../"
+%>
 <%inherit file="html.mako" />
 <div class="container-fluid">
   <div class="row">
