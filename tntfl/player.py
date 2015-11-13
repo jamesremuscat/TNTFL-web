@@ -91,6 +91,13 @@ class Player(object):
             skillChange += game.skillChangeToBlue if game.bluePlayer == self.name else -game.skillChangeToBlue
         return skillChange
 
+    def rankChangeToday(self):
+        today = date.today()
+        change = 0
+        for game in [g for g in self.games if g.timeAsDatetime().date() == today]:
+            change += game.bluePosChange if game.bluePlayer == self.name else game.redPosChange
+        return change
+
     def achieve(self, achievements, game):
         for achievement in achievements:
             if achievement in self.achievements.keys():

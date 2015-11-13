@@ -37,24 +37,29 @@ def getSkillHistory(player):
 <%
 
 streaks = player.getStreaks()
-
 winStreak = streaks['win']
 loseStreak = streaks['lose']
 currentStreak = streaks['current']
 currentStreakType = streaks['currentType']
 
+overratedClass = "positive" if player.overrated() <= 0 else "negative"
 tenNilWins = getNumYellowStripes(player)
 pps = getPerPlayerStats(player)
 rank = ladder.getPlayerRank(player.name)
 redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
 sideStyle = "background-color: rgb(" + str(int(round(redness * 255))) + ", 0, "  + str(int(round((1 - redness) * 255))) + ")"
 goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
+goalRatioClass = "positive" if goalRatio > 0 else "negative" if goalRatio < 0 else ""
 skillBounds = player.getSkillBounds()
 skillChange = player.skillChangeToday()
+skillChangeClass = "positive" if skillChange > 0 else "negative" if skillChange < 0 else ""
 skillHistory = getSkillHistory(player)
+rankChange = player.rankChangeToday()
+rankChangeClass = "positive" if rankChange > 0 else "negative" if rankChange < 0 else ""
 
 recentGames = player.games[-5:]
 recentGames.reverse()
+ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
 %>
 <div class="container-fluid">
   <div class="row">
@@ -65,9 +70,9 @@ recentGames.reverse()
         </div>
         <div class="panel-body">
           <div class="row">
-          ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=("ladder-position inactive" if rank == -1 else "ladder-position ladder-first" if rank == 1 else "ladder-position"))}
+          ${self.blocks.render("statbox", title="Current Ranking", body=(rank if rank != -1 else "-"), classes=ladderPositionCSS)}
           ${self.blocks.render("statbox", title="Skill", body="{:.3f}".format(player.elo))}
-          ${self.blocks.render("statbox", title="Overrated", body="{:.3f}".format(player.overrated()), classes=("positive" if player.overrated() <= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Overrated", body="{:.3f}".format(player.overrated()), classes=overratedClass)}
           ${self.blocks.render("statbox", title="Side preference", body="{:.2%}".format(redness if redness >= 0.5 else (1-redness)) + (" red" if redness >= 0.5 else " blue"), classes="side-preference", style=sideStyle)}
           </div>
           <div class="row">
@@ -79,20 +84,23 @@ recentGames.reverse()
           <div class="row">
           ${self.blocks.render("statbox", title="Goals for", body=player.goalsFor)}
           ${self.blocks.render("statbox", title="Goals against", body=player.goalsAgainst)}
-          ${self.blocks.render("statbox", title="Goal ratio", body=("{:.3f}".format(goalRatio)), classes=("positive" if goalRatio >= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Goal ratio", body=("{:.3f}".format(goalRatio)), classes=goalRatioClass)}
           ${self.blocks.render("statbox", title="10-0 wins", body=tenNilWins)}
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Games today", body=player.gamesToday)}
-          ${self.blocks.render("statbox", title="Skill change today", body="{:.3f}".format(skillChange), classes=("positive" if skillChange >= 0 else "negative"))}
+          ${self.blocks.render("statbox", title="Skill change today", body="{:.3f}".format(skillChange), classes=skillChangeClass)}
+          ${self.blocks.render("statbox", title="Rank change today", body=rankChange, classes=rankChangeClass)}
           ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
-          ${self.blocks.render("statbox", title="Total achievements", body=str(sum([len(g) for g in player.achievements.values()])) + '<div class="date"><a href="#achievements">See all</a></div>' )}
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['highest']['skill'], time=skillBounds['highest']['time'], base=self.attr.base))}
           ${self.blocks.render("statbox", title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['lowest']['skill'], time=skillBounds['lowest']['time'], base=self.attr.base))}
           ${self.blocks.render("statbox", title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak.count, fromDate=winStreak.fromDate, toDate=winStreak.toDate, base=self.attr.base))}
           ${self.blocks.render("statbox", title="Longest losing streak", body=get_template("durationStat.mako", value=loseStreak.count, fromDate=loseStreak.fromDate, toDate=loseStreak.toDate, base=self.attr.base))}
+          </div>
+          <div class="row">
+          ${self.blocks.render("statbox", title="Total achievements", body=str(sum([len(g) for g in player.achievements.values()])) + '<div class="date"><a href="#achievements">See all</a></div>' )}
           </div>
         </div>
       </div>

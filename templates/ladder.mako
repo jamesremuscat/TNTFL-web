@@ -1,7 +1,7 @@
 <%page args="sortCol=10, sortOrder=1, showInactive=0"/>
-<%! from datetime import datetime %>
-<%namespace name="blocks" file="blocks.mako" />
-<%
+<%!
+from datetime import datetime
+
 headings = [
     "Pos",
     "Player",
@@ -17,7 +17,21 @@ headings = [
     "Trend"
 ]
 
+def rankPlayers(players):
+    ranked = []
+    rank = 1
+    for player in players:
+        if player.isActive():
+            ranked.append([rank, player])
+            rank += 1
+        else:
+            ranked.append([-1, player])
+    return ranked
 %>
+<%
+ranked = rankPlayers(ladder.getPlayers())
+%>
+<%namespace name="blocks" file="blocks.mako" />
       <table class="table table-hover ladder" id="ladder">
         <thead>
             <tr>
@@ -27,14 +41,8 @@ headings = [
             </tr>
         </thead>
         <tbody>
-<% rank = 0 %>
-% for player in ladder.getPlayers():
-  % if player.isActive():
-    ${blocks.render("ladderEntry", player=player, index=rank, base=base)}
-    <% rank += 1 %>
-  % else:
-    ${blocks.render("ladderEntry", player=player, index=-1, base=base)}
-  % endif
+% for player in ranked:
+    ${blocks.render("ladderEntry", player=player[1], rank=player[0], base=base)}
 % endfor
           </tbody>
         </table>

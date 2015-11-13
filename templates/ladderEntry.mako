@@ -1,3 +1,4 @@
+<%page args="player, rank, base"/>
 <%!
 import re
 from datetime import datetime
@@ -19,29 +20,27 @@ def getTrend(player):
 %>
 <%
 trend = getTrend(player)
+
 daysAgo = (datetime.now() - player.games[-1].timeAsDatetime()).days
 daysToGo = Player.DAYS_INACTIVE - daysAgo
 nearlyInactive = daysToGo <= 14
+ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""
+ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
+ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
+
+draws = len(player.games) - player.wins - player.losses
+goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
 %>
-% if index == -1:
-<tr class="inactive">
-      <td class="ladder-position inactive">-</td>
-% else:
-  % if nearlyInactive:
-    <tr class="nearly-inactive" title="Player will become inactive in ${daysToGo} day${"s" if daysToGo > 0 else ""}">
-  % else:
-    <tr>
-  % endif
-      <td class="ladder-position ${"ladder-first" if index is 0 else "" }">${index + 1}</td>
-% endif
+    <tr class="${ladderRowCSS}" title="${ladderRowTitle}">
+      <td class="${ladderPositionCSS}">${rank if rank != -1 else "-"}</td>
       <td class="ladder-name"><a href="${base}player/${player.name | u}/">${player.name}</a></td>
       <td class="ladder-stat">${"{:d}".format(len(player.games))}</td>
       <td class="ladder-stat">${"{:d}".format(player.wins)}</td>
-      <td class="ladder-stat">${"{:d}".format(len(player.games) - player.wins - player.losses)}</td>
+      <td class="ladder-stat">${"{:d}".format(draws)}</td>
       <td class="ladder-stat">${"{:d}".format(player.losses)}</td>
       <td class="ladder-stat">${"{:d}".format(player.goalsFor)}</td>
       <td class="ladder-stat">${"{:d}".format(player.goalsAgainst)}</td>
-      <td class="ladder-stat">${"{:.3f}".format(float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else "0"}</td>
+      <td class="ladder-stat">${"{:.3f}".format(goalRatio)}</td>
       <td class="ladder-stat">${"{:.3f}".format(player.overrated())}</td>
       <td class="ladder-stat ladder-skill">${"{:.3f}".format(player.elo)}</td>
       <td class="ladder-stat ladder-trend"><div id="${player.name | idsafe}_trend" class="ladder-trend">&nbsp;</div></td>
@@ -50,4 +49,4 @@ nearlyInactive = daysToGo <= 14
           $.plot("#${player.name | idsafe}_trend", [ ${trend['trend']} ], {'legend' : {show: false}, 'xaxis': {show: false}, 'yaxis': {show: false}, 'grid': {'show': false}, 'series': {'shadowSize': 0}, 'colors': ['${trend["colour"]}']});
         });
       </script>
-      </tr>
+    </tr>
