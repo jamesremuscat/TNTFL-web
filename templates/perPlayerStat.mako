@@ -1,3 +1,4 @@
+<%page args="base, player, stat"/>
 <tr>
 <td class="ladder-name"><a href="${base}player/${stat.opponent}">${stat.opponent}</a></td>
 <td><a href="${base}headtohead/${player.name}/${stat.opponent}/" title="Head to Head"><span class="glyphicon glyphicon-transfer"></span></a></td>
