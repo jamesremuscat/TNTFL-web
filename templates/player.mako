@@ -49,13 +49,13 @@ rank = ladder.getPlayerRank(player.name)
 redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
 sideStyle = "background-color: rgb(" + str(int(round(redness * 255))) + ", 0, "  + str(int(round((1 - redness) * 255))) + ")"
 goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
-goalRatioClass = "positive" if goalRatio >= 0 else "negative"
+goalRatioClass = "positive" if goalRatio > 0 else "negative" if goalRatio < 0 else ""
 skillBounds = player.getSkillBounds()
 skillChange = player.skillChangeToday()
-skillChangeClass = "positive" if skillChange >= 0 else "negative"
+skillChangeClass = "positive" if skillChange > 0 else "negative" if skillChange < 0 else ""
 skillHistory = getSkillHistory(player)
 rankChange = player.rankChangeToday()
-rankChangeClass = "positive" if RankChange >= 0 else "negative"
+rankChangeClass = "positive" if rankChange > 0 else "negative" if rankChange < 0 else ""
 
 recentGames = player.games[-5:]
 recentGames.reverse()
