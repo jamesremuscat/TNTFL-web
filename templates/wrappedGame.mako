@@ -1,8 +1,14 @@
 <%!
 title = ""
 base = "../../"
+from tntfl.pundit import Pundit
 %>
 <%inherit file="html.mako" />
+<%
+pundit = Pundit()
+redFacts = pundit.getAllForGame(ladder.players[game.redPlayer], game, ladder)
+blueFacts = pundit.getAllForGame(ladder.players[game.bluePlayer], game, ladder)
+%>
 ${self.blocks.render("game", game=game, base=self.attr.base)}
 <div class="recent-game container-fluid">
   <div class="row achievements">
@@ -10,10 +16,16 @@ ${self.blocks.render("game", game=game, base=self.attr.base)}
     % for ach in game.redAchievements:
       ${self.blocks.render("achievement", ach=ach)}
     % endfor
+    % for fact in redFacts:
+      ${fact.description}
+    % endfor
     </div>
     <div class="col-md-4 col-md-offset-4">
     % for ach in game.blueAchievements:
       ${self.blocks.render("achievement", ach=ach)}
+    % endfor
+    % for fact in blueFacts:
+      ${fact.description}
     % endfor
     </div>
   </div>
