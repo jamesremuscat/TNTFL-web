@@ -34,14 +34,14 @@ class Significance(FactChecker):
         if index < 10:
             if index == 0:
                 return "Most significant game."
-            return self.ordinal(index + 1) + " most significant game."
+            return "%s most significant game." % self.ordinal(index + 1)
         return None
 
 class GameNumber(FactChecker):
     def applies(self, player, game, opponent, ladder):
         numGames = len([g for g in player.games if g.time <= game.time])
         if numGames >= 10 and self.isRoundNumber(numGames):
-            return self.ordinal(numGames) + " game."
+            return "%s game." % self.ordinal(numGames)
         return None
 
 class GoalNumber(FactChecker):
@@ -50,7 +50,7 @@ class GoalNumber(FactChecker):
         minGoals = maxGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
         for i in xrange(minGoals, maxGoals):
             if i >= 10 and self.isRoundNumber(i):
-                return self.ordinal(i) + " goal."
+                return "%s goal." % self.ordinal(i)
         return None
 
 class Streaks(FactChecker):
@@ -63,7 +63,7 @@ class Streaks(FactChecker):
                     if i == 0:
                         return "Longest winning streak."
                     if i < len(winStreaks) / 10:
-                        return self.ordinal(i + 1) + " longest winning streak."
+                        return "%s longest winning streak." % self.ordinal(i + 1)
                         #return "Longest winning streak since " + Game.formatTime(winStreaks[i + 1].toDate)
         elif streaks['currentType'] == 'losses':
             loseStreaks = sorted(streaks['lose'], key=lambda s:s.count, reverse=True)
@@ -72,7 +72,7 @@ class Streaks(FactChecker):
                     if i == 0:
                         return "Longest losing streak."
                     if i < len(loseStreaks) / 10:
-                        return self.ordinal(i + 1) + " longest losing streak."
+                        return "%s longest losing streak." % self.ordinal(i + 1)
                         #return "Longest losing streak since " + Game.formatTime(loseStreaks[i + 1].toDate)
 
         if player.games[-2].time == streaks['win'][-1].toDate and streaks['win'][-1].count >= 3:
