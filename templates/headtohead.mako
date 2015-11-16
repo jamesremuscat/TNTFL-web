@@ -2,12 +2,10 @@
 title = "Head to Head | "
 base = "../../../"
 from tntfl.game import Game
+import tntfl.templateUtils as utils
 
 def getSharedGames(player1, player2):
     return sorted([g for g in player1.games if g.redPlayer == player2.name or g.bluePlayer == player2.name], key=lambda g:g.time, reverse=True)
-
-def getNumYellowStripes(player, games):
-    return len([g for g in games if (g.redPlayer == player.name and g.redScore == 10 and g.blueScore == 0) or (g.bluePlayer == player.name and g.blueScore == 10 and g.redScore == 0)])
 
 def getNumWins(player, games):
     return len([g for g in games if (g.redPlayer == player.name and g.redScore > g.blueScore) or (g.bluePlayer == player.name and g.blueScore > g.redScore)])
@@ -59,8 +57,8 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
     player2wins = len(sharedGames) - draws - player1wins
     player1goals = getNumGoals(player1, sharedGames)
     player2goals = getNumGoals(player2, sharedGames)
-    player1yellowStripes = getNumYellowStripes(player1, sharedGames)
-    player2yellowStripes = getNumYellowStripes(player2, sharedGames)
+    player1yellowStripes = utils.getNumYellowStripes(player1, sharedGames)
+    player2yellowStripes = utils.getNumYellowStripes(player2, sharedGames)
     swingToPlayer1 = getSkillChange(player1, sharedGames)
     histograms = getHistograms(player1, player2, sharedGames)
     predict = ladder.predict(player1, player2) * 10
