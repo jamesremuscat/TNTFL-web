@@ -1,4 +1,4 @@
-
+from tntfl.game import Game
 
 class FactChecker(object):
     def ordinal(self, n):
@@ -51,6 +51,31 @@ class GoalNumber(FactChecker):
         for i in xrange(minGoals, maxGoals):
             if i >= 10 and self.isRoundNumber(i):
                 return self.ordinal(i) + " goal."
+        return None
+
+class Streaks(FactChecker):
+    def applies(self, player, game, opponent, ladder):
+        streaks = player.getAllStreaks(game.time)
+        if streaks['currentType'] == 'wins':
+            winStreaks = sorted(streaks['win'], key=lambda s:s.count, reverse=True)
+            for i, s in enumerate(winStreaks):
+                if s.count < streaks['current'].count:
+                    if i == 0:
+                        return "Longest winning streak."
+                    if i < 4:
+                        return self.ordinal(i + 1) + " longest winning streak."
+                        #return "Longest winning streak since " + Game.formatTime(winStreaks[i + 1].toDate)
+                    return None
+        elif streaks['currentType'] == 'losses':
+            loseStreaks = sorted(streaks['lose'], key=lambda s:s.count, reverse=True)
+            for i, s in enumerate(loseStreaks):
+                if s.count < streaks['current'].count:
+                    if i == 0:
+                        return "Longest losing streak."
+                    if i < 4:
+                        return self.ordinal(i + 1) + " longest losing streak."
+                        #return "Longest losing streak since " + Game.formatTime(loseStreaks[i + 1].toDate)
+                    return None
         return None
 
 class Pundit(object):
