@@ -6,8 +6,10 @@ from tntfl.pundit import Pundit
 <%inherit file="html.mako" />
 <%
 pundit = Pundit()
-redFacts = pundit.getAllForGame(ladder.players[game.redPlayer], game, ladder)
-blueFacts = pundit.getAllForGame(ladder.players[game.bluePlayer], game, ladder)
+red = ladder.players[game.redPlayer]
+blue = ladder.players[game.bluePlayer]
+redFacts = pundit.getAllForGame(red, game, blue, ladder)
+blueFacts = pundit.getAllForGame(blue, game, red, ladder)
 %>
 ${self.blocks.render("game", game=game, base=self.attr.base)}
 <div class="recent-game container-fluid">

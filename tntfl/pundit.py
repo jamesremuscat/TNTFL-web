@@ -4,9 +4,9 @@ class FactChecker(object):
     pass
 
 class HighestSkill(FactChecker):
-    description = 'New highest skill'
-    def applies(self, player, game, ladder):
-        return player.highestSkill['time'] == game.time
+    def applies(self, player, game, opponent, ladder):
+        return 'New highest skill' if player.highestSkill['time'] == game.time else None
+
 
 class Pundit(object):
     factCheckers = []
@@ -15,9 +15,10 @@ class Pundit(object):
         for clz in FactChecker.__subclasses__():
             self.factCheckers.append(clz())
 
-    def getAllForGame(self, player, game, ladder):
+    def getAllForGame(self, player, game, opponent, ladder):
         facts = []
         for clz in self.factCheckers:
-            if clz.applies(player, game, ladder):
-                facts.append(clz.__class__)
+            fact = clz.applies(player, game, opponent, ladder)
+            if fact != None:
+                facts.append(fact)
         return facts
