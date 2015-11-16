@@ -4,9 +4,7 @@ base = "../../"
 from tntfl.game import Game
 from tntfl.web import get_template
 from tntfl.player import PerPlayerStat
-
-def getNumYellowStripes(player):
-    return len([g for g in player.games if (g.redPlayer == player.name and g.redScore == 10 and g.blueScore == 0) or (g.bluePlayer == player.name and g.blueScore == 10 and g.redScore == 0)])
+import tntfl.templateUtils as utils
 
 def getPerPlayerStats(player):
     pps = {}
@@ -43,7 +41,7 @@ currentStreak = streaks['current']
 currentStreakType = streaks['currentType']
 
 overratedClass = "positive" if player.overrated() <= 0 else "negative"
-tenNilWins = getNumYellowStripes(player)
+tenNilWins = utils.getNumYellowStripes(player, player.games)
 pps = getPerPlayerStats(player)
 rank = ladder.getPlayerRank(player.name)
 redness = float(player.gamesAsRed) / len(player.games) if len(player.games) > 0 else 0
