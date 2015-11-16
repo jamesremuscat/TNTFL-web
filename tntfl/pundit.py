@@ -62,7 +62,7 @@ class Streaks(FactChecker):
                 if s.count < streaks['current'].count:
                     if i == 0:
                         return "Longest winning streak."
-                    if i < 4:
+                    if i < len(winStreaks) / 10:
                         return self.ordinal(i + 1) + " longest winning streak."
                         #return "Longest winning streak since " + Game.formatTime(winStreaks[i + 1].toDate)
                     return None
@@ -72,7 +72,7 @@ class Streaks(FactChecker):
                 if s.count < streaks['current'].count:
                     if i == 0:
                         return "Longest losing streak."
-                    if i < 4:
+                    if i < len(loseStreaks) / 10:
                         return self.ordinal(i + 1) + " longest losing streak."
                         #return "Longest losing streak since " + Game.formatTime(loseStreaks[i + 1].toDate)
                     return None
