@@ -1,6 +1,8 @@
 from tntfl.game import Game
 
 class FactChecker(object):
+    reportCount = 10    #eg report the 10 most significant games
+
     def ordinal(self, n):
         return "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
 
@@ -31,7 +33,7 @@ class Significance(FactChecker):
                 return i
     def applies(self, player, game, opponent, ladder):
         index = self.getSignificanceIndex(player, game)
-        if index < 10:
+        if index < self.reportCount:
             if index == 0:
                 return "Most significant game."
             return "%s most significant game." % self.ordinal(index + 1)
@@ -61,7 +63,7 @@ class Streaks(FactChecker):
                 if s.count < streaks['current'].count:
                     if i == 0:
                         return "Longest %s streak." % winningLosing
-                    if i < len(sortedStreaks) / 10:
+                    if i < self.reportCount:
                         return "%s longest %s streak." % (self.ordinal(i + 1), winningLosing)
                         #return "Longest %s streak since %s" (winningLosing, Game.formatTime(winStreaks[i + 1].toDate))
         if player.games[-2].time == streaks[streakType][-1].toDate and streaks[streakType][-1].count >= 3:
