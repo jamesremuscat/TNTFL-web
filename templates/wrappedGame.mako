@@ -2,6 +2,7 @@
 title = ""
 base = "../../"
 from tntfl.pundit import Pundit
+from random import shuffle
 %>
 <%inherit file="html.mako" />
 <%
@@ -10,6 +11,8 @@ red = ladder.players[game.redPlayer]
 blue = ladder.players[game.bluePlayer]
 redFacts = pundit.getAllForGame(red, game, blue, ladder)
 blueFacts = pundit.getAllForGame(blue, game, red, ladder)
+facts = redFacts + blueFacts
+shuffle(facts)
 %>
 ${self.blocks.render("game", game=game, base=self.attr.base)}
 <div class="recent-game container-fluid">
@@ -20,7 +23,7 @@ ${self.blocks.render("game", game=game, base=self.attr.base)}
     % endfor
     </div>
     <div class="col-md-4">
-      ${self.blocks.render("punditry", facts=redFacts+blueFacts)}
+      ${self.blocks.render("punditry", facts=facts)}
     </div>
     <div class="col-md-4">
     % for ach in game.blueAchievements:
