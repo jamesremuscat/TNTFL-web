@@ -19,7 +19,7 @@ class HighestSkill(FactChecker):
 
 class Significance(FactChecker):
     def getSignificanceIndex(self, player, game):
-        for i, g in enumerate(sorted([g for g in player.games], key=lambda g:abs(g.skillChangeToBlue), reverse=True)):
+        for i, g in enumerate(sorted([g for g in player.games if g.time <= game.time], key=lambda g:abs(g.skillChangeToBlue), reverse=True)):
             if g.time == game.time:
                 return i
     def applies(self, player, game, opponent, ladder):
