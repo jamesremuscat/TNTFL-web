@@ -15,7 +15,7 @@ class FactChecker(object):
 
 class HighestSkill(FactChecker):
     def applies(self, player, game, opponent, ladder):
-        return 'New highest skill' if player.highestSkill['time'] == game.time else None
+        return 'New highest skill.' if player.highestSkill['time'] == game.time else None
 
 class Significance(FactChecker):
     def getSignificanceIndex(self, player, game):
