@@ -7,6 +7,7 @@
   <div class="panel-body">
     % for fact in facts:
       ${fact}
+      <br/>
     % endfor
   </div>
 </div>
