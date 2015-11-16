@@ -23,7 +23,7 @@ trend = getTrend(player)
 
 daysAgo = (datetime.now() - player.games[-1].timeAsDatetime()).days
 daysToGo = Player.DAYS_INACTIVE - daysAgo
-nearlyInactive = daysToGo <= 14
+nearlyInactive = daysToGo <= 14 and rank != -1
 ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""
 ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
 ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
