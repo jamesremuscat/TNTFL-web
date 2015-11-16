@@ -66,8 +66,8 @@ class Streaks(FactChecker):
                     if i < self.reportCount:
                         return "%s longest %s streak." % (self.ordinal(i + 1), winningLosing)
                         #return "Longest %s streak since %s" (winningLosing, Game.formatTime(winStreaks[i + 1].toDate))
-        if player.games[-2].time == streaks[streakType][-1].toDate and streaks[streakType][-1].count >= 3:
             return "Broke %s streak of %d games." % (winningLosing, streaks[streakType][-1].count)
+        if len(player.games) >= 2 and len(streaks[streakType]) > 0 and player.games[-2].time == streaks[streakType][-1].toDate and streaks[streakType][-1].count >= 3:
         return None
 
     def applies(self, player, game, opponent, ladder):
