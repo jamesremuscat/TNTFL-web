@@ -33,7 +33,7 @@ class Significance(FactChecker):
 class GameNumber(FactChecker):
     def applies(self, player, game, opponent, ladder):
         numGames = len([g for g in player.games if g.time <= game.time])
-        if self.isRoundNumber(numGames):
+        if numGames >= 10 and self.isRoundNumber(numGames):
             return self.ordinal(numGames) + " game."
         return None
 
@@ -42,7 +42,7 @@ class GoalNumber(FactChecker):
         maxGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time <= game.time])
         minGoals = maxGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
         for i in xrange(minGoals, maxGoals):
-            if self.isRoundNumber(i):
+            if i >= 10 and self.isRoundNumber(i):
                 return self.ordinal(i) + " goal."
         return None
 
