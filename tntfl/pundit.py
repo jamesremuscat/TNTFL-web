@@ -24,7 +24,7 @@ class HighestSkill(FactChecker):
             if skill > highestSkill['skill']:
                 highestSkill['skill'] = skill
                 highestSkill['time'] = g.time
-        return 'New highest skill.' if highestSkill['time'] == game.time else None
+        return ('That game puts %s on their highest ever skill.' % (player.name)) if highestSkill['time'] == game.time else None
 
 class Significance(FactChecker):
     def getSignificanceIndex(self, player, game):
@@ -35,15 +35,15 @@ class Significance(FactChecker):
         index = self.getSignificanceIndex(player, game)
         if index < self.reportCount:
             if index == 0:
-                return "Most significant game."
-            return "%s most significant game." % self.ordinal(index + 1)
+                return "That was %s's most significant game." % (player.name)
+            return "That was %s's %s most significant game." % (player.name, self.ordinal(index + 1))
         return None
 
 class GameNumber(FactChecker):
     def applies(self, player, game, opponent, ladder):
         numGames = len([g for g in player.games if g.time <= game.time])
         if numGames >= 10 and self.isRoundNumber(numGames):
-            return "%s game." % self.ordinal(numGames)
+            return "That was %s's %s game." % (player.name, self.ordinal(numGames))
         return None
 
 class GoalNumber(FactChecker):
@@ -52,7 +52,7 @@ class GoalNumber(FactChecker):
         minGoals = maxGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
         for i in xrange(minGoals, maxGoals):
             if i >= 10 and self.isRoundNumber(i):
-                return "%s goal." % self.ordinal(i)
+                return "That game featured %s's %s goal." % (player.name, self.ordinal(i))
         return None
 
 class Streaks(FactChecker):
@@ -62,12 +62,12 @@ class Streaks(FactChecker):
             for i, s in enumerate(sortedStreaks):
                 if s.count < streaks['current'].count:
                     if i == 0:
-                        return "Longest %s streak." % winningLosing
+                        return "After that game %s was on their longest %s streak." % (player.name, winningLosing)
                     if i < self.reportCount:
-                        return "%s longest %s streak." % (self.ordinal(i + 1), winningLosing)
+                        return "After that game %s was on their %s longest %s streak." % (player.name, self.ordinal(i + 1), winningLosing)
                         #return "Longest %s streak since %s" (winningLosing, Game.formatTime(winStreaks[i + 1].toDate))
-            return "Broke %s streak of %d games." % (winningLosing, streaks[streakType][-1].count)
         if len(player.games) >= 2 and len(streaks[streakType]) > 0 and player.games[-2].time == streaks[streakType][-1].toDate and streaks[streakType][-1].count >= 3:
+            return "%s broke their %s streak of %d games." % (player.name, winningLosing, streaks[streakType][-1].count)
         return None
 
     def applies(self, player, game, opponent, ladder):
