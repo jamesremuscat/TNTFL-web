@@ -127,40 +127,45 @@ class Player(object):
     def lostGame(self, game):
         return (game.redPlayer == self.name and game.redScore < game.blueScore) or (game.bluePlayer == self.name and game.blueScore < game.redScore)
 
-    def getStreaks(self):
-        winStreak = Streak()
-        loseStreak = Streak()
+    def getAllStreaks(self):
+        winStreaks = []
+        loseStreaks = []
         currentStreak = Streak()
-
         wonPrev = False
         lostPrev = False
 
         for game in self.games:
             wonGame = self.wonGame(game)
             lostGame = self.lostGame(game)
-
             if (wonGame and wonPrev) or (lostGame and lostPrev):
                 currentStreak.toDate = game.time
                 currentStreak.count += 1
             else:
                 # end of streak
-                if wonPrev and currentStreak.count > winStreak.count:
-                    winStreak = currentStreak
-                if lostPrev and currentStreak.count > loseStreak.count:
-                    loseStreak = currentStreak
+                if wonPrev:
+                    winStreaks.append(currentStreak)
+                if lostPrev:
+                    loseStreaks.append(currentStreak)
                 currentStreak = Streak()
                 currentStreak.fromDate = game.time
                 currentStreak.toDate = game.time if (wonGame or lostGame) else 0
                 currentStreak.count = 1 if (wonGame or lostGame) else 0
-
             wonPrev = wonGame
             lostPrev = lostGame
 
         currentStreakType = "wins" if wonPrev else "losses" if lostPrev else "(last game was a draw)"
+        return {'win': winStreaks, 'lose': loseStreaks, 'current': currentStreak, 'currentType': currentStreakType}
 
-        return {'win': winStreak, 'lose': loseStreak, 'current': currentStreak, 'currentType': currentStreakType}
-
-
+    def getStreaks(self):
+        streaks = self.getAllStreaks()
+        winStreaks = sorted(streaks['win'], key=lambda s:s.count, reverse=True)
+        loseStreaks = sorted(streaks['lose'], key=lambda s:s.count, reverse=True)
+        return {
+            'win': winStreaks[0] if len(winStreaks) > 0 else Streak(),
+            'lose': loseStreaks[0] if len(winStreaks) > 0 else Streak(),
+            'current': streaks['current'],
+            'currentType': streaks['currentType']
+        }
 
 class PerPlayerStat(object):
     games = 0
