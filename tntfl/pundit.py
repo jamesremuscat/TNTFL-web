@@ -55,6 +55,13 @@ class GoalNumber(FactChecker):
                 return "That game featured %s's %s goal." % (player.name, self.ordinal(i))
         return None
 
+class Wins(FactChecker):
+    def applies(self, player, game, opponent, ladder):
+        numWins = len([g for g in player.games if g.time <= game.time and player.wonGame(g)])
+        if numWins >= 10 and self.isRoundNumber(numWins):
+            return "That was %s's %s win." % (player.name, self.ordinal(numWins))
+        return None
+
 class Streaks(FactChecker):
     def s(self, player, streaks, streakType, currentStreakType, winningLosing):
         if streaks['currentType'] == currentStreakType:
