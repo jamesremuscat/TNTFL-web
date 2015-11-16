@@ -4,6 +4,15 @@ class FactChecker(object):
     def ordinal(self, n):
         return "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
 
+    def isRoundNumber(self, n):
+        digits = len(str(n))
+        order = 1
+        for i in range(0, digits - 1):
+            order *= 10
+        if n % order == 0:
+            return True
+        return False
+
 class HighestSkill(FactChecker):
     def applies(self, player, game, opponent, ladder):
         return 'New highest skill' if player.highestSkill['time'] == game.time else None
@@ -24,11 +33,7 @@ class Significance(FactChecker):
 class GameNumber(FactChecker):
     def applies(self, player, game, opponent, ladder):
         numGames = len([g for g in player.games if g.time <= game.time])
-        digits = len(str(numGames))
-        order = 1
-        for i in range(0, digits - 1):
-            order *= 10
-        if numGames % order == 0:
+        if self.isRoundNumber(numGames):
             return self.ordinal(numGames) + " game."
         return None
 
