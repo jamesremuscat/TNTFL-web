@@ -65,7 +65,6 @@ class Streaks(FactChecker):
                     if i < len(winStreaks) / 10:
                         return self.ordinal(i + 1) + " longest winning streak."
                         #return "Longest winning streak since " + Game.formatTime(winStreaks[i + 1].toDate)
-                    return None
         elif streaks['currentType'] == 'losses':
             loseStreaks = sorted(streaks['lose'], key=lambda s:s.count, reverse=True)
             for i, s in enumerate(loseStreaks):
@@ -75,7 +74,11 @@ class Streaks(FactChecker):
                     if i < len(loseStreaks) / 10:
                         return self.ordinal(i + 1) + " longest losing streak."
                         #return "Longest losing streak since " + Game.formatTime(loseStreaks[i + 1].toDate)
-                    return None
+
+        if player.games[-2].time == streaks['win'][-1].toDate and streaks['win'][-1].count >= 3:
+            return "Broke winning streak of %s games." % streaks['win'][-1].count
+        elif player.games[-2].time == streaks['lose'][-1].toDate and streaks['lose'][-1].count >= 3:
+            return "Broke losing streak of %s games." % streaks['lose'][-1].count
         return None
 
 class Pundit(object):
