@@ -1,7 +1,8 @@
 
 
 class FactChecker(object):
-    pass
+    def ordinal(self, n):
+        return "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
 
 class HighestSkill(FactChecker):
     def applies(self, player, game, opponent, ladder):
@@ -17,8 +18,7 @@ class Significance(FactChecker):
         if index < 10:
             if index == 0:
                 return "Most significant game."
-            ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
-            return ordinal(index + 1) + " most significant game."
+            return self.ordinal(index + 1) + " most significant game."
         return None
 
 class GameNumber(FactChecker):
@@ -29,8 +29,7 @@ class GameNumber(FactChecker):
         for i in range(0, digits - 1):
             order *= 10
         if numGames % order == 0:
-            ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
-            return ordinal(numGames) + " game."
+            return self.ordinal(numGames) + " game."
         return None
 
 class Pundit(object):
