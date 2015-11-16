@@ -16,17 +16,13 @@ ${self.blocks.render("game", game=game, base=self.attr.base)}
     % for ach in game.redAchievements:
       ${self.blocks.render("achievement", ach=ach)}
     % endfor
-    % for fact in redFacts:
-      ${fact.description}
-    % endfor
+    ${self.blocks.render("punditry", facts=redFacts)}
     </div>
     <div class="col-md-4 col-md-offset-4">
     % for ach in game.blueAchievements:
       ${self.blocks.render("achievement", ach=ach)}
     % endfor
-    % for fact in blueFacts:
-      ${fact.description}
-    % endfor
+    ${self.blocks.render("punditry", facts=blueFacts)}
     </div>
   </div>
 </div>
