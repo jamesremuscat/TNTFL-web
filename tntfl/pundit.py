@@ -26,7 +26,7 @@ class HighestSkill(FactChecker):
                 highestSkill['time'] = g.time
         return ('That game puts %s on their highest ever skill.' % (player.name)) if highestSkill['time'] == game.time else None
 
-class Significance(FactChecker):
+class SignificantGames(FactChecker):
     def getSignificanceIndex(self, player, game):
         for i, g in enumerate(sorted([g for g in player.games if g.time <= game.time], key=lambda g:abs(g.skillChangeToBlue), reverse=True)):
             if g.time == game.time:
@@ -39,14 +39,14 @@ class Significance(FactChecker):
             return "That was %s's %s most significant game." % (player.name, self.ordinal(index + 1))
         return None
 
-class GameNumber(FactChecker):
+class Games(FactChecker):
     def applies(self, player, game, opponent, ladder):
         numGames = len([g for g in player.games if g.time <= game.time])
         if numGames >= 10 and self.isRoundNumber(numGames):
             return "That was %s's %s game." % (player.name, self.ordinal(numGames))
         return None
 
-class GoalNumber(FactChecker):
+class Goals(FactChecker):
     def applies(self, player, game, opponent, ladder):
         maxGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time <= game.time])
         minGoals = maxGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
