@@ -129,39 +129,34 @@ class Player(object):
 
     def getStreaks(self):
         winStreak = Streak()
-
         loseStreak = Streak()
-
         currentStreak = Streak()
 
-        lastWon = False
-        lastLost = False
+        wonPrev = False
+        lostPrev = False
 
         for game in self.games:
             wonGame = self.wonGame(game)
             lostGame = self.lostGame(game)
 
-            if (wonGame != lastWon) or (lostGame != lastLost):
+            if (wonGame and wonPrev) or (lostGame and lostPrev):
+                currentStreak.toDate = game.time
+                currentStreak.count += 1
+            else:
                 # end of streak
-                if lastWon:
-                    if currentStreak.count > winStreak.count:
-                        winStreak = currentStreak
-                if lastLost:
-                    if currentStreak.count > loseStreak.count:
-                        loseStreak = currentStreak
+                if wonPrev and currentStreak.count > winStreak.count:
+                    winStreak = currentStreak
+                if lostPrev and currentStreak.count > loseStreak.count:
+                    loseStreak = currentStreak
                 currentStreak = Streak()
                 currentStreak.fromDate = game.time
                 currentStreak.toDate = game.time if (wonGame or lostGame) else 0
                 currentStreak.count = 1 if (wonGame or lostGame) else 0
 
-            if (wonGame and lastWon) or (lostGame and lastLost):
-                currentStreak.toDate = game.time
-                currentStreak.count += 1
+            wonPrev = wonGame
+            lostPrev = lostGame
 
-            lastWon = wonGame
-            lastLost = lostGame
-
-        currentStreakType = "wins" if lastWon else "losses" if lastLost else "(last game was a draw)"
+        currentStreakType = "wins" if wonPrev else "losses" if lostPrev else "(last game was a draw)"
 
         return {'win': winStreak, 'lose': loseStreak, 'current': currentStreak, 'currentType': currentStreakType}
 
