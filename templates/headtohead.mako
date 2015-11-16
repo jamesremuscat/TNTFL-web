@@ -4,9 +4,6 @@ base = "../../../"
 from tntfl.game import Game
 import tntfl.templateUtils as utils
 
-def getSharedGames(player1, player2):
-    return sorted([g for g in player1.games if g.redPlayer == player2.name or g.bluePlayer == player2.name], key=lambda g:g.time, reverse=True)
-
 def getNumWins(player, games):
     return len([g for g in games if (g.redPlayer == player.name and g.redScore > g.blueScore) or (g.bluePlayer == player.name and g.blueScore > g.redScore)])
 
@@ -51,7 +48,7 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
         <div class="panel-body container-fluid">
 %if player1 and player2:
 <%
-    sharedGames = getSharedGames(player1, player2)
+    sharedGames = utils.getSharedGames(player1, player2)
     draws = len([g for g in sharedGames if g.redScore == g.blueScore])
     player1wins = getNumWins(player1, sharedGames)
     player2wins = len(sharedGames) - draws - player1wins
