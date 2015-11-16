@@ -21,6 +21,17 @@ class Significance(FactChecker):
             return ordinal(index + 1) + " most significant game."
         return None
 
+class GameNumber(FactChecker):
+    def applies(self, player, game, opponent, ladder):
+        numGames = len([g for g in player.games if g.time <= game.time])
+        digits = len(str(numGames))
+        order = 1
+        for i in range(0, digits - 1):
+            order *= 10
+        if numGames % order == 0:
+            ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
+            return ordinal(numGames) + " game."
+        return None
 
 class Pundit(object):
     factCheckers = []
