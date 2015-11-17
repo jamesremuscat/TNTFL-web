@@ -1,11 +1,11 @@
-<%page args="ladder, base, limit=10"/>
+<%page args="ladder, base, games, limit=10"/>
 <%namespace name="blocks" file="blocks.mako" />
 <%!
 from datetime import datetime
 from tntfl.pundit import Pundit
 %>
 <%
-  recentGames = [l for l in ladder.games if not l.isDeleted()][-limit:]
+  recentGames = [l for l in games if not l.isDeleted()][-limit:]
   recentGames.reverse()
   pundit = Pundit()
 %>
