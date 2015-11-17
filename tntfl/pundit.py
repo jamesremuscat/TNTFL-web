@@ -17,7 +17,7 @@ class FactChecker(object):
         return False
 
 class HighestSkill(FactChecker):
-    def getFact(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent):
         skill = 0
         highestSkill = {"time": 0, "skill": 0}
         for g in [g for g in player.games if g.time <= game.time]:
@@ -32,7 +32,7 @@ class SignificantGames(FactChecker):
         for i, g in enumerate(sorted([g for g in player.games if g.time <= game.time], key=lambda g:abs(g.skillChangeToBlue), reverse=True)):
             if g.time == game.time:
                 return i
-    def getFact(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent):
         index = self.getSignificanceIndex(player, game)
         if index < self._reportCount:
             if index == 0:
@@ -41,7 +41,7 @@ class SignificantGames(FactChecker):
         return None
 
 class Games(FactChecker):
-    def getFact(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent):
         numGames = len([g for g in player.games if g.time <= game.time])
         if numGames >= 10 and self.isRoundNumber(numGames):
             return "That was %s's %s game." % (player.name, self.ordinal(numGames))
@@ -49,7 +49,7 @@ class Games(FactChecker):
 
 class GamesAgainst(FactChecker):
     _pairs = [] # run once per pair
-    def getFact(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent):
         sharedGames = utils.getSharedGames(player, opponent)
         numGames = len([g for g in sharedGames if g.time <= game.time])
         pairing = {player.name, opponent.name}
@@ -59,7 +59,7 @@ class GamesAgainst(FactChecker):
         return None
 
 class Goals(FactChecker):
-    def getFact(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent):
         totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time <= game.time])
         goalsInGame = (game.blueScore if game.bluePlayer == player.name else game.redScore)
         if goalsInGame > 0:
@@ -70,7 +70,7 @@ class Goals(FactChecker):
         return None
 
 class GoalsAgainst(FactChecker):
-    def getFact(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent):
         sharedGames = utils.getSharedGames(player, opponent)
         totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in sharedGames if g.time <= game.time])
         goalsInGame = (game.blueScore if game.bluePlayer == player.name else game.redScore)
@@ -82,14 +82,14 @@ class GoalsAgainst(FactChecker):
         return None
 
 class Wins(FactChecker):
-    def getFact(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent):
         numWins = len([g for g in player.games if g.time <= game.time and player.wonGame(g)])
         if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
             return "That was %s's %s win." % (player.name, self.ordinal(numWins))
         return None
 
 class WinsAgainst(FactChecker):
-    def getFact(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent):
         sharedGames = utils.getSharedGames(player, opponent)
         numWins = len([g for g in sharedGames if g.time <= game.time and player.wonGame(g)])
         if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
@@ -111,7 +111,7 @@ class Streaks(FactChecker):
             return "%s broke their %s streak of %d games." % (player.name, winningLosing, streaks[streakType][-1].count)
         return None
 
-    def getFact(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent):
         streaks = player.getAllStreaks(player.games, game.time)
         winFact = self.s(player, streaks, 'win', 'wins', 'winning')
         loseFact = self.s(player, streaks, 'lose', 'losses', 'losing')
@@ -124,10 +124,10 @@ class Pundit(object):
         for clz in FactChecker.__subclasses__():
             self._factCheckers.append(clz())
 
-    def getAllForGame(self, player, game, opponent, ladder):
+    def getAllForGame(self, player, game, opponent):
         facts = []
         for clz in self._factCheckers:
-            fact = clz.getFact(player, game, opponent, ladder)
+            fact = clz.getFact(player, game, opponent)
             if fact != None:
                 facts.append(fact)
         return facts

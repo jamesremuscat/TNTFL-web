@@ -9,8 +9,8 @@ from random import shuffle
 pundit = Pundit()
 red = ladder.players[game.redPlayer]
 blue = ladder.players[game.bluePlayer]
-redFacts = pundit.getAllForGame(red, game, blue, ladder)
-blueFacts = pundit.getAllForGame(blue, game, red, ladder)
+redFacts = pundit.getAllForGame(red, game, blue)
+blueFacts = pundit.getAllForGame(blue, game, red)
 facts = redFacts + blueFacts
 shuffle(facts)
 %>
