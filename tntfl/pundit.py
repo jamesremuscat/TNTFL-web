@@ -85,6 +85,14 @@ class Wins(FactChecker):
             return "That was %s's %s win." % (player.name, self.ordinal(numWins))
         return None
 
+class WinsAgainst(FactChecker):
+    def getFact(self, player, game, opponent, ladder):
+        sharedGames = utils.getSharedGames(player, opponent)
+        numWins = len([g for g in sharedGames if g.time <= game.time and player.wonGame(g)])
+        if numWins >= 10 and self.isRoundNumber(numWins):
+            return "That was %s's %s win against %s." % (player.name, self.ordinal(numWins), opponent.name)
+        return None
+
 class Streaks(FactChecker):
     def s(self, player, streaks, streakType, currentStreakType, winningLosing):
         if streaks['currentType'] == currentStreakType:
