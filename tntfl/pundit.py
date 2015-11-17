@@ -1,6 +1,5 @@
 from tntfl.game import Game
 import tntfl.templateUtils as utils
-import tntfl.player as playerutils
 
 class FactChecker(object):
     _reportCount = 10    #eg report the 10 most significant games
@@ -113,7 +112,7 @@ class Streaks(FactChecker):
         return None
 
     def getFact(self, player, game, opponent, ladder):
-        streaks = playerutils.getAllStreaks(player, player.games, game.time)
+        streaks = player.getAllStreaks(player.games, game.time)
         winFact = self.s(player, streaks, 'win', 'wins', 'winning')
         loseFact = self.s(player, streaks, 'lose', 'losses', 'losing')
         return winFact if winFact != None else loseFact

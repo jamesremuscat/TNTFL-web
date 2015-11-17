@@ -9,35 +9,6 @@ class Streak(object):
         self.fromDate = 0
         self.toDate = 0
 
-def getAllStreaks(player, games, untilTime = None):
-    winStreaks = []
-    loseStreaks = []
-    currentStreak = Streak()
-    wonPrev = False
-    lostPrev = False
-
-    for game in [g for g in games if (untilTime is None or g.time <= untilTime)]:
-        wonGame = player.wonGame(game)
-        lostGame = player.lostGame(game)
-        if (wonGame and wonPrev) or (lostGame and lostPrev):
-            currentStreak.toDate = game.time
-            currentStreak.count += 1
-        else:
-            # end of streak
-            if wonPrev:
-                winStreaks.append(currentStreak)
-            if lostPrev:
-                loseStreaks.append(currentStreak)
-            currentStreak = Streak()
-            currentStreak.fromDate = game.time
-            currentStreak.toDate = game.time if (wonGame or lostGame) else 0
-            currentStreak.count = 1 if (wonGame or lostGame) else 0
-        wonPrev = wonGame
-        lostPrev = lostGame
-
-    currentStreakType = "wins" if wonPrev else "losses" if lostPrev else "(last game was a draw)"
-    return {'win': winStreaks, 'lose': loseStreaks, 'current': currentStreak, 'currentType': currentStreakType}
-
 class Player(object):
 
     # Number of days inactivity after which players are considered inactive
@@ -155,8 +126,37 @@ class Player(object):
     def lostGame(self, game):
         return (game.redPlayer == self.name and game.redScore < game.blueScore) or (game.bluePlayer == self.name and game.blueScore < game.redScore)
 
+    def getAllStreaks(self, games, untilTime = None):
+        winStreaks = []
+        loseStreaks = []
+        currentStreak = Streak()
+        wonPrev = False
+        lostPrev = False
+
+        for game in [g for g in games if (untilTime is None or g.time <= untilTime)]:
+            wonGame = self.wonGame(game)
+            lostGame = self.lostGame(game)
+            if (wonGame and wonPrev) or (lostGame and lostPrev):
+                currentStreak.toDate = game.time
+                currentStreak.count += 1
+            else:
+                # end of streak
+                if wonPrev:
+                    winStreaks.append(currentStreak)
+                if lostPrev:
+                    loseStreaks.append(currentStreak)
+                currentStreak = Streak()
+                currentStreak.fromDate = game.time
+                currentStreak.toDate = game.time if (wonGame or lostGame) else 0
+                currentStreak.count = 1 if (wonGame or lostGame) else 0
+            wonPrev = wonGame
+            lostPrev = lostGame
+
+        currentStreakType = "wins" if wonPrev else "losses" if lostPrev else "(last game was a draw)"
+        return {'win': winStreaks, 'lose': loseStreaks, 'current': currentStreak, 'currentType': currentStreakType}
+
     def getStreaks(self):
-        streaks = getAllStreaks(self, self.games)
+        streaks = self.getAllStreaks(self.games)
         winStreaks = sorted(streaks['win'], key=lambda s:s.count, reverse=True)
         loseStreaks = sorted(streaks['lose'], key=lambda s:s.count, reverse=True)
         return {
