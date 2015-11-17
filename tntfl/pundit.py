@@ -61,9 +61,9 @@ class GamesAgainst(FactChecker):
 
 class Goals(FactChecker):
     def getFact(self, player, game, opponent, ladder):
-        maxGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time <= game.time])
-        minGoals = maxGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
-        for i in xrange(minGoals, maxGoals):
+        totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time <= game.time])
+        prevGoalTotal = totalGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
+        for i in xrange(prevGoalTotal + 1, totalGoals + 1):
             if i >= 10 and self.isRoundNumber(i):
                 return "That game featured %s's %s goal." % (player.name, self.ordinal(i))
         return None
