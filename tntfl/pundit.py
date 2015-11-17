@@ -1,4 +1,5 @@
 from tntfl.game import Game
+import tntfl.templateUtils as utils
 
 class FactChecker(object):
     _reportCount = 10    #eg report the 10 most significant games
@@ -44,6 +45,18 @@ class Games(FactChecker):
         numGames = len([g for g in player.games if g.time <= game.time])
         if numGames >= 10 and self.isRoundNumber(numGames):
             return "That was %s's %s game." % (player.name, self.ordinal(numGames))
+        return None
+
+#TODO share code
+class GamesAgainst(FactChecker):
+    _pairs = [] # run once per pair
+    def getFact(self, player, game, opponent, ladder):
+        sharedGames = utils.getSharedGames(player, opponent)
+        numGames = len([g for g in sharedGames if g.time <= game.time])
+        pairing = {player.name, opponent.name}
+        if numGames >= 10 and self.isRoundNumber(numGames) and pairing not in self._pairs:
+            self._pairs.append(pairing)
+            return "That was the %s and %s's %s encounter." % (player.name, opponent.name, self.ordinal(numGames))
         return None
 
 class Goals(FactChecker):
