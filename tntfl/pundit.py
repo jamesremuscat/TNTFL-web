@@ -131,3 +131,13 @@ class Pundit(object):
             if fact != None:
                 facts.append(fact)
         return facts
+
+    def anyComment(self, player, game, opponent):
+        for clz in self._factCheckers:
+            fact = clz.getFact(player, game, opponent)
+            if fact != None:
+                return True
+            fact = clz.getFact(opponent, game, player)
+            if fact != None:
+                return True
+        return False

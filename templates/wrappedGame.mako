@@ -14,7 +14,7 @@ blueFacts = pundit.getAllForGame(blue, game, red)
 facts = redFacts + blueFacts
 shuffle(facts)
 %>
-${self.blocks.render("game", game=game, base=self.attr.base)}
+${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts))}
 <div class="recent-game container-fluid">
   <div class="row achievements">
     <div class="col-md-4">
