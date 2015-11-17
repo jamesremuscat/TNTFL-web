@@ -62,26 +62,30 @@ class GamesAgainst(FactChecker):
 class Goals(FactChecker):
     def getFact(self, player, game, opponent, ladder):
         totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time <= game.time])
-        prevGoalTotal = totalGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
-        for i in xrange(prevGoalTotal + 1, totalGoals + 1):
-            if i >= 10 and self.isRoundNumber(i):
-                return "That game featured %s's %s goal." % (player.name, self.ordinal(i))
+        goalsInGame = (game.blueScore if game.bluePlayer == player.name else game.redScore)
+        if goalsInGame > 0:
+            prevGoalTotal = totalGoals - goalsInGame
+            for i in xrange(prevGoalTotal + 1, totalGoals + 1):
+                if i >= 10 and self.isRoundNumber(i):
+                    return "That game featured %s's %s goal." % (player.name, self.ordinal(i))
         return None
 
 class GoalsAgainst(FactChecker):
     def getFact(self, player, game, opponent, ladder):
         sharedGames = utils.getSharedGames(player, opponent)
         totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in sharedGames if g.time <= game.time])
-        prevGoalTotal = totalGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
-        for i in xrange(prevGoalTotal + 1, totalGoals + 1):
-            if i >= 10 and self.isRoundNumber(i):
-                return "That game featured %s's %s goal against %s." % (player.name, self.ordinal(i), opponent.name)
+        goalsInGame = (game.blueScore if game.bluePlayer == player.name else game.redScore)
+        if goalsInGame > 0:
+            prevGoalTotal = totalGoals - goalsInGame
+            for i in xrange(prevGoalTotal + 1, totalGoals + 1):
+                if i >= 10 and self.isRoundNumber(i):
+                    return "That game featured %s's %s goal against %s." % (player.name, self.ordinal(i), opponent.name)
         return None
 
 class Wins(FactChecker):
     def getFact(self, player, game, opponent, ladder):
         numWins = len([g for g in player.games if g.time <= game.time and player.wonGame(g)])
-        if numWins >= 10 and self.isRoundNumber(numWins):
+        if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
             return "That was %s's %s win." % (player.name, self.ordinal(numWins))
         return None
 
@@ -89,7 +93,7 @@ class WinsAgainst(FactChecker):
     def getFact(self, player, game, opponent, ladder):
         sharedGames = utils.getSharedGames(player, opponent)
         numWins = len([g for g in sharedGames if g.time <= game.time and player.wonGame(g)])
-        if numWins >= 10 and self.isRoundNumber(numWins):
+        if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
             return "That was %s's %s win against %s." % (player.name, self.ordinal(numWins), opponent.name)
         return None
 
