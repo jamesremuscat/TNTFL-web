@@ -1,7 +1,7 @@
 from tntfl.game import Game
 
 class FactChecker(object):
-    reportCount = 10    #eg report the 10 most significant games
+    _reportCount = 10    #eg report the 10 most significant games
 
     def ordinal(self, n):
         return "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
@@ -16,7 +16,7 @@ class FactChecker(object):
         return False
 
 class HighestSkill(FactChecker):
-    def applies(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent, ladder):
         skill = 0
         highestSkill = {"time": 0, "skill": 0}
         for g in [g for g in player.games if g.time <= game.time]:
@@ -31,23 +31,23 @@ class SignificantGames(FactChecker):
         for i, g in enumerate(sorted([g for g in player.games if g.time <= game.time], key=lambda g:abs(g.skillChangeToBlue), reverse=True)):
             if g.time == game.time:
                 return i
-    def applies(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent, ladder):
         index = self.getSignificanceIndex(player, game)
-        if index < self.reportCount:
+        if index < self._reportCount:
             if index == 0:
                 return "That was %s's most significant game." % (player.name)
             return "That was %s's %s most significant game." % (player.name, self.ordinal(index + 1))
         return None
 
 class Games(FactChecker):
-    def applies(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent, ladder):
         numGames = len([g for g in player.games if g.time <= game.time])
         if numGames >= 10 and self.isRoundNumber(numGames):
             return "That was %s's %s game." % (player.name, self.ordinal(numGames))
         return None
 
 class Goals(FactChecker):
-    def applies(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent, ladder):
         maxGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time <= game.time])
         minGoals = maxGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
         for i in xrange(minGoals, maxGoals):
@@ -56,7 +56,7 @@ class Goals(FactChecker):
         return None
 
 class Wins(FactChecker):
-    def applies(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent, ladder):
         numWins = len([g for g in player.games if g.time <= game.time and player.wonGame(g)])
         if numWins >= 10 and self.isRoundNumber(numWins):
             return "That was %s's %s win." % (player.name, self.ordinal(numWins))
@@ -70,30 +70,30 @@ class Streaks(FactChecker):
                 if s.count < streaks['current'].count:
                     if i == 0:
                         return "After that game %s was on their longest %s streak." % (player.name, winningLosing)
-                    if i < self.reportCount:
+                    if i < self._reportCount:
                         return "After that game %s was on their %s longest %s streak." % (player.name, self.ordinal(i + 1), winningLosing)
                         #return "Longest %s streak since %s" (winningLosing, Game.formatTime(winStreaks[i + 1].toDate))
         if len(player.games) >= 2 and len(streaks[streakType]) > 0 and player.games[-2].time == streaks[streakType][-1].toDate and streaks[streakType][-1].count >= 3:
             return "%s broke their %s streak of %d games." % (player.name, winningLosing, streaks[streakType][-1].count)
         return None
 
-    def applies(self, player, game, opponent, ladder):
+    def getFact(self, player, game, opponent, ladder):
         streaks = player.getAllStreaks(game.time)
         winFact = self.s(player, streaks, 'win', 'wins', 'winning')
         loseFact = self.s(player, streaks, 'lose', 'losses', 'losing')
         return winFact if winFact != None else loseFact
 
 class Pundit(object):
-    factCheckers = []
+    _factCheckers = []
 
     def __init__(self):
         for clz in FactChecker.__subclasses__():
-            self.factCheckers.append(clz())
+            self._factCheckers.append(clz())
 
     def getAllForGame(self, player, game, opponent, ladder):
         facts = []
-        for clz in self.factCheckers:
-            fact = clz.applies(player, game, opponent, ladder)
+        for clz in self._factCheckers:
+            fact = clz.getFact(player, game, opponent, ladder)
             if fact != None:
                 facts.append(fact)
         return facts
