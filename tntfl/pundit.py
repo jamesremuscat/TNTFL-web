@@ -68,6 +68,16 @@ class Goals(FactChecker):
                 return "That game featured %s's %s goal." % (player.name, self.ordinal(i))
         return None
 
+class GoalsAgainst(FactChecker):
+    def getFact(self, player, game, opponent, ladder):
+        sharedGames = utils.getSharedGames(player, opponent)
+        totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in sharedGames if g.time <= game.time])
+        prevGoalTotal = totalGoals - (game.blueScore if game.bluePlayer == player.name else game.redScore)
+        for i in xrange(prevGoalTotal + 1, totalGoals + 1):
+            if i >= 10 and self.isRoundNumber(i):
+                return "That game featured %s's %s goal against %s." % (player.name, self.ordinal(i), opponent.name)
+        return None
+
 class Wins(FactChecker):
     def getFact(self, player, game, opponent, ladder):
         numWins = len([g for g in player.games if g.time <= game.time and player.wonGame(g)])
