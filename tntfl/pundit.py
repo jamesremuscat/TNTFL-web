@@ -104,7 +104,7 @@ class Streaks(FactChecker):
             if len(prevStreaks) > 0:
                 #find the current streak's significance
                 sortedStreaks = sorted(prevStreaks, key=lambda s:s.count, reverse=True)
-            for i, s in enumerate(sortedStreaks):
+                for i, s in enumerate(sortedStreaks):
                     if i == 0 and s.count < streaks['current'].count:
                         return "After that game %s was on their longest %s streak." % (player.name, curStreakType)
                     elif s.count < streaks['current'].count:
