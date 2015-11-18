@@ -166,6 +166,7 @@ class Streaks(FactChecker):
     _descriptionBroken = "%s broke their %s streak of %d games."
 
     def __init__(self):
+        FactChecker.__init__(self)
         self._streaks = {}
 
     def _getStreakTypeText(self, winning):
