@@ -139,7 +139,7 @@ class Player(object):
                 currentStreak.count += 1
             else:
                 # end of streak
-                if currentStreak.count >= 3:
+                if currentStreak.count >= 1:
                     streaks.append(currentStreak)
                 currentStreak = Streak()
                 currentStreak.fromDate = game.time
