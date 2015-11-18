@@ -225,6 +225,8 @@ class Functional(unittest.TestCase):
         streaky = l.players['streak']
 
         sut = Streaks()
+        result = sut.getFact(streaky, streaky.games[2], None)
+        self.assertEqual(result, "After that game streak was on their longest winning streak.")
         result = sut.getFact(streaky, streaky.games[3], None)
         self.assertEqual(result, "After that game streak was on their longest winning streak.")
         result = sut.getFact(streaky, streaky.games[4], None)
@@ -238,5 +240,7 @@ class Functional(unittest.TestCase):
             game = Game(streaky.name, 6, "baz", 4, i)
             streaky.games.append(game)
         sut = Streaks()
+        result = sut.getFact(streaky, streaky.games[-2], None)
+        self.assertIsNone(result)
         result = sut.getFact(streaky, streaky.games[-1], None)
         self.assertEqual(result, "After that game streak was on their 2nd longest winning streak.")
