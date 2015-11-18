@@ -34,9 +34,9 @@ class Unit(unittest.TestCase):
 
     def testGames(self):
         player = Player("foo")
-        for i in range(0, 1002):
-            game = Game(player.name, 5, "bar", 5, i)
-            player.games.append(game)
+        opponent = Player("bar")
+        self._bulkAppend(player, 6, opponent, 4, 0, 1002)
+
         sut = Games()
         result = sut.getFact(player, player.games[0], None)
         self.assertIsNone(result)
@@ -62,10 +62,8 @@ class Unit(unittest.TestCase):
     def testGamesAgainst(self):
         player = self._create()
         opponent = Player("baz")
-        for i in range(0, 1002):
-            game = Game(player.name, 5, opponent.name, 5, i+5)
-            player.games.append(game)
-            opponent.games.append(game)
+        self._bulkAppend(player, 6, opponent, 4, 5, 1002)
+
         sut = GamesAgainst()
         result = sut.getFact(player, player.games[0], opponent)
         self.assertIsNone(result)
@@ -90,9 +88,8 @@ class Unit(unittest.TestCase):
 
     def testGoals(self):
         player = Player("foo")
-        for i in range(0, 1002):
-            game = Game(player.name, 5, "bar", 5, i)
-            player.games.append(game)
+        opponent = Player("bar")
+        self._bulkAppend(player, 5, opponent, 5, 0, 1002)
         sut = Goals()
         result = sut.getFact(player, player.games[0], None)
         self.assertIsNone(result)
@@ -118,10 +115,8 @@ class Unit(unittest.TestCase):
     def testGoalsAgainst(self):
         player = self._create()
         opponent = Player("baz")
-        for i in range(0, 1002):
-            game = Game(player.name, 5, opponent.name, 5, i+5)
-            player.games.append(game)
-            opponent.games.append(game)
+        self._bulkAppend(player, 5, opponent, 5, 5, 1002)
+
         sut = GoalsAgainst()
         result = sut.getFact(player, player.games[0], opponent)
         self.assertIsNone(result)
@@ -146,9 +141,9 @@ class Unit(unittest.TestCase):
 
     def testWins(self):
         player = Player("foo")
-        for i in range(0, 1002):
-            game = Game(player.name, 6, "bar", 4, i+5)
-            player.games.append(game)
+        opponent = Player("bar")
+        self._bulkAppend(player, 6, opponent, 4, 0, 1002)
+
         sut = Wins()
         result = sut.getFact(player, player.games[0], None)
         self.assertIsNone(result)
@@ -174,10 +169,8 @@ class Unit(unittest.TestCase):
     def testWinsAgainst(self):
         player = self._create()
         opponent = Player("baz")
-        for i in range(0, 1002):
-            game = Game(player.name, 6, opponent.name, 4, i+5)
-            player.games.append(game)
-            opponent.games.append(game)
+        self._bulkAppend(player, 6, opponent, 4, 5, 1002)
+
         sut = WinsAgainst()
         result = sut.getFact(player, player.games[0], opponent)
         self.assertIsNone(result)
@@ -200,9 +193,6 @@ class Unit(unittest.TestCase):
         result = sut.getFact(player, player.games[1001], opponent)
         self.assertIsNone(result)
 
-    def testStreaks(self):
-        self.assertEqual(None, "not implemented")
-
     def _create(self):
         player = Player("foo")
         game0 = Game(player.name, 10, "bar", 0, 1)
@@ -218,6 +208,12 @@ class Unit(unittest.TestCase):
         game3.skillChangeToBlue = -1
         player.games.append(game3)
         return player
+
+    def _bulkAppend(self, player, playerScore, opponent, opponentScore, startTime, count):
+        for i in range(startTime, startTime + count):
+            game = Game(player.name, playerScore, opponent.name, opponentScore, i)
+            player.games.append(game)
+            opponent.games.append(game)
 
 class Functional(unittest.TestCase):
     def testStreaks(self):
