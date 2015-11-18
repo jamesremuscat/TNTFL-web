@@ -60,8 +60,15 @@ class HighestSkill(FactChecker):
 class SignificantGames(FactChecker):
     _description = "That was %s's %smost significant game."
 
+    def __init__(self):
+        FactChecker.__init__(self)
+        self._significances = {}
+
     def getSignificanceIndex(self, player, game):
-        for i, g in enumerate(sorted([g for g in player.games if g.time <= game.time], key=lambda g:abs(g.skillChangeToBlue), reverse=True)):
+        if player.name not in self._significances:
+            self._significances[player.name] = sorted([g for g in player.games], key=lambda g:abs(g.skillChangeToBlue), reverse=True)
+        significances = self._significances[player.name]
+        for i, g in enumerate([g for g in significances if g.time <= game.time]):
             if g.time == game.time:
                 return i
     def getFact(self, player, game, opponent):
