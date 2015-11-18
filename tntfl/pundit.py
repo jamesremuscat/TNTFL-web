@@ -66,11 +66,10 @@ class SignificantGames(FactChecker):
 
     def getSignificanceIndex(self, player, game):
         if player.name not in self._significances:
-            self._significances[player.name] = sorted([g for g in player.games], key=lambda g:abs(g.skillChangeToBlue), reverse=True)
+            self._significances[player.name] = [g.time for g in sorted([g for g in player.games], key=lambda g:abs(g.skillChangeToBlue), reverse=True)]
         significances = self._significances[player.name]
-        for i, g in enumerate([g for g in significances if g.time <= game.time]):
-            if g.time == game.time:
-                return i
+        return significances.index(game.time)
+
     def getFact(self, player, game, opponent):
         index = self.getSignificanceIndex(player, game)
         if index < self._reportCount:
