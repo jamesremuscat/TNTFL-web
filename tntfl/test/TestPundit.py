@@ -201,7 +201,7 @@ class Unit(unittest.TestCase):
         self.assertIsNone(result)
 
     def testStreaks(self):
-        pass
+        self.assertEqual(None, "not implemented")
 
     def _create(self):
         player = Player("foo")
@@ -229,3 +229,14 @@ class Functional(unittest.TestCase):
         self.assertEqual(result, "After that game streak was on their longest winning streak.")
         result = sut.getFact(streaky, streaky.games[4], None)
         self.assertEqual(result, "streak broke their winning streak of 4 games.")
+
+    def testStreaks2nd(self):
+        l = TableFootballLadder(os.path.join(__location__, "testStreak.txt"), False)
+        streaky = l.players['streak']
+
+        for i in range(5000000012, 5000000015):
+            game = Game(streaky.name, 6, "baz", 4, i)
+            streaky.games.append(game)
+        sut = Streaks()
+        result = sut.getFact(streaky, streaky.games[-1], None)
+        self.assertEqual(result, "After that game streak was on their 2nd longest winning streak.")
