@@ -112,6 +112,18 @@ class Unit(unittest.TestCase):
         result = sut.getFact(player, player.games[1001], None)
         self.assertIsNone(result)
 
+    def testGoalsThenNone(self):
+        player = Player("foo")
+        opponent = Player("bar")
+        self._bulkAppend(player, 5, opponent, 5, 0, 10)
+        player.games.append(Game(player.name, 0, opponent.name, 10, 10))
+
+        sut = Goals()
+        result = sut.getFact(player, player.games[9], None)
+        self.assertEqual(result, "That game featured foo's 50th goal.")
+        result = sut.getFact(player, player.games[10], None)
+        self.assertIsNone(result)
+
     def testGoalsAgainst(self):
         player = self._create()
         opponent = Player("baz")
@@ -137,6 +149,20 @@ class Unit(unittest.TestCase):
         result = sut.getFact(player, player.games[1000 +4-1], opponent)
         self.assertEqual(result, "That game featured foo's 5000th goal against baz.")
         result = sut.getFact(player, player.games[1001], opponent)
+        self.assertIsNone(result)
+
+    def testGoalsAgainstThenNone(self):
+        player = Player("foo")
+        opponent = Player("bar")
+        self._bulkAppend(player, 5, opponent, 5, 0, 10)
+        game = Game(player.name, 0, opponent.name, 10, 10)
+        player.games.append(game)
+        opponent.games.append(game)
+
+        sut = GoalsAgainst()
+        result = sut.getFact(player, player.games[9], opponent)
+        self.assertEqual(result, "That game featured foo's 50th goal against bar.")
+        result = sut.getFact(player, player.games[10], opponent)
         self.assertIsNone(result)
 
     def testWins(self):
@@ -166,6 +192,18 @@ class Unit(unittest.TestCase):
         result = sut.getFact(player, player.games[1001], None)
         self.assertIsNone(result)
 
+    def testWinsThenDraw(self):
+        player = Player("foo")
+        opponent = Player("bar")
+        self._bulkAppend(player, 6, opponent, 4, 0, 10)
+        player.games.append(Game(player.name, 5, opponent.name, 5, 10))
+
+        sut = Wins()
+        result = sut.getFact(player, player.games[9], None)
+        self.assertEqual(result, "That was foo's 10th win.")
+        result = sut.getFact(player, player.games[10], None)
+        self.assertIsNone(result)
+
     def testWinsAgainst(self):
         player = self._create()
         opponent = Player("baz")
@@ -191,6 +229,20 @@ class Unit(unittest.TestCase):
         result = sut.getFact(player, player.games[1000 +4-1], opponent)
         self.assertEqual(result, "That was foo's 1000th win against baz.")
         result = sut.getFact(player, player.games[1001], opponent)
+        self.assertIsNone(result)
+
+    def testWinsAgainstThenDraw(self):
+        player = Player("foo")
+        opponent = Player("bar")
+        self._bulkAppend(player, 6, opponent, 4, 0, 10)
+        game = Game(player.name, 5, opponent.name, 5, 10)
+        player.games.append(game)
+        opponent.games.append(game)
+
+        sut = WinsAgainst()
+        result = sut.getFact(player, player.games[9], opponent)
+        self.assertEqual(result, "That was foo's 10th win against bar.")
+        result = sut.getFact(player, player.games[10], opponent)
         self.assertIsNone(result)
 
     def _create(self):
