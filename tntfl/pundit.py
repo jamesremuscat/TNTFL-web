@@ -1,4 +1,5 @@
 from tntfl.game import Game
+from tntfl.player import Streak
 import tntfl.templateUtils as utils
 
 class FactChecker(object):
@@ -164,10 +165,28 @@ class Streaks(FactChecker):
     _description = "After that game %s was on their %slongest %s streak."
     _descriptionBroken = "%s broke their %s streak of %d games."
 
+    def __init__(self):
+        self._streaks = {}
+
     def _getStreakTypeText(self, winning):
         return 'winning' if winning else 'losing'
 
-    def _streakSignificance(self, player, streaks, game):
+    def _rewind(self, streaks, time):
+        rewound = {'past': [], 'current':Streak()}
+        for streak in streaks['past']:
+            if streak.toDate < time:
+                rewound['past'].append(streak)
+            elif time < streak.fromDate:
+                break
+            else:
+                rewound['current'].gameTimes = [g for g in streak.gameTimes if g <= time]
+                rewound['current'].win = streak.win
+        if streaks['current'].count > 0 and streaks['current'].fromDate < time:
+            rewound['current'].gameTimes = [g for g in streaks['current'].gameTimes if g <= time]
+            rewound['current'].win = streaks['current'].win
+        return rewound
+
+    def _streakSignificance(self, player, streaks):
         if streaks['current'].count >= 3:
             curStreakType = self._getStreakTypeText(streaks['current'].win)
             prevStreaks = [s for s in streaks['past'] if s.win == streaks['current'].win]
@@ -201,8 +220,10 @@ class Streaks(FactChecker):
         return None
 
     def getFact(self, player, game, opponent):
-        streaks = player.getAllStreaks(player.games, game.time)
-        cur = self._streakSignificance(player, streaks, game)
+        if player.name not in self._streaks:
+            self._streaks[player.name] = player.getAllStreaks(player.games)
+        streaks = self._rewind(self._streaks[player.name], game.time)
+        cur = self._streakSignificance(player, streaks)
         return cur if cur is not None else self._brokenStreak(player, streaks, game)
 
 class Pundit(object):
