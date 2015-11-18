@@ -47,14 +47,12 @@ class Games(FactChecker):
             return "That was %s's %s game." % (player.name, self.ordinal(numGames))
         return None
 
+#TODO run once per pair
 class GamesAgainst(FactChecker):
-    _pairs = [] # run once per pair
     def getFact(self, player, game, opponent):
         sharedGames = utils.getSharedGames(player, opponent)
         numGames = len([g for g in sharedGames if g.time <= game.time])
-        pairing = {player.name, opponent.name}
-        if numGames >= 10 and self.isRoundNumber(numGames) and pairing not in self._pairs:
-            self._pairs.append(pairing)
+        if numGames >= 10 and self.isRoundNumber(numGames):
             return "That was %s and %s's %s encounter." % (player.name, opponent.name, self.ordinal(numGames))
         return None
 
