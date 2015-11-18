@@ -3,7 +3,9 @@ import tntfl.templateUtils as utils
 
 class FactChecker(object):
     _reportCount = 10    #eg report the 10 most significant games
-    _sharedGames = {}
+
+    def __init__(self):
+        self._sharedGames = {}
 
     def ordinal(self, n):
         return "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
@@ -28,7 +30,10 @@ class FactChecker(object):
 
 class HighestSkill(FactChecker):
     _description = 'That game puts %s on their highest ever skill.'
-    _skillHistories = {}
+
+    def __init__(self):
+        FactChecker.__init__(self)
+        self._skillHistories = {}
 
     def _getPlayerHistory(self, player):
         if player.name not in self._skillHistories:
@@ -80,6 +85,9 @@ class Games(FactChecker):
 class GamesAgainst(FactChecker):
     _description = "That was %s and %s's %s encounter."
 
+    def __init__(self):
+        FactChecker.__init__(self)
+
     def getFact(self, player, game, opponent):
         sharedGames = self.getSharedGames(player, opponent)
         numGames = len([g for g in sharedGames if g.time <= game.time])
@@ -103,6 +111,9 @@ class Goals(FactChecker):
 class GoalsAgainst(FactChecker):
     _description = "That game featured %s's %s goal against %s."
 
+    def __init__(self):
+        FactChecker.__init__(self)
+        
     def getFact(self, player, game, opponent):
         sharedGames = self.getSharedGames(player, opponent)
         totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in sharedGames if g.time <= game.time])
@@ -116,7 +127,10 @@ class GoalsAgainst(FactChecker):
 
 class Wins(FactChecker):
     _description = "That was %s's %s win."
-    _wins = {}
+
+    def __init__(self):
+        FactChecker.__init__(self)
+        self._wins = {}
 
     def getFact(self, player, game, opponent):
         if player.name not in self._wins:
@@ -128,7 +142,10 @@ class Wins(FactChecker):
 
 class WinsAgainst(FactChecker):
     _description = "That was %s's %s win against %s."
-    _winsAgainst = {}
+
+    def __init__(self):
+        FactChecker.__init__(self)
+        self._winsAgainst = {}
 
     def getFact(self, player, game, opponent):
         sharedGames = self.getSharedGames(player, opponent)
