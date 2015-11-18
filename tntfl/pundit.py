@@ -97,7 +97,7 @@ class WinsAgainst(FactChecker):
         return None
 
 class Streaks(FactChecker):
-    def s(self, player, streaks, game):
+    def _streakSignificance(self, player, streaks, game):
         if streaks['current'].count >= 3:
             curStreakType = 'winning' if streaks['current'].win else 'losing'
             prevStreaks = [s for s in streaks['past'] if s.win == streaks['current'].win]
@@ -115,7 +115,9 @@ class Streaks(FactChecker):
                 return "After that game %s was on their %s longest %s streak." % (player.name, self.ordinal(len(prevStreaks) + 1), curStreakType)
             else:
                 return "After that game %s was on their longest %s streak." % (player.name, curStreakType)
+        return None
 
+    def _brokenStreak(self, player, streaks, game):
         if streaks['current'].count < 2 and len(streaks['past']) > 0:
             prevStreak = streaks['past'][-1]
             prevGame = None
@@ -129,7 +131,8 @@ class Streaks(FactChecker):
 
     def getFact(self, player, game, opponent):
         streaks = player.getAllStreaks(player.games, game.time)
-        return self.s(player, streaks, game)
+        cur = self._streakSignificance(player, streaks, game)
+        return cur if cur is not None else self._brokenStreak(player, streaks, game)
 
 class Pundit(object):
     _factCheckers = []
