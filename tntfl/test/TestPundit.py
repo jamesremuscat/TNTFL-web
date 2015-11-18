@@ -7,7 +7,7 @@ from tntfl.pundit import *
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-class TestPunditUnit(unittest.TestCase):
+class Unit(unittest.TestCase):
     def testHighestSkill(self):
         player = self._create()
         sut = HighestSkill()
@@ -219,7 +219,7 @@ class TestPunditUnit(unittest.TestCase):
         player.games.append(game3)
         return player
 
-class TestPunditFunctional(unittest.TestCase):
+class Functional(unittest.TestCase):
     def testStreaks(self):
         l = TableFootballLadder(os.path.join(__location__, "testStreak.txt"), False)
         streaky = l.players['streak']
