@@ -55,7 +55,7 @@ class GamesAgainst(FactChecker):
         pairing = {player.name, opponent.name}
         if numGames >= 10 and self.isRoundNumber(numGames) and pairing not in self._pairs:
             self._pairs.append(pairing)
-            return "That was the %s and %s's %s encounter." % (player.name, opponent.name, self.ordinal(numGames))
+            return "That was %s and %s's %s encounter." % (player.name, opponent.name, self.ordinal(numGames))
         return None
 
 class Goals(FactChecker):
