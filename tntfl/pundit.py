@@ -3,6 +3,7 @@ import tntfl.templateUtils as utils
 
 class FactChecker(object):
     _reportCount = 10    #eg report the 10 most significant games
+    _sharedGames = {}
 
     def ordinal(self, n):
         return "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
@@ -15,6 +16,15 @@ class FactChecker(object):
         if n % order == 0:
             return True
         return False
+
+    def getSharedGames(self, player1, player2):
+        if (player1, player2) in self._sharedGames:
+            return self._sharedGames[(player1, player2)]
+        elif (player2, player1) in self._sharedGames:
+            return self._sharedGames[(player2, player1)]
+        else:
+            self._sharedGames[(player1, player2)] = utils.getSharedGames(player1, player2)
+            return self._sharedGames[(player1, player2)]
 
 class HighestSkill(FactChecker):
     _description = 'That game puts %s on their highest ever skill.'
@@ -71,7 +81,7 @@ class GamesAgainst(FactChecker):
     _description = "That was %s and %s's %s encounter."
 
     def getFact(self, player, game, opponent):
-        sharedGames = utils.getSharedGames(player, opponent)
+        sharedGames = self.getSharedGames(player, opponent)
         numGames = len([g for g in sharedGames if g.time <= game.time])
         if numGames >= 10 and self.isRoundNumber(numGames):
             return self._description % (player.name, opponent.name, self.ordinal(numGames))
@@ -94,7 +104,7 @@ class GoalsAgainst(FactChecker):
     _description = "That game featured %s's %s goal against %s."
 
     def getFact(self, player, game, opponent):
-        sharedGames = utils.getSharedGames(player, opponent)
+        sharedGames = self.getSharedGames(player, opponent)
         totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in sharedGames if g.time <= game.time])
         goalsInGame = (game.blueScore if game.bluePlayer == player.name else game.redScore)
         if goalsInGame > 0:
@@ -117,7 +127,7 @@ class WinsAgainst(FactChecker):
     _description = "That was %s's %s win against %s."
 
     def getFact(self, player, game, opponent):
-        sharedGames = utils.getSharedGames(player, opponent)
+        sharedGames = self.getSharedGames(player, opponent)
         numWins = len([g for g in sharedGames if g.time <= game.time and player.wonGame(g)])
         if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
             return self._description % (player.name, self.ordinal(numWins), opponent.name)
