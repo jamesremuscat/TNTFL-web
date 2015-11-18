@@ -128,10 +128,17 @@ class Wins(FactChecker):
 
 class WinsAgainst(FactChecker):
     _description = "That was %s's %s win against %s."
+    _winsAgainst = {}
 
     def getFact(self, player, game, opponent):
         sharedGames = self.getSharedGames(player, opponent)
-        numWins = len([g for g in sharedGames if g.time <= game.time and player.wonGame(g)])
+        if player.name not in self._winsAgainst:
+            self._winsAgainst[player.name] = {}
+        playerWins = self._winsAgainst[player.name]
+        if opponent.name not in playerWins:
+            self._winsAgainst[player.name][opponent.name] = [g for g in sharedGames if player.wonGame(g)]
+            playerWins = self._winsAgainst[player.name]
+        numWins = len([g for g in playerWins[opponent.name] if g.time <= game.time])
         if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
             return self._description % (player.name, self.ordinal(numWins), opponent.name)
         return None
