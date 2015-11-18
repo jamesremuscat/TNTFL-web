@@ -169,7 +169,7 @@ class Streaks(FactChecker):
                 if g.time == game.time:
                     prevGame = player.games[i - 1]
                     break
-            if prevStreak.toDate == prevGame.time:
+            if prevStreak.toDate == prevGame.time and prevStreak.count >= 3:
                 return self._descriptionBroken % (player.name, prevStreakType, prevStreak.count)
         return None
 
