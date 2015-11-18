@@ -116,9 +116,12 @@ class GoalsAgainst(FactChecker):
 
 class Wins(FactChecker):
     _description = "That was %s's %s win."
+    _wins = {}
 
     def getFact(self, player, game, opponent):
-        numWins = len([g for g in player.games if g.time <= game.time and player.wonGame(g)])
+        if player.name not in self._wins:
+            self._wins[player.name] = [g for g in player.games if player.wonGame(g)]
+        numWins = len([g for g in self._wins[player.name] if g.time <= game.time ])
         if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
             return self._description % (player.name, self.ordinal(numWins))
         return None
