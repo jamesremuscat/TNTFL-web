@@ -155,7 +155,7 @@ class Player(object):
         currentStreakType = "(last game was a draw)" if streaks['current'].count == 0 else "wins" if streaks['current'].win else "losses"
         return {
             'win': winStreaks[0] if len(winStreaks) > 0 else Streak(),
-            'lose': loseStreaks[0] if len(winStreaks) > 0 else Streak(),
+            'lose': loseStreaks[0] if len(loseStreaks) > 0 else Streak(),
             'current': streaks['current'],
             'currentType': currentStreakType
         }
