@@ -5,10 +5,18 @@ from tntfl.aks import CircularSkillBuffer
 
 class Streak(object):
     def __init__(self):
-        self.count = 0
-        self.fromDate = 0
-        self.toDate = 0
         self.win = True
+        self.gameTimes = []
+
+    @property
+    def count(self):
+        return len(self.gameTimes)
+    @property
+    def fromDate(self):
+        return self.gameTimes[0]
+    @property
+    def toDate(self):
+        return self.gameTimes[-1]
 
 class Player(object):
 
@@ -135,16 +143,14 @@ class Player(object):
             wonGame = self.wonGame(game)
             lostGame = self.lostGame(game)
             if (wonGame and currentStreak.win) or (lostGame and not currentStreak.win):
-                currentStreak.toDate = game.time
-                currentStreak.count += 1
+                currentStreak.gameTimes.append(game.time)
             else:
                 # end of streak
                 if currentStreak.count >= 1:
                     streaks.append(currentStreak)
                 currentStreak = Streak()
-                currentStreak.fromDate = game.time
-                currentStreak.toDate = game.time if (wonGame or lostGame) else 0
-                currentStreak.count = 1 if (wonGame or lostGame) else 0
+                if wonGame or lostGame:
+                    currentStreak.gameTimes.append(game.time)
                 currentStreak.win = wonGame
         return {'past': streaks, 'current': currentStreak}
 
