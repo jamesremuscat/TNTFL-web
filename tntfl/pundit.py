@@ -18,17 +18,28 @@ class FactChecker(object):
 
 class HighestSkill(FactChecker):
     _description = 'That game puts %s on their highest ever skill.'
+    _skillHistories = {}
+
+    def _getPlayerHistory(self, player):
+        if player.name not in self._skillHistories:
+            skill = 0
+            highestSkill = {"time": 0, "skill": 0}
+            history = [0]
+            for g in player.games:
+                skill += g.skillChangeToBlue if g.bluePlayer == player.name else -g.skillChangeToBlue
+                if skill > highestSkill['skill']:
+                    highestSkill['skill'] = skill
+                    highestSkill['time'] = g.time
+                    history.append(g.time)
+            self._skillHistories[player.name] = history
+        return self._skillHistories[player.name]
 
     def getFact(self, player, game, opponent):
-        skill = 0
-        highestSkill = {"time": 0, "skill": 0}
-        for g in [g for g in player.games if g.time <= game.time]:
-            skill += g.skillChangeToBlue if g.bluePlayer == player.name else -g.skillChangeToBlue
-            if skill > highestSkill['skill']:
-                highestSkill['skill'] = skill
-                highestSkill['time'] = g.time
-        result = (player.name) if highestSkill['time'] == game.time else None
-        return self._description % result if result is not None else None
+        curHistory = self._getPlayerHistory(player)
+        for time in curHistory:
+            if time == game.time:
+                return self._description % (player.name)
+        return None
 
 class SignificantGames(FactChecker):
     _description = "That was %s's %smost significant game."
