@@ -189,7 +189,7 @@ class Streaks(FactChecker):
     def _getStreakTypeText(self, winning):
         return 'winning' if winning else 'losing'
 
-    def _splitStreak(self, streak, time):
+    def _truncateStreak(self, streak, time):
         split = Streak()
         split.gameTimes = [g for g in streak.gameTimes if g <= time]
         split.win = streak.win
@@ -201,15 +201,15 @@ class Streaks(FactChecker):
             if streak.toDate < time:
                 rewound['past'].append(streak)
             elif streak.fromDate < time:
-                rewound['current'] = self._splitStreak(streak, time)
+                rewound['current'] = self._truncateStreak(streak, time)
             else:
                 return rewound
         if streaks['current'].count > 0 and streaks['current'].fromDate < time:
-            rewound['current'] = self._splitStreak(streaks['current'], time)
+            rewound['current'] = self._truncateStreak(streaks['current'], time)
         return rewound
 
     #returns 1-indexed significance, 0 = insignificant
-    def _getStreakSignificance(self, player, streaks):
+    def _getCurrentStreakSignificance(self, streaks):
         if streaks['current'].count >= 3:
             prevStreaks = [s for s in streaks['past'] if s.win == streaks['current'].win]
             if len(prevStreaks) > 0:
@@ -238,7 +238,7 @@ class Streaks(FactChecker):
         if player.name not in self._streaks:
             self._streaks[player.name] = player.getAllStreaks(player.games)
         streaks = self._rewind(self._streaks[player.name], game.time)
-        significance = self._getStreakSignificance(player, streaks)
+        significance = self._getCurrentStreakSignificance(streaks)
         if significance > 0:
             return self._description % (player.name, "%s " % self.ordinal(significance) if significance > 1 else "", self._getStreakTypeText(streaks['current'].win))
         else:
