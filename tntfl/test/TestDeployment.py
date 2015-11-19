@@ -4,59 +4,60 @@ import urlparse
 import json
 import os
 
-class TestDeployment(unittest.TestCase):
+class Deployment(unittest.TestCase):
     urlBase = os.path.join('http://www/~tlr/', os.path.split(os.getcwd())[1]) + "/"
 
     def _page(self, page):
         return urlparse.urljoin(self.urlBase, page)
 
-class TestPages(TestDeployment):
+class Pages(Deployment):
     def testIndexReachable(self):
-        self._testPage('')
+        self._testPageReachable('')
 
     def testAchievementsReachable(self):
-        self._testPage('achievements.cgi')
+        self._testPageReachable('achievements.cgi')
 
     def testApiReachable(self):
-        self._testPage('api/')
+        self._testPageReachable('api/')
 
     def testGameReachable(self):
-        self._testPage('game/1223308996/')
+        self._testPageReachable('game/1223308996/')
 
     def testDeleteReachable(self):
         try:
-            self._testPage('game/1223308996/delete')
+            self._testPageReachable('game/1223308996/delete')
         except urllib2.HTTPError as e:
             self.assertEqual(e.code, 401)
 
     def testHeadToHeadReachable(self):
-        self._testPage('headtohead/jrem/sam/')
+        self._testPageReachable('headtohead/jrem/sam/')
 
     def testPlayerReachable(self):
-        self._testPage('player/jrem/')
+        self._testPageReachable('player/jrem/')
 
     def testPlayerGamesReachable(self):
-        self._testPage('player/jrem/games/')
+        self._testPageReachable('player/jrem/games/')
 
     def testSpeculateReachable(self):
-        self._testPage('speculate/')
+        self._testPageReachable('speculate/')
 
     def testStatsReachable(self):
-        self._testPage('stats/')
+        self._testPageReachable('stats/')
 
-    def _testPage(self, page):
-        response = urllib2.urlopen(self._page(page))
-        self.assertTrue("<!DOCTYPE html>" in response.read())
+    def _testPageReachable(self, page):
+        response = urllib2.urlopen(self._page(page)).read()
+        self.assertTrue("<!DOCTYPE html>" in response)
+        self.assertTrue("Traceback (most recent call last):" not in response)
 
-class TestApi(TestDeployment):
+class Api(Deployment):
+
     def testGameJson(self):
         page = 'game/1223308996/json'
         response = self._getJsonFrom(page)
 
         self.assertEqual(response['red']['name'], 'jrem')
         self.assertEqual(response['red']['href'], '../../player/jrem/json')
-        urlToPlayer = urlparse.urljoin(self._page(page), response['red']['href'])
-        self.assertEqual(urlToPlayer, urlparse.urljoin(self.urlBase, "player/jrem/json"))
+        self.assertEqual(urlparse.urljoin(self._page(page), response['red']['href']), urlparse.urljoin(self.urlBase, "player/jrem/json"))
         self.assertEqual(response['red']['score'], 10)
         self.assertEqual(response['red']['skillChange'], 14.8698309141)
         self.assertEqual(response['red']['rankChange'], 0)
@@ -89,8 +90,7 @@ class TestApi(TestDeployment):
         self.assertEqual(response['active'], False)
         self.assertEqual(response['skill'], 65.7308777725)
         self.assertEqual(response['overrated'], -20.2998078551)
-        urlToPlayer = urlparse.urljoin(self._page(page), response['games']['href'])
-        self.assertEqual(urlToPlayer, urlparse.urljoin(self.urlBase, "player/ndt/games/json"))
+        self.assertEqual(urlparse.urljoin(self._page(page), response['games']['href']), urlparse.urljoin(self.urlBase, "player/ndt/games/json"))
         self.assertEqual(response['total']['for'], 2895)
         self.assertEqual(response['total']['against'], 2005)
         self.assertEqual(response['total']['games'], 490)
@@ -115,8 +115,7 @@ class TestApi(TestDeployment):
 
         self.assertEqual(response[0]['red']['name'], 'lefh')
         self.assertEqual(response[0]['red']['href'], 'player/lefh/json')
-        urlToPlayer = urlparse.urljoin(self._page(page), response[0]['red']['href'])
-        self.assertEqual(urlToPlayer, urlparse.urljoin(self.urlBase, "player/lefh/json"))
+        self.assertEqual(urlparse.urljoin(self._page(page), response[0]['red']['href']), urlparse.urljoin(self.urlBase, "player/lefh/json"))
         self.assertEqual(response[0]['red']['score'], 5)
         self.assertEqual(response[0]['red']['skillChange'], -0.497657033239)
         self.assertEqual(response[0]['red']['rankChange'], 0)
