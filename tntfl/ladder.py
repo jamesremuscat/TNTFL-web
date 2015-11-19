@@ -7,13 +7,7 @@ from tntfl.gameStore import GameStore
 from tntfl.game import Game
 
 class TableFootballLadder(object):
-
-    games = []
-    players = {}
-    _gameStore = None
     _cacheFilePath = "cache"
-    _usingCache = True
-    achievements = None
 
     def __init__(self, ladderFilePath, useCache = True):
         self.games = []

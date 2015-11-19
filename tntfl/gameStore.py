@@ -3,8 +3,6 @@ from tntfl.game import Game
 
 class GameStore(object):
 
-    _ladderfilePath = ""
-
     def __init__(self, ladderFilePath):
         self._ladderFilePath = ladderFilePath
 
