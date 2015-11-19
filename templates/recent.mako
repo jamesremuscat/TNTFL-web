@@ -3,11 +3,7 @@
 <%!
 from datetime import datetime
 from tntfl.pundit import Pundit
-
-def punditryAvailable(pundit, game, ladder):
-    red = ladder.getPlayer(game.redPlayer)
-    blue = ladder.getPlayer(game.bluePlayer)
-    return pundit.anyComment(red, game, blue)
+import tntfl.templateUtils as utils
 %>
 <%
   recentGames = [l for l in games if not l.isDeleted()][-limit:]
@@ -15,6 +11,6 @@ def punditryAvailable(pundit, game, ladder):
   pundit = Pundit()
 %>
 % for game in recentGames:
-    ${blocks.render("game", game=game, base=base, punditryAvailable=punditryAvailable(pundit, game, ladder))}
+    ${blocks.render("game", game=game, base=base, punditryAvailable=utils.punditryAvailable(pundit, game, ladder))}
 % endfor
 <p>Updated at ${datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>

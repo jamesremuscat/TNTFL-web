@@ -4,3 +4,9 @@ def getNumYellowStripes(player, games):
 
 def getSharedGames(player1, player2):
     return sorted([g for g in player1.games if g.redPlayer == player2.name or g.bluePlayer == player2.name], key=lambda g:g.time, reverse=True)
+
+def punditryAvailable(pundit, game, ladder):
+    red = ladder.getPlayer(game.redPlayer)
+    blue = ladder.getPlayer(game.bluePlayer)
+    return pundit.anyComment(red, game, blue)
+    
