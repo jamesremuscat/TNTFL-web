@@ -1,10 +1,6 @@
 from datetime import date, datetime, timedelta
 
 class Game(object):
-    skillChangeToBlue = 0
-    positionSwap = False
-    deletedBy = None
-    deletedAt = 0
 
     def __init__(self, redPlayer, redScore, bluePlayer, blueScore, time):
         self.redPlayer = redPlayer.lower()
@@ -18,6 +14,10 @@ class Game(object):
         self.time = int(time)
         self.redAchievements = []
         self.blueAchievements = []
+        self.skillChangeToBlue = 0
+        self.positionSwap = False
+        self.deletedBy = None
+        self.deletedAt = 0
 
     def __str__(self):
         return self.__repr__()
