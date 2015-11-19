@@ -3,16 +3,20 @@ title = ""
 base = "../../"
 from tntfl.pundit import Pundit
 from random import shuffle
+
+def getPunditry(pundit, game, ladder):
+    red = ladder.players[game.redPlayer]
+    blue = ladder.players[game.bluePlayer]
+    redFacts = pundit.getAllForGame(red, game, blue)
+    blueFacts = pundit.getAllForGame(blue, game, red)
+    facts = redFacts + blueFacts
+    shuffle(facts)
+    return facts
 %>
 <%inherit file="html.mako" />
 <%
 pundit = Pundit()
-red = ladder.players[game.redPlayer]
-blue = ladder.players[game.bluePlayer]
-redFacts = pundit.getAllForGame(red, game, blue)
-blueFacts = pundit.getAllForGame(blue, game, red)
-facts = redFacts + blueFacts
-shuffle(facts)
+facts = getPunditry(pundit, game, ladder)
 %>
 ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts))}
 <div class="recent-game container-fluid">
