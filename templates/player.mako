@@ -54,9 +54,6 @@ skillChangeClass = "positive" if skillChange > 0 else "negative" if skillChange 
 skillHistory = getSkillHistory(player)
 rankChange = player.rankChangeToday()
 rankChangeClass = "positive" if rankChange > 0 else "negative" if rankChange < 0 else ""
-
-recentGames = player.games[-5:]
-recentGames.reverse()
 ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
 %>
 <div class="container-fluid">
@@ -179,9 +176,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
           <h2 class="panel-title">Recent Games</h2>
         </div>
         <div class="panel-body">
-  % for game in recentGames:
-      ${self.blocks.render("game", game=game, base=self.attr.base)}
-  % endfor
+            ${self.blocks.render("recent", base=self.attr.base, games=player.games, limit=5)}
           <a class="pull-right" href="games/">See all games</a>
         </div>
       </div>

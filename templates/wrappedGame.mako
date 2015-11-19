@@ -1,9 +1,20 @@
 <%!
 title = ""
 base = "../../"
+from tntfl.pundit import Pundit
+from random import shuffle
 %>
 <%inherit file="html.mako" />
-${self.blocks.render("game", game=game, base=self.attr.base)}
+<%
+pundit = Pundit()
+red = ladder.players[game.redPlayer]
+blue = ladder.players[game.bluePlayer]
+redFacts = pundit.getAllForGame(red, game, blue)
+blueFacts = pundit.getAllForGame(blue, game, red)
+facts = redFacts + blueFacts
+shuffle(facts)
+%>
+${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts))}
 <div class="recent-game container-fluid">
   <div class="row achievements">
     <div class="col-md-4">
@@ -11,7 +22,10 @@ ${self.blocks.render("game", game=game, base=self.attr.base)}
       ${self.blocks.render("achievement", ach=ach)}
     % endfor
     </div>
-    <div class="col-md-4 col-md-offset-4">
+    <div class="col-md-4">
+      ${self.blocks.render("punditry", facts=facts)}
+    </div>
+    <div class="col-md-4">
     % for ach in game.blueAchievements:
       ${self.blocks.render("achievement", ach=ach)}
     % endfor

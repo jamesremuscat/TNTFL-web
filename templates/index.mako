@@ -21,13 +21,13 @@
                 else if ($(this).hasClass('headerSortUp')) {
                     hdrorder[arrayindex] = [index, 1];
                     arrayindex++;
-                }       
+                }
             });
-            
+
             if (hdrorder.length == 0 && tableQuery != ".floatThead-table th") {
           	  return getSortOptions(".floatThead-table th")
             }
-            
+
             return hdrorder;
           }
           setInterval(function() {
@@ -49,7 +49,7 @@
           <h2 class="panel-title">Recent Games</h2>
         </div>
         <div class="panel-body" id="recentHolder">
-          ${self.blocks.render("recent", base=self.attr.base)}
+          ${self.blocks.render("recent", base=self.attr.base, games=ladder.games)}
         </div>
         <script type="text/javascript">
         setInterval(function() {$("#recentHolder").load("recent.cgi")}, 600000);
