@@ -12,7 +12,7 @@ from tntfl.game import Game
           <h1 class="panel-title">${player.name}'s games</h1>
         </div>
         <div class="panel-body">
-  % for game in player.games:
+  % for game in reversed(player.games):
       ${self.blocks.render("game", game=game, base=self.attr.base)}
   % endfor
         </div>
