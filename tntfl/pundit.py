@@ -105,14 +105,15 @@ class GamesAgainst(FactChecker):
 class Goals(FactChecker):
     _description = "That game featured %s's %s goal."
 
+    def __init__(self):
+        FactChecker.__init__(self)
+
     def getFact(self, player, game, opponent):
-        totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time <= game.time])
-        goalsInGame = (game.blueScore if game.bluePlayer == player.name else game.redScore)
-        if goalsInGame > 0:
-            prevGoalTotal = totalGoals - goalsInGame
-            for i in xrange(prevGoalTotal + 1, totalGoals + 1):
-                if i >= 10 and self.isRoundNumber(i):
-                    return self._description % (player.name, self.ordinal(i))
+        prevGoalTotal = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time < game.time])
+        goalsInGame = game.blueScore if game.bluePlayer == player.name else game.redScore
+        for i in xrange(prevGoalTotal + 1, prevGoalTotal + goalsInGame + 1):
+            if i >= 10 and self.isRoundNumber(i):
+                return self._description % (player.name, self.ordinal(i))
         return None
 
 class GoalsAgainst(FactChecker):
@@ -120,14 +121,13 @@ class GoalsAgainst(FactChecker):
 
     def __init__(self):
         FactChecker.__init__(self)
-        
+
     def getFact(self, player, game, opponent):
-        sharedGames = self.getSharedGames(player, opponent)
-        totalGoals = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in sharedGames if g.time <= game.time])
-        goalsInGame = (game.blueScore if game.bluePlayer == player.name else game.redScore)
-        if goalsInGame > 0:
-            prevGoalTotal = totalGoals - goalsInGame
-            for i in xrange(prevGoalTotal + 1, totalGoals + 1):
+        if (game.redPlayer == player.name or game.redPlayer == opponent.name) and (game.bluePlayer == player.name or game.bluePlayer == opponent.name):
+            sharedGames = self.getSharedGames(player, opponent)
+            prevGoalTotal = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in sharedGames if g.time < game.time])
+            goalsInGame = game.blueScore if game.bluePlayer == player.name else game.redScore
+            for i in xrange(prevGoalTotal + 1, prevGoalTotal + goalsInGame + 1):
                 if i >= 10 and self.isRoundNumber(i):
                     return self._description % (player.name, self.ordinal(i), opponent.name)
         return None
