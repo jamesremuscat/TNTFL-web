@@ -294,6 +294,8 @@ class Functional(unittest.TestCase):
         self.assertEqual(result, "After that game streak was on their longest winning streak.")
         result = sut.getFact(streaky, streaky.games[4], None)
         self.assertEqual(result, "streak broke their winning streak of 4 games.")
+        result = sut.getFact(streaky, streaky.games[5], None)
+        self.assertIsNone(result)
 
     def testStreaks2nd(self):
         l = TableFootballLadder(os.path.join(__location__, "testStreak.txt"), False)
