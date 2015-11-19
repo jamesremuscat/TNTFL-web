@@ -88,17 +88,26 @@ class Games(FactChecker):
             return self._description % (player.name, self.ordinal(numGames))
         return None
 
-#TODO run once per pair
 class GamesAgainst(FactChecker):
     _description = "That was %s and %s's %s encounter."
 
     def __init__(self):
         FactChecker.__init__(self)
+        self._pairings = {}
 
     def getFact(self, player, game, opponent):
+        key = None
+        if (player, opponent) in self._pairings:
+            key = (player, opponent)
+        elif (opponent, player) in self._pairings:
+            key = (opponent, player)
+        else:
+            key = (player, opponent)
+            self._pairings[key] = []
         sharedGames = self.getSharedGames(player, opponent)
         numGames = len([g for g in sharedGames if g.time <= game.time])
-        if numGames >= 10 and self.isRoundNumber(numGames):
+        if numGames >= 10 and self.isRoundNumber(numGames) and numGames not in self._pairings[key]:
+            self._pairings[key].append(numGames)
             return self._description % (player.name, opponent.name, self.ordinal(numGames))
         return None
 

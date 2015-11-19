@@ -86,6 +86,21 @@ class Unit(unittest.TestCase):
         result = sut.getFact(player, player.games[1001], opponent)
         self.assertIsNone(result)
 
+    def testGamesAgainstSingleReport(self):
+        player = Player("foo")
+        opponent = Player("baz")
+        self._bulkAppend(player, 6, opponent, 4, 0, 1002)
+
+        sut = GamesAgainst()
+        result = sut.getFact(player, player.games[10 -1], opponent)
+        self.assertEqual(result, "That was foo and baz's 10th encounter.")
+        result = sut.getFact(opponent, player.games[10 -1], player)
+        self.assertIsNone(result)
+        result = sut.getFact(opponent, player.games[700 -1], player)
+        self.assertEqual(result, "That was baz and foo's 700th encounter.")
+        result = sut.getFact(player, player.games[700 -1], opponent)
+        self.assertIsNone(result)
+
     def testGoals(self):
         player = Player("foo")
         opponent = Player("bar")
