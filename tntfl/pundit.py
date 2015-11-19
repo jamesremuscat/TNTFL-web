@@ -206,45 +206,42 @@ class Streaks(FactChecker):
             rewound['current'] = self._splitStreak(streaks['current'], time)
         return rewound
 
-    def _streakSignificance(self, player, streaks):
+    #returns 1-indexed significance, 0 = insignificant
+    def _getStreakSignificance(self, player, streaks):
         if streaks['current'].count >= 3:
-            curStreakType = self._getStreakTypeText(streaks['current'].win)
             prevStreaks = [s for s in streaks['past'] if s.win == streaks['current'].win]
             if len(prevStreaks) > 0:
                 #find the current streak's significance
                 sortedStreaks = sorted(prevStreaks, key=lambda s:s.count, reverse=True)
                 for i, s in enumerate(sortedStreaks):
-                    if i == 0 and s.count < streaks['current'].count:
-                        return self._description % (player.name, "", curStreakType)
-                    elif s.count < streaks['current'].count:
-                        return self._description % (player.name, "%s " % self.ordinal(i + 1), curStreakType)
-                    elif i > self._reportCount:
-                        return None
+                    if s.count < streaks['current'].count:
+                        return i + 1
+                    elif i >= self._reportCount:
+                        return 0
                 #not found, is "least significant"
-                return self._description % (player.name, "%s " % self.ordinal(len(prevStreaks) + 1), curStreakType)
+                return len(prevStreaks) + 1
             else:
-                return self._description % (player.name, "", curStreakType)
-        return None
+                return 1
+        return 0
 
-    def _brokenStreak(self, player, streaks, game):
-        if streaks['current'].count < 2 and len(streaks['past']) > 0:
+    def _getBrokenStreak(self, player, streaks, game):
+        if streaks['current'].count < 2 and len(streaks['past']) > 0 and streaks['past'][-1].count >= 3:
             prevStreak = streaks['past'][-1]
-            prevStreakType = self._getStreakTypeText(prevStreak.win)
-            prevGame = None
             for i, g in enumerate(player.games):
-                if g.time == game.time:
-                    prevGame = player.games[i - 1]
-                    break
-            if prevStreak.toDate == prevGame.time and prevStreak.count >= 3:
-                return self._descriptionBroken % (player.name, prevStreakType, prevStreak.count)
+                if g.time == game.time and prevStreak.toDate == player.games[i - 1].time:
+                    return prevStreak
         return None
 
     def getFact(self, player, game, opponent):
         if player.name not in self._streaks:
             self._streaks[player.name] = player.getAllStreaks(player.games)
         streaks = self._rewind(self._streaks[player.name], game.time)
-        cur = self._streakSignificance(player, streaks)
-        return cur if cur is not None else self._brokenStreak(player, streaks, game)
+        significance = self._getStreakSignificance(player, streaks)
+        if significance > 0:
+            return self._description % (player.name, "%s " % self.ordinal(significance) if significance > 1 else "", self._getStreakTypeText(streaks['current'].win))
+        else:
+            broken = self._getBrokenStreak(player, streaks, game)
+            return self._descriptionBroken % (player.name, self._getStreakTypeText(broken.win), broken.count) if broken is not None else None
 
 class Pundit(object):
     _factCheckers = []
