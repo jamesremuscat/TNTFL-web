@@ -138,11 +138,15 @@ class TestApi(TestDeployment):
         self.assertEqual(response[2]['date'], 1120840777)
 
     def testLadderReachable(self):
-        response = urllib2.urlopen(self._page('ladder.cgi'))
+        self._testPageReachable('ladder.cgi')
 
     def testRecentReachable(self):
-        response = urllib2.urlopen(self._page('recent.cgi'))
+        self._testPageReachable('recent.cgi')
 
     def _getJsonFrom(self, page):
         response = urllib2.urlopen(self._page(page))
         return json.load(response)
+
+    def _testPageReachable(self, page):
+        response = urllib2.urlopen(self._page(page))
+        self.assertTrue("Traceback (most recent call last):" not in response.read())
