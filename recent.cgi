@@ -8,4 +8,4 @@ from tntfl.web import serve_template
 form = cgi.FieldStorage()
 
 ladder = TableFootballLadder("ladder.txt")
-serve_template("recent.mako", ladder=ladder, base="", limit=form["limit"].value if "limit" in form else 10)
+serve_template("recent.mako", ladder=ladder, base="", games=games=ladder.games, limit=form["limit"].value if "limit" in form else 10)
