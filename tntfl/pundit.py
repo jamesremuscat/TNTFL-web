@@ -178,19 +178,23 @@ class Streaks(FactChecker):
     def _getStreakTypeText(self, winning):
         return 'winning' if winning else 'losing'
 
+    def _splitStreak(self, streak, time):
+        split = Streak()
+        split.gameTimes = [g for g in streak.gameTimes if g <= time]
+        split.win = streak.win
+        return split
+
     def _rewind(self, streaks, time):
         rewound = {'past': [], 'current':Streak()}
         for streak in streaks['past']:
             if streak.toDate < time:
                 rewound['past'].append(streak)
-            elif time < streak.fromDate:
-                break
+            elif streak.fromDate < time:
+                rewound['current'] = self._splitStreak(streak, time)
             else:
-                rewound['current'].gameTimes = [g for g in streak.gameTimes if g <= time]
-                rewound['current'].win = streak.win
+                return rewound
         if streaks['current'].count > 0 and streaks['current'].fromDate < time:
-            rewound['current'].gameTimes = [g for g in streaks['current'].gameTimes if g <= time]
-            rewound['current'].win = streaks['current'].win
+            rewound['current'] = self._splitStreak(streaks['current'], time)
         return rewound
 
     def _streakSignificance(self, player, streaks):
