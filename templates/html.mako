@@ -47,7 +47,7 @@
               })
             </script>
           </div>
-          <button type="submit" class="btn btn-default">Add game <span class="glyphicon glyphicon-triangle-right"></span></button>
+          <button type="submit" class="btn btn-default" onClick="this.form.submit(); this.disabled=true;">Add game <span class="glyphicon glyphicon-triangle-right"></span></button>
         </form>
       </div><!-- /.container-fluid -->
     </nav>
