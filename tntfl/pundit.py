@@ -118,27 +118,28 @@ class Goals(FactChecker):
         FactChecker.__init__(self)
 
     def getFact(self, player, game, opponent):
-        prevGoalTotal = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in player.games if g.time < game.time])
+        ordinal = self._getGoalsOrdinal(player, game, opponent, player.games)
+        return self._description % (player.name, ordinal) if ordinal is not None else None
+
+    def _getGoalsOrdinal(self, player, game, opponent, games):
+        prevGoalTotal = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in games if g.time < game.time])
         goalsInGame = game.blueScore if game.bluePlayer == player.name else game.redScore
         for i in xrange(prevGoalTotal + 1, prevGoalTotal + goalsInGame + 1):
             if i >= 10 and self.isRoundNumber(i):
-                return self._description % (player.name, self.ordinal(i))
+                return self.ordinal(i)
         return None
 
-class GoalsAgainst(FactChecker):
+class GoalsAgainst(Goals):
     _description = "That game featured %s's %s goal against %s."
 
     def __init__(self):
-        FactChecker.__init__(self)
+        Goals.__init__(self)
 
     def getFact(self, player, game, opponent):
         if (game.redPlayer == player.name or game.redPlayer == opponent.name) and (game.bluePlayer == player.name or game.bluePlayer == opponent.name):
             sharedGames = self.getSharedGames(player, opponent)
-            prevGoalTotal = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in sharedGames if g.time < game.time])
-            goalsInGame = game.blueScore if game.bluePlayer == player.name else game.redScore
-            for i in xrange(prevGoalTotal + 1, prevGoalTotal + goalsInGame + 1):
-                if i >= 10 and self.isRoundNumber(i):
-                    return self._description % (player.name, self.ordinal(i), opponent.name)
+            ordinal = self._getGoalsOrdinal(player, game, opponent, sharedGames)
+            return self._description % (player.name, ordinal, opponent.name) if ordinal is not None else None
         return None
 
 class Wins(FactChecker):
@@ -246,9 +247,13 @@ class Streaks(FactChecker):
 class Pundit(object):
     _factCheckers = []
 
+    def _addSubClasses(self, clz):
+        for sclz in clz.__subclasses__():
+            self._factCheckers.append(sclz())
+            self._addSubClasses(sclz)
+
     def __init__(self):
-        for clz in FactChecker.__subclasses__():
-            self._factCheckers.append(clz())
+        self._addSubClasses(FactChecker)
 
     def getAllForGame(self, player, game, opponent):
         facts = []
