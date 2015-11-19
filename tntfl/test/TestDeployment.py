@@ -2,9 +2,10 @@ import urllib2
 import unittest
 import urlparse
 import json
+import os
 
 class TestDeployment(unittest.TestCase):
-    urlBase = 'http://www/~tlr/tntfl-test/'
+    urlBase = os.path.join('http://www/~tlr/', os.path.split(os.getcwd())[1])
 
     def _page(self, page):
         return urlparse.urljoin(self.urlBase, page)
