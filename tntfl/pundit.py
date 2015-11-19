@@ -149,15 +149,18 @@ class Wins(FactChecker):
         FactChecker.__init__(self)
         self._wins = {}
 
+    def _getWinsOrdinal(self, player, game, games):
+        numWins = len([g for g in games if g.time <= game.time ])
+        if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
+            return self.ordinal(numWins)
+
     def getFact(self, player, game, opponent):
         if player.name not in self._wins:
             self._wins[player.name] = [g for g in player.games if player.wonGame(g)]
-        numWins = len([g for g in self._wins[player.name] if g.time <= game.time ])
-        if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
-            return self._description % (player.name, self.ordinal(numWins))
-        return None
+        ordinal = self._getWinsOrdinal(player, game, self._wins[player.name])
+        return self._description % (player.name, ordinal) if ordinal is not None else None
 
-class WinsAgainst(FactChecker):
+class WinsAgainst(Wins):
     _description = "That was %s's %s win against %s."
 
     def __init__(self):
@@ -172,10 +175,8 @@ class WinsAgainst(FactChecker):
         if opponent.name not in playerWins:
             self._winsAgainst[player.name][opponent.name] = [g for g in sharedGames if player.wonGame(g)]
             playerWins = self._winsAgainst[player.name]
-        numWins = len([g for g in playerWins[opponent.name] if g.time <= game.time])
-        if numWins >= 10 and self.isRoundNumber(numWins) and player.wonGame(game):
-            return self._description % (player.name, self.ordinal(numWins), opponent.name)
-        return None
+        ordinal = self._getWinsOrdinal(player, game, playerWins[opponent.name])
+        return self._description % (player.name, ordinal, opponent.name) if ordinal is not None else None
 
 class Streaks(FactChecker):
     _description = "After that game %s was on their %slongest %s streak."
