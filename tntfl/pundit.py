@@ -93,7 +93,7 @@ class GamesAgainst(FactChecker):
 
     def __init__(self):
         FactChecker.__init__(self)
-        self._pairings = {}
+        self._pairings = {} #to avoid repeating this fact in a game
 
     def getFact(self, player, game, opponent):
         key = None
