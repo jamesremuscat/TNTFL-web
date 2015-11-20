@@ -179,7 +179,7 @@ class WinsAgainst(Wins):
         return self._description % (player.name, ordinal, opponent.name) if ordinal is not None else None
 
 class Streaks(FactChecker):
-    _description = "After that game %s was on their %slongest %s streak."
+    _description = "At %d games, %s was on their %slongest %s streak."
     _descriptionBroken = "%s broke their %s streak of %d games."
 
     def __init__(self):
@@ -240,7 +240,7 @@ class Streaks(FactChecker):
         streaks = self._rewind(self._streaks[player.name], game.time)
         significance = self._getCurrentStreakSignificance(streaks)
         if significance > 0:
-            return self._description % (player.name, "%s " % self.ordinal(significance) if significance > 1 else "", self._getStreakTypeText(streaks['current'].win))
+            return self._description % (streaks['current'].count, player.name, "%s " % self.ordinal(significance) if significance > 1 else "", self._getStreakTypeText(streaks['current'].win))
         else:
             broken = self._getBrokenStreak(player, streaks, game)
             return self._descriptionBroken % (player.name, self._getStreakTypeText(broken.win), broken.count) if broken is not None else None
