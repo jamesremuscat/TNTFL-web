@@ -301,9 +301,22 @@ class Functional(unittest.TestCase):
         l = TableFootballLadder(os.path.join(__location__, "testStreak.txt"), False)
         streaky = l.players['streak']
         bulkAppend(streaky, 6, Player('baz'), 4, 5000000012, 3)
-        
+
         sut = Streaks()
         result = sut.getFact(streaky, streaky.games[-2], None)
         self.assertIsNone(result)
         result = sut.getFact(streaky, streaky.games[-1], None)
         self.assertEqual(result, "At 3 games, streak was on their 2nd longest winning streak.")
+
+    def testStreaksAgainst(self):
+        l = TableFootballLadder(os.path.join(__location__, "testStreak.txt"), False)
+        streaky = l.players['streak']
+        test = l.players['test']
+
+        sut = StreaksAgainst()
+        result = sut.getFact(streaky, streaky.games[3], test)
+        self.assertEqual(result, "streak has now defeated test 4 times in a row.")
+        result = sut.getFact(streaky, streaky.games[4], test)
+        self.assertIsNone(result)
+        result = sut.getFact(test, streaky.games[4], streaky)
+        self.assertEqual(result, "test just defeated streak for the first time in 4 games.")
