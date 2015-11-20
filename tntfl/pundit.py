@@ -226,11 +226,11 @@ class Streaks(FactChecker):
                 return 1
         return 0
 
-    def _getBrokenStreak(self, player, streaks, game):
+    def _getBrokenStreak(self, games, streaks, game):
         if streaks['current'].count < 2 and len(streaks['past']) > 0 and streaks['past'][-1].count >= 3:
             prevStreak = streaks['past'][-1]
-            for i, g in enumerate(player.games):
-                if g.time == game.time and prevStreak.toDate == player.games[i - 1].time:
+            for i, g in enumerate(games):
+                if g.time == game.time and prevStreak.toDate == games[i - 1].time:
                     return prevStreak
         return None
 
@@ -242,8 +242,25 @@ class Streaks(FactChecker):
         if significance > 0:
             return self._description % (streaks['current'].count, player.name, "%s " % self.ordinal(significance) if significance > 1 else "", self._getStreakTypeText(streaks['current'].win))
         else:
-            broken = self._getBrokenStreak(player, streaks, game)
+            broken = self._getBrokenStreak(player.games, streaks, game)
             return self._descriptionBroken % (player.name, self._getStreakTypeText(broken.win), broken.count) if broken is not None else None
+
+class StreaksAgainst(Streaks):
+    _description = '%s has now defeated %s %d times in a row.'
+    _descriptionBroken = '%s just defeated %s for the first time in %d games.'
+
+    def __init__(self):
+        Streaks.__init__(self)
+
+    def getFact(self, player, game, opponent):
+        sharedGames = self.getSharedGames(player, opponent)
+        streaks = player.getAllStreaks(sharedGames)
+        streaks = self._rewind(streaks, game.time)
+        if streaks['current'].win and streaks['current'].count >= 3:
+            return self._description % (player.name, opponent.name, streaks['current'].count)
+        else:
+            broken = self._getBrokenStreak(sharedGames, streaks, game)
+            return self._descriptionBroken % (player.name, opponent.name, broken.count) if broken is not None and not broken.win else None
 
 class Pundit(object):
     _factCheckers = []
