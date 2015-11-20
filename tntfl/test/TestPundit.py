@@ -133,6 +133,19 @@ class Unit(unittest.TestCase):
         result = sut.getFact(player, player.games[1001], None)
         self.assertIsNone(result)
 
+    def testGoalsFirst10(self):
+        player = Player("foo")
+        opponent = Player("bar")
+        bulkAppend(player, 1, opponent, 9, 0, 11)
+
+        sut = Goals()
+        result = sut.getFact(player, player.games[8], None)
+        self.assertIsNone(result)
+        result = sut.getFact(player, player.games[9], None)
+        self.assertEqual(result, "That game featured foo's 10th goal.")
+        result = sut.getFact(player, player.games[10], None)
+        self.assertIsNone(result)
+
     def testGoalsThenNone(self):
         player = Player("foo")
         opponent = Player("bar")
