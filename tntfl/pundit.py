@@ -121,15 +121,15 @@ class Goals(FactChecker):
         FactChecker.__init__(self)
 
     def getFact(self, player, game, opponent):
-        ordinal = self._getGoalsOrdinal(player, game, opponent, player.games)
-        return self._description % (player.name, ordinal) if ordinal is not None else None
+        goals = self._numGoals(player, game, opponent, player.games)
+        return self._description % (player.name, self.ordinal(goals)) if goals is not None else None
 
-    def _getGoalsOrdinal(self, player, game, opponent, games):
+    def _numGoals(self, player, game, opponent, games):
         prevGoalTotal = sum([g.blueScore if g.bluePlayer == player.name else g.redScore for g in games if g.time < game.time])
         goalsInGame = game.blueScore if game.bluePlayer == player.name else game.redScore
         for i in xrange(prevGoalTotal + 1, prevGoalTotal + goalsInGame + 1):
             if i >= 10 and self.isRoundNumber(i):
-                return self.ordinal(i)
+                return i
         return None
 
 class GoalsAgainst(Goals):
@@ -141,8 +141,8 @@ class GoalsAgainst(Goals):
     def getFact(self, player, game, opponent):
         if (game.redPlayer == player.name or game.redPlayer == opponent.name) and (game.bluePlayer == player.name or game.bluePlayer == opponent.name):
             sharedGames = self.getSharedGames(player, opponent)
-            ordinal = self._getGoalsOrdinal(player, game, opponent, sharedGames)
-            return self._description % (player.name, ordinal, opponent.name) if ordinal is not None else None
+            goals = self._numGoals(player, game, opponent, sharedGames)
+            return self._description % (player.name, self.ordinal(goals), opponent.name) if goals is not None else None
         return None
 
 class Wins(FactChecker):
