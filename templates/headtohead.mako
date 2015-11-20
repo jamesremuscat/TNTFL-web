@@ -68,9 +68,7 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
                   <h2 class="panel-title">Recent Encounters</h2>
                 </div>
                 <div class="panel-body">
-        %for game in sharedGames[0:5]:
-            ${self.blocks.render("game", game=game, base=self.attr.base)}
-        %endfor
+                  ${self.blocks.render("recent", base=self.attr.base, games=sharedGames, limit=5)}
                 </div>
               </div>
             </div>

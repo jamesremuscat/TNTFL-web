@@ -39,6 +39,8 @@ winStreak = streaks['win']
 loseStreak = streaks['lose']
 currentStreak = streaks['current']
 currentStreakType = streaks['currentType']
+streakFromDate = currentStreak.fromDate if currentStreak.count > 0 else 0
+streakToDate = currentStreak.toDate if currentStreak.count > 0 else 0
 
 overratedClass = "positive" if player.overrated() <= 0 else "negative"
 tenNilWins = utils.getNumYellowStripes(player, player.games)
@@ -86,7 +88,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
           ${self.blocks.render("statbox", title="Games today", body=player.gamesToday)}
           ${self.blocks.render("statbox", title="Skill change today", body="{:.3f}".format(skillChange), classes=skillChangeClass)}
           ${self.blocks.render("statbox", title="Rank change today", body=rankChange, classes=rankChangeClass)}
-          ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
+          ${self.blocks.render("statbox", title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=streakFromDate, toDate=streakToDate, base=self.attr.base))}
           </div>
           <div class="row">
           ${self.blocks.render("statbox", title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['highest']['skill'], time=skillBounds['highest']['time'], base=self.attr.base))}
