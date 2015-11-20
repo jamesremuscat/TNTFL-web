@@ -6,6 +6,8 @@ import os
 
 class Deployment(unittest.TestCase):
     urlBase = os.path.join('http://www/~tlr/', os.path.split(os.getcwd())[1]) + "/"
+    _username = 'tlr'
+    _password = ''
 
     def _page(self, page):
         return urlparse.urljoin(self.urlBase, page)
@@ -23,11 +25,19 @@ class Pages(Deployment):
     def testGameReachable(self):
         self._testPageReachable('game/1223308996/')
 
-    def testDeleteReachable(self):
+    def testDeleteAuthenticationRequired(self):
         try:
             self._testPageReachable('game/1223308996/delete')
         except urllib2.HTTPError as e:
             self.assertEqual(e.code, 401)
+
+    def testDeleteReachable(self):
+        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+        password_mgr.add_password(None, self.urlBase, self._username, self._password)
+        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+        opener = urllib2.build_opener(handler)
+        response = opener.open(self._page('game/1223308996/delete')).read()
+        self._testResponse(response)
 
     def testHeadToHeadReachable(self):
         self._testPageReachable('headtohead/jrem/sam/')
@@ -46,6 +56,9 @@ class Pages(Deployment):
 
     def _testPageReachable(self, page):
         response = urllib2.urlopen(self._page(page)).read()
+        self._testResponse(response)
+
+    def _testResponse(self, response):
         self.assertTrue("<!DOCTYPE html>" in response)
         self.assertTrue("Traceback (most recent call last):" not in response)
 

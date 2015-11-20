@@ -1,4 +1,3 @@
-<%page args="game, base"/>
 <%!
 title = ""
 base = "../../"

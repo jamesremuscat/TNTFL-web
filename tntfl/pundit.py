@@ -64,15 +64,15 @@ class SignificantGames(FactChecker):
         FactChecker.__init__(self)
         self._significances = {}
 
-    def getSignificanceIndex(self, player, game):
+    def _getSignificanceIndex(self, player, game):
         if player.name not in self._significances:
             self._significances[player.name] = [g.time for g in sorted([g for g in player.games], key=lambda g:abs(g.skillChangeToBlue), reverse=True)]
         significances = self._significances[player.name]
-        return significances.index(game.time)
+        return significances.index(game.time) if game.time in significances else None
 
     def getFact(self, player, game, opponent):
-        index = self.getSignificanceIndex(player, game)
-        if index < self._reportCount:
+        index = self._getSignificanceIndex(player, game)
+        if index is not None and index < self._reportCount:
             ordinal = ""
             if index > 0:
                 ordinal = "%s " % self.ordinal(index + 1)
