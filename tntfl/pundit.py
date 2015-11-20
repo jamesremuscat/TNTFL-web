@@ -218,7 +218,7 @@ class Streaks(FactChecker):
                 for i, s in enumerate(sortedStreaks):
                     if s.count < streaks['current'].count:
                         return i + 1
-                    elif i >= self._reportCount:
+                    elif i >= self._reportCount - 1:
                         return 0
                 #not found, is "least significant"
                 return len(prevStreaks) + 1
