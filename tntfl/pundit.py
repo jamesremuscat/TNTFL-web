@@ -64,15 +64,15 @@ class SignificantGames(FactChecker):
         FactChecker.__init__(self)
         self._significances = {}
 
-    def getSignificanceIndex(self, player, game):
+    def _getSignificanceIndex(self, player, game):
         if player.name not in self._significances:
             self._significances[player.name] = [g.time for g in sorted([g for g in player.games], key=lambda g:abs(g.skillChangeToBlue), reverse=True)]
         significances = self._significances[player.name]
-        return significances.index(game.time)
+        return significances.index(game.time) if game.time in significances else None
 
     def getFact(self, player, game, opponent):
-        index = self.getSignificanceIndex(player, game)
-        if index < self._reportCount:
+        index = self._getSignificanceIndex(player, game)
+        if index is not None and index < self._reportCount:
             ordinal = ""
             if index > 0:
                 ordinal = "%s " % self.ordinal(index + 1)
@@ -235,7 +235,7 @@ class Streaks(FactChecker):
                 if g.time == game.time:
                     prevGame = player.games[i - 1]
                     break
-            if prevStreak.toDate == prevGame.time and prevStreak.count >= 3:
+            if prevGame is not None and prevStreak.toDate == prevGame.time and prevStreak.count >= 3:
                 return self._descriptionBroken % (player.name, prevStreakType, prevStreak.count)
         return None
 
