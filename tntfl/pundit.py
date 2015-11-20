@@ -249,8 +249,8 @@ class Streaks(FactChecker):
             return self._descriptionBroken % (player.name, self._getStreakTypeText(broken.win), broken.count) if broken is not None else None
 
 class StreaksAgainst(Streaks):
-    _description = '%s has now defeated %s %d times in a row.'
-    _descriptionBroken = '%s just defeated %s for the first time in %d games.'
+    _description = "That was %s's %s consecutive win against %s."
+    _descriptionBroken = '%s defeated %s for the first time in %d games.'
 
     def __init__(self):
         Streaks.__init__(self)
@@ -260,7 +260,7 @@ class StreaksAgainst(Streaks):
         streaks = player.getAllStreaks(sharedGames)
         streaks = self._rewind(streaks, game.time)
         if streaks['current'].win and streaks['current'].count >= 3:
-            return self._description % (player.name, opponent.name, streaks['current'].count)
+            return self._description % (player.name, self.ordinal(streaks['current'].count), opponent.name)
         else:
             broken = self._getBrokenStreak(sharedGames, streaks, game)
             return self._descriptionBroken % (player.name, opponent.name, broken.count) if broken is not None and not broken.win else None

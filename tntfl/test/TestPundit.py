@@ -328,8 +328,8 @@ class Functional(unittest.TestCase):
 
         sut = StreaksAgainst()
         result = sut.getFact(streaky, streaky.games[3], test)
-        self.assertEqual(result, "streak has now defeated test 4 times in a row.")
+        self.assertEqual(result, "That was streak's 4th consecutive win against test.")
         result = sut.getFact(streaky, streaky.games[4], test)
         self.assertIsNone(result)
         result = sut.getFact(test, streaky.games[4], streaky)
-        self.assertEqual(result, "test just defeated streak for the first time in 4 games.")
+        self.assertEqual(result, "test defeated streak for the first time in 4 games.")
