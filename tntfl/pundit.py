@@ -82,17 +82,20 @@ class SignificantGames(FactChecker):
 class Games(FactChecker):
     _description = "That was %s's %s game."
 
+    def _numGames(self, games, time):
+        return len([g for g in games if g.time <= time])
+
     def getFact(self, player, game, opponent):
-        numGames = len([g for g in player.games if g.time <= game.time])
+        numGames = self._numGames(player.games, game.time)
         if numGames >= 10 and self.isRoundNumber(numGames):
             return self._description % (player.name, self.ordinal(numGames))
         return None
 
-class GamesAgainst(FactChecker):
+class GamesAgainst(Games):
     _description = "That was %s and %s's %s encounter."
 
     def __init__(self):
-        FactChecker.__init__(self)
+        Games.__init__(self)
         self._pairings = {} #to avoid repeating this fact in a game
 
     def getFact(self, player, game, opponent):
@@ -105,7 +108,7 @@ class GamesAgainst(FactChecker):
             key = (player, opponent)
             self._pairings[key] = []
         sharedGames = self.getSharedGames(player, opponent)
-        numGames = len([g for g in sharedGames if g.time <= game.time])
+        numGames = self._numGames(sharedGames, game.time)
         if numGames >= 10 and self.isRoundNumber(numGames) and numGames not in self._pairings[key]:
             self._pairings[key].append(numGames)
             return self._description % (player.name, opponent.name, self.ordinal(numGames))
