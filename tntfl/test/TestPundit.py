@@ -7,6 +7,12 @@ from tntfl.pundit import *
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
+def bulkAppend(player, playerScore, opponent, opponentScore, startTime, count):
+    for i in range(startTime, startTime + count):
+        game = Game(player.name, playerScore, opponent.name, opponentScore, i)
+        player.games.append(game)
+        opponent.games.append(game)
+
 class Unit(unittest.TestCase):
     def testHighestSkill(self):
         player = self._create()
@@ -35,7 +41,7 @@ class Unit(unittest.TestCase):
     def testGames(self):
         player = Player("foo")
         opponent = Player("bar")
-        self._bulkAppend(player, 6, opponent, 4, 0, 1002)
+        bulkAppend(player, 6, opponent, 4, 0, 1002)
 
         sut = Games()
         result = sut.getFact(player, player.games[0], None)
@@ -62,7 +68,7 @@ class Unit(unittest.TestCase):
     def testGamesAgainst(self):
         player = self._create()
         opponent = Player("baz")
-        self._bulkAppend(player, 6, opponent, 4, 5, 1002)
+        bulkAppend(player, 6, opponent, 4, 5, 1002)
 
         sut = GamesAgainst()
         result = sut.getFact(player, player.games[0], opponent)
@@ -89,7 +95,7 @@ class Unit(unittest.TestCase):
     def testGamesAgainstSingleReport(self):
         player = Player("foo")
         opponent = Player("baz")
-        self._bulkAppend(player, 6, opponent, 4, 0, 1002)
+        bulkAppend(player, 6, opponent, 4, 0, 1002)
 
         sut = GamesAgainst()
         result = sut.getFact(player, player.games[10 -1], opponent)
@@ -104,7 +110,7 @@ class Unit(unittest.TestCase):
     def testGoals(self):
         player = Player("foo")
         opponent = Player("bar")
-        self._bulkAppend(player, 5, opponent, 5, 0, 1002)
+        bulkAppend(player, 5, opponent, 5, 0, 1002)
         sut = Goals()
         result = sut.getFact(player, player.games[0], None)
         self.assertIsNone(result)
@@ -127,10 +133,23 @@ class Unit(unittest.TestCase):
         result = sut.getFact(player, player.games[1001], None)
         self.assertIsNone(result)
 
+    def testGoalsFirst10(self):
+        player = Player("foo")
+        opponent = Player("bar")
+        bulkAppend(player, 1, opponent, 9, 0, 11)
+
+        sut = Goals()
+        result = sut.getFact(player, player.games[8], None)
+        self.assertIsNone(result)
+        result = sut.getFact(player, player.games[9], None)
+        self.assertEqual(result, "That game featured foo's 10th goal.")
+        result = sut.getFact(player, player.games[10], None)
+        self.assertIsNone(result)
+
     def testGoalsThenNone(self):
         player = Player("foo")
         opponent = Player("bar")
-        self._bulkAppend(player, 5, opponent, 5, 0, 10)
+        bulkAppend(player, 5, opponent, 5, 0, 10)
         player.games.append(Game(player.name, 0, opponent.name, 10, 10))
 
         sut = Goals()
@@ -142,7 +161,7 @@ class Unit(unittest.TestCase):
     def testGoalsAgainst(self):
         player = self._create()
         opponent = Player("baz")
-        self._bulkAppend(player, 5, opponent, 5, 5, 1002)
+        bulkAppend(player, 5, opponent, 5, 5, 1002)
 
         sut = GoalsAgainst()
         result = sut.getFact(player, player.games[0], opponent)
@@ -169,7 +188,7 @@ class Unit(unittest.TestCase):
     def testGoalsAgainstThenNone(self):
         player = Player("foo")
         opponent = Player("bar")
-        self._bulkAppend(player, 5, opponent, 5, 0, 10)
+        bulkAppend(player, 5, opponent, 5, 0, 10)
         game = Game(player.name, 0, opponent.name, 10, 10)
         player.games.append(game)
         opponent.games.append(game)
@@ -183,7 +202,7 @@ class Unit(unittest.TestCase):
     def testWins(self):
         player = Player("foo")
         opponent = Player("bar")
-        self._bulkAppend(player, 6, opponent, 4, 0, 1002)
+        bulkAppend(player, 6, opponent, 4, 0, 1002)
 
         sut = Wins()
         result = sut.getFact(player, player.games[0], None)
@@ -210,7 +229,7 @@ class Unit(unittest.TestCase):
     def testWinsThenDraw(self):
         player = Player("foo")
         opponent = Player("bar")
-        self._bulkAppend(player, 6, opponent, 4, 0, 10)
+        bulkAppend(player, 6, opponent, 4, 0, 10)
         player.games.append(Game(player.name, 5, opponent.name, 5, 10))
 
         sut = Wins()
@@ -222,7 +241,7 @@ class Unit(unittest.TestCase):
     def testWinsAgainst(self):
         player = self._create()
         opponent = Player("baz")
-        self._bulkAppend(player, 6, opponent, 4, 5, 1002)
+        bulkAppend(player, 6, opponent, 4, 5, 1002)
 
         sut = WinsAgainst()
         result = sut.getFact(player, player.games[0], opponent)
@@ -249,7 +268,7 @@ class Unit(unittest.TestCase):
     def testWinsAgainstThenDraw(self):
         player = Player("foo")
         opponent = Player("bar")
-        self._bulkAppend(player, 6, opponent, 4, 0, 10)
+        bulkAppend(player, 6, opponent, 4, 0, 10)
         game = Game(player.name, 5, opponent.name, 5, 10)
         player.games.append(game)
         opponent.games.append(game)
@@ -276,12 +295,6 @@ class Unit(unittest.TestCase):
         player.games.append(game3)
         return player
 
-    def _bulkAppend(self, player, playerScore, opponent, opponentScore, startTime, count):
-        for i in range(startTime, startTime + count):
-            game = Game(player.name, playerScore, opponent.name, opponentScore, i)
-            player.games.append(game)
-            opponent.games.append(game)
-
 class Functional(unittest.TestCase):
     def testStreaks(self):
         l = TableFootballLadder(os.path.join(__location__, "testStreak.txt"), False)
@@ -289,21 +302,34 @@ class Functional(unittest.TestCase):
 
         sut = Streaks()
         result = sut.getFact(streaky, streaky.games[2], None)
-        self.assertEqual(result, "After that game streak was on their longest winning streak.")
+        self.assertEqual(result, "At 3 games, streak was on their longest winning streak.")
         result = sut.getFact(streaky, streaky.games[3], None)
-        self.assertEqual(result, "After that game streak was on their longest winning streak.")
+        self.assertEqual(result, "At 4 games, streak was on their longest winning streak.")
         result = sut.getFact(streaky, streaky.games[4], None)
         self.assertEqual(result, "streak broke their winning streak of 4 games.")
+        result = sut.getFact(streaky, streaky.games[5], None)
+        self.assertIsNone(result)
 
     def testStreaks2nd(self):
         l = TableFootballLadder(os.path.join(__location__, "testStreak.txt"), False)
         streaky = l.players['streak']
+        bulkAppend(streaky, 6, Player('baz'), 4, 5000000012, 3)
 
-        for i in range(5000000012, 5000000015):
-            game = Game(streaky.name, 6, "baz", 4, i)
-            streaky.games.append(game)
         sut = Streaks()
         result = sut.getFact(streaky, streaky.games[-2], None)
         self.assertIsNone(result)
         result = sut.getFact(streaky, streaky.games[-1], None)
-        self.assertEqual(result, "After that game streak was on their 2nd longest winning streak.")
+        self.assertEqual(result, "At 3 games, streak was on their 2nd longest winning streak.")
+
+    def testStreaksAgainst(self):
+        l = TableFootballLadder(os.path.join(__location__, "testStreak.txt"), False)
+        streaky = l.players['streak']
+        test = l.players['test']
+
+        sut = StreaksAgainst()
+        result = sut.getFact(streaky, streaky.games[3], test)
+        self.assertEqual(result, "That was streak's 4th consecutive win against test.")
+        result = sut.getFact(streaky, streaky.games[4], test)
+        self.assertIsNone(result)
+        result = sut.getFact(test, streaky.games[4], streaky)
+        self.assertEqual(result, "test defeated streak for the first time in 4 games.")

@@ -135,11 +135,11 @@ class Player(object):
     def lostGame(self, game):
         return (game.redPlayer == self.name and game.redScore < game.blueScore) or (game.bluePlayer == self.name and game.blueScore < game.redScore)
 
-    def getAllStreaks(self, games, untilTime = None):
+    def getAllStreaks(self, games):
         streaks = []
         currentStreak = Streak()
 
-        for game in [g for g in games if (untilTime is None or g.time <= untilTime)]:
+        for game in games:
             wonGame = self.wonGame(game)
             lostGame = self.lostGame(game)
             if (wonGame and currentStreak.win) or (lostGame and not currentStreak.win):
