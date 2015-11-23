@@ -13,10 +13,10 @@ class Streak(object):
         return len(self.gameTimes)
     @property
     def fromDate(self):
-        return self.gameTimes[0]
+        return self.gameTimes[0] if self.count > 0 else 0
     @property
     def toDate(self):
-        return self.gameTimes[-1]
+        return self.gameTimes[-1] if self.count > 0 else 0
 
 class Player(object):
 
