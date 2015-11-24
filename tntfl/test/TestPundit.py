@@ -279,6 +279,24 @@ class Unit(unittest.TestCase):
         result = sut.getFact(player, player.games[10], opponent)
         self.assertIsNone(result)
 
+    def testFirstGameSince(self):
+        player = Player("foo")
+        opponent = Player("bar")
+        game = Game(player.name, 5, opponent.name, 5, 10)
+        player.games.append(game)
+        opponent.games.append(game)
+        opponent.games.append(Game(opponent.name, 5, "baz", 5, 11))
+        retireTime = (60 * 60 * 24 * player.DAYS_INACTIVE)
+        game = Game(player.name, 5, opponent.name, 5, 11 + retireTime)
+        player.games.append(game)
+        opponent.games.append(game)
+
+        sut = FirstGameSince()
+        result = sut.getFact(player, player.games[-1], None)
+        self.assertEqual(result, "That was foo's first game since retiring on 1970-03-02.")
+        result = sut.getFact(opponent, opponent.games[-1], None)
+        self.assertIsNone(result)
+
     def _create(self):
         player = Player("foo")
         game0 = Game(player.name, 10, "bar", 0, 1)
