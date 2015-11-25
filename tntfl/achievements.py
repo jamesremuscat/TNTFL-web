@@ -210,13 +210,11 @@ class EarlyBird(Achievement):
     description = "Play and win the first game of the day"
 
     def applies(self, player, game, opponent, ladder):
-        won = (game.blueScore > game.redScore) if player.name == game.bluePlayer else (game.blueScore < game.redScore)
-
         prevGame = self.getMostRecentGame(game, ladder)
         if prevGame == -1:
-            return won
+            return player.wonGame(game)
         thisGame = datetime.datetime.fromtimestamp(game.time).date()
-        return thisGame != prevGame and won
+        return thisGame != prevGame and player.wonGame(game)
 
     def getMostRecentGame(self, curGame, ladder):
         numGames = len(ladder.games)
