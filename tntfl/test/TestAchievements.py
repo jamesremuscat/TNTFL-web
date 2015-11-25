@@ -1,6 +1,8 @@
+import os
 import unittest
 from tntfl.player import Player
 from tntfl.game import Game
+from tntfl.ladder import TableFootballLadder
 from tntfl.achievements import *
 
 class TestAchievements(unittest.TestCase):
@@ -68,3 +70,31 @@ class TestAchievements(unittest.TestCase):
         opponent.game(game)
         result = ach.applies(player, game, opponent, None)
         self.assertTrue(result)
+
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+class Functional(unittest.TestCase):
+    def testEarlyBird(self):
+        ladder = TableFootballLadder(os.path.join(__location__, "testLadder.txt"), False)
+        player = Player("foo")
+        opponent = Player("baz")
+        game = Game(opponent.name, 0, player.name, 10, 6000000003)
+        ladder.addGame(game)
+
+        sut = EarlyBird()
+        result = sut.applies(player, game, opponent, ladder)
+        self.assertTrue(result)
+        result = sut.applies(opponent, game, player, ladder)
+        self.assertFalse(result)
+
+    def testEarlyBirdFirstGame(self):
+        ladder = TableFootballLadder(os.path.join(__location__, "emptyLadder.txt"), False)
+        player = Player("foo")
+        opponent = Player("baz")
+        game = Game(opponent.name, 0, player.name, 10, 0)
+        ladder.addGame(game)
+
+        sut = EarlyBird()
+        result = sut.applies(player, game, opponent, ladder)
+        self.assertTrue(result)
+        result = sut.applies(opponent, game, player, ladder)
+        self.assertFalse(result)
