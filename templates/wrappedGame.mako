@@ -5,8 +5,8 @@ from tntfl.pundit import Pundit
 from random import shuffle
 
 def getPunditry(pundit, game, ladder):
-    red = ladder.players[game.redPlayer]
-    blue = ladder.players[game.bluePlayer]
+    red = ladder.getPlayer(game.redPlayer)
+    blue = ladder.getPlayer(game.bluePlayer)
     redFacts = pundit.getAllForGame(red, game, blue)
     blueFacts = pundit.getAllForGame(blue, game, red)
     facts = redFacts + blueFacts
