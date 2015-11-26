@@ -64,14 +64,17 @@ class TableFootballLadder(object):
 
         self._calculateSkillChange(red, game, blue)
 
-        players = sorted([p for p in self.players.values() if p.isActive(game.time - 1)], key=lambda x: x.elo, reverse=True)
+        activePlayers = {p.name: p for p in [p for p in self.players.values() if p.isActive(game.time - 1)]}
+        players = sorted(activePlayers.values(), key=lambda x: x.elo, reverse=True)
         redPosBefore = players.index(red) if red in players else -1
         bluePosBefore = players.index(blue) if blue in players else -1
 
         blue.game(game)
         red.game(game)
 
-        players = sorted([p for p in self.players.values() if p.isActive(game.time)], key=lambda x: x.elo, reverse=True)
+        activePlayers[red.name] = red
+        activePlayers[blue.name] = blue
+        players = sorted(activePlayers.values(), key=lambda x: x.elo, reverse=True)
         redPosAfter = players.index(red)
         bluePosAfter = players.index(blue)
 
