@@ -1,6 +1,6 @@
 import os.path
 import cPickle as pickle
-from time import time
+import time
 from tntfl.achievements import Achievements
 from tntfl.player import Player, Streak
 from tntfl.gameStore import GameStore
@@ -14,8 +14,8 @@ class TableFootballLadder(object):
         self.players = {}
         self._gameStore = GameStore(ladderFilePath)
         self._usingCache = useCache
-
         self.achievements = Achievements()
+        self._recentlyActivePlayers = (-1, [])
 
         loaded = self._loadFromCache()
         if not loaded:
@@ -64,21 +64,30 @@ class TableFootballLadder(object):
 
         self._calculateSkillChange(red, game, blue)
 
-        posBefore = self._getPositions(game.redPlayer, game.bluePlayer, game.time - 1)
+        activePlayers = {p.name: p for p in self.getActivePlayers(game.time -1)}
+        players = sorted(activePlayers.values(), key=lambda x: x.elo, reverse=True)
+        redPosBefore = players.index(red) if red in players else -1
+        bluePosBefore = players.index(blue) if blue in players else -1
 
         blue.game(game)
         red.game(game)
 
-        posAfter = self._getPositions(game.redPlayer, game.bluePlayer, game.time)
-        game.bluePosAfter = posAfter['blue'] + 1 # because it's zero-indexed here
-        game.redPosAfter = posAfter['red'] + 1
+        activePlayers[red.name] = red
+        activePlayers[blue.name] = blue
+        self._recentlyActivePlayers = (game.time, activePlayers.values())
+        players = sorted(activePlayers.values(), key=lambda x: x.elo, reverse=True)
+        redPosAfter = players.index(red)
+        bluePosAfter = players.index(blue)
 
-        if posBefore['blue'] > 0:
-            game.bluePosChange = posBefore['blue'] - posAfter['blue']  # It's this way around because a rise in position is to a lower numbered rank.
-        if posBefore['red'] > 0:
-            game.redPosChange = posBefore['red'] - posAfter['red']
-        if posBefore['blue'] > 0 and posBefore['red'] > 0:
-            if posBefore['blue'] == posAfter['red'] or posBefore['red'] == posAfter['blue']:
+        game.bluePosAfter = bluePosAfter + 1 # because it's zero-indexed here
+        game.redPosAfter = redPosAfter + 1
+
+        if bluePosBefore > 0:
+            game.bluePosChange = bluePosBefore - bluePosAfter  # It's this way around because a rise in position is to a lower numbered rank.
+        if redPosBefore > 0:
+            game.redPosChange = redPosBefore - redPosAfter
+        if bluePosBefore > 0 and redPosBefore > 0:
+            if bluePosBefore == redPosAfter or redPosBefore == bluePosAfter:
                 game.positionSwap = True
 
         game.redAchievements = self.achievements.getAllForGame(red, game, blue, self)
@@ -96,19 +105,10 @@ class TableFootballLadder(object):
         delta = 25 * (result - predict)
         game.skillChangeToBlue = delta
 
-    def _getPositions(self, redPlayer, bluePlayer, time):
-        bluePos = -1
-        redPos = -1
-        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive(time)], key=lambda x: x.elo, reverse=True)):
-            if player.name == bluePlayer:
-                bluePos = index
-                if redPos != -1:
-                    break
-            elif player.name == redPlayer:
-                redPos = index
-                if bluePos != -1:
-                    break
-        return {'blue': bluePos, 'red': redPos}
+    def getActivePlayers(self, atTime = time.time()):
+        if self._recentlyActivePlayers[0] != atTime:
+            self._recentlyActivePlayers = (atTime, [p for p in self.players.values() if p.isActive(atTime)])
+        return self._recentlyActivePlayers[1]
 
     def getSkillBounds(self):
         highSkill = {'player': None, 'skill': 0, 'time': 0}
@@ -144,7 +144,7 @@ class TableFootballLadder(object):
         blueScore = int(blueScore)
         if redScore >= 0 and blueScore >= 0 and (redScore + blueScore) > 0:
             self._deleteCache()
-            game = Game(redPlayer, redScore, bluePlayer, blueScore, int(time()))
+            game = Game(redPlayer, redScore, bluePlayer, blueScore, int(time.time()))
             self.addGame(game)
             self._gameStore.appendGame(game)
         return game

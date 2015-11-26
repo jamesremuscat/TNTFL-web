@@ -25,9 +25,6 @@ def getGamesPerDay(ladder):
 
 def getMostSignificantGames(games):
     return sorted([g for g in games if not g.isDeleted()], key=lambda x: abs(x.skillChangeToBlue), reverse=True)
-
-def getNumActivePlayers(players):
-    return len([p for p in players.values() if p.isActive()])
 %>
 <%inherit file="html.mako" />
 <%namespace name="blocks" file="blocks.mako" />
@@ -39,7 +36,7 @@ for game in ladder.games:
     blueGoals += game.blueScore
 
 mostSignificantGames = getMostSignificantGames(ladder.games)
-activePlayers = getNumActivePlayers(ladder.players)
+activePlayers = len(ladder.getActivePlayers())
 skillBounds = ladder.getSkillBounds()
 streaks = ladder.getStreaks()
 plotData = getGamesPerDay(ladder)
