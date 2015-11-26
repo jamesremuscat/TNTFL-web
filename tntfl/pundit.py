@@ -250,7 +250,7 @@ class Streaks(FactChecker):
 
 class StreaksAgainst(Streaks):
     _description = "That was %s's %s consecutive win against %s."
-    _descriptionBroken = '%s defeated %s for the first time in %d games.'
+    _descriptionBroken = '%s avoided losing to %s for the first time in %d games.'
 
     def __init__(self):
         Streaks.__init__(self)
