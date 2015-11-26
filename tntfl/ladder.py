@@ -74,6 +74,7 @@ class TableFootballLadder(object):
 
         activePlayers[red.name] = red
         activePlayers[blue.name] = blue
+        self._recentlyActivePlayers = (game.time, activePlayers.values())
         players = sorted(activePlayers.values(), key=lambda x: x.elo, reverse=True)
         redPosAfter = players.index(red)
         bluePosAfter = players.index(blue)
