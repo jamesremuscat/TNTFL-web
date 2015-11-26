@@ -141,7 +141,7 @@ class TableFootballLadder(object):
         blueScore = int(blueScore)
         if redScore >= 0 and blueScore >= 0 and (redScore + blueScore) > 0:
             self._deleteCache()
-            game = Game(redPlayer, redScore, bluePlayer, blueScore, int(time()))
+            game = Game(redPlayer, redScore, bluePlayer, blueScore, int(time.time()))
             self.addGame(game)
             self._gameStore.appendGame(game)
         return game
