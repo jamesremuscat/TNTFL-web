@@ -1,6 +1,6 @@
 import os.path
 import cPickle as pickle
-from time import time
+import time
 from tntfl.achievements import Achievements
 from tntfl.player import Player, Streak
 from tntfl.gameStore import GameStore
@@ -104,8 +104,8 @@ class TableFootballLadder(object):
         delta = 25 * (result - predict)
         game.skillChangeToBlue = delta
 
-    def getActivePlayers(self, time):
-        return [p for p in self.players.values() if p.isActive(time)]
+    def getActivePlayers(self, atTime = time.time()):
+        return [p for p in self.players.values() if p.isActive(atTime)]
 
     def getSkillBounds(self):
         highSkill = {'player': None, 'skill': 0, 'time': 0}
