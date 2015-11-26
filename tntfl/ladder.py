@@ -14,8 +14,8 @@ class TableFootballLadder(object):
         self.players = {}
         self._gameStore = GameStore(ladderFilePath)
         self._usingCache = useCache
-
         self.achievements = Achievements()
+        self._recentlyActivePlayers = (-1, [])
 
         loaded = self._loadFromCache()
         if not loaded:
@@ -105,7 +105,9 @@ class TableFootballLadder(object):
         game.skillChangeToBlue = delta
 
     def getActivePlayers(self, atTime = time.time()):
-        return [p for p in self.players.values() if p.isActive(atTime)]
+        if self._recentlyActivePlayers[0] != atTime:
+            self._recentlyActivePlayers = (atTime, [p for p in self.players.values() if p.isActive(atTime)])
+        return self._recentlyActivePlayers[1]
 
     def getSkillBounds(self):
         highSkill = {'player': None, 'skill': 0, 'time': 0}
