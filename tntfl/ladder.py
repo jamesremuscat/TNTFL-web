@@ -64,12 +64,12 @@ class TableFootballLadder(object):
 
         self._calculateSkillChange(red, game, blue)
 
-        posBefore = self._getPositions(game.redPlayer, game.bluePlayer, game.time - 1)
+        posBefore = self._getPositions(red, blue, game.time - 1)
 
         blue.game(game)
         red.game(game)
 
-        posAfter = self._getPositions(game.redPlayer, game.bluePlayer, game.time)
+        posAfter = self._getPositions(red, blue, game.time)
         game.bluePosAfter = posAfter['blue'] + 1 # because it's zero-indexed here
         game.redPosAfter = posAfter['red'] + 1
 
@@ -96,18 +96,10 @@ class TableFootballLadder(object):
         delta = 25 * (result - predict)
         game.skillChangeToBlue = delta
 
-    def _getPositions(self, redPlayer, bluePlayer, time):
-        bluePos = -1
-        redPos = -1
-        for index, player in enumerate(sorted([p for p in self.players.values() if p.isActive(time)], key=lambda x: x.elo, reverse=True)):
-            if player.name == bluePlayer:
-                bluePos = index
-                if redPos != -1:
-                    break
-            elif player.name == redPlayer:
-                redPos = index
-                if bluePos != -1:
-                    break
+    def _getPositions(self, red, blue, time):
+        players = sorted([p for p in self.players.values() if p.isActive(time)], key=lambda x: x.elo, reverse=True)
+        redPos = players.index(red) if red in players else -1
+        bluePos = players.index(blue) if blue in players else -1
         return {'blue': bluePos, 'red': redPos}
 
     def getSkillBounds(self):
