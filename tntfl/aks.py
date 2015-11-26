@@ -1,5 +1,5 @@
-class CircularSkillBuffer:
 
+class CircularBuffer(object):
     def __init__(self, size):
         self.list = []
         self.maxSize = size
@@ -13,6 +13,11 @@ class CircularSkillBuffer:
         if len(self.list) > self.maxSize:
             self.list = self.list[1:]
 
+    def size(self):
+        return len(self.list)
+
+
+class CircularSkillBuffer(CircularBuffer):
     def sum(self):
         total = 0
         for val in self.list:
@@ -30,6 +35,3 @@ class CircularSkillBuffer:
         if len(self.list) == 0:
             return 0
         return self.list[index]
-
-    def size(self):
-        return len(self.list)
