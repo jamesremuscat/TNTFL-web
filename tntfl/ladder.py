@@ -64,7 +64,7 @@ class TableFootballLadder(object):
 
         self._calculateSkillChange(red, game, blue)
 
-        activePlayers = {p.name: p for p in [p for p in self.players.values() if p.isActive(game.time - 1)]}
+        activePlayers = {p.name: p for p in self.getActivePlayers(game.time -1)}
         players = sorted(activePlayers.values(), key=lambda x: x.elo, reverse=True)
         redPosBefore = players.index(red) if red in players else -1
         bluePosBefore = players.index(blue) if blue in players else -1
@@ -103,6 +103,9 @@ class TableFootballLadder(object):
         result = float(game.blueScore) / (game.blueScore + game.redScore)
         delta = 25 * (result - predict)
         game.skillChangeToBlue = delta
+
+    def getActivePlayers(self, time):
+        return [p for p in self.players.values() if p.isActive(time)]
 
     def getSkillBounds(self):
         highSkill = {'player': None, 'skill': 0, 'time': 0}
