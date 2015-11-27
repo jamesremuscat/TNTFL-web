@@ -119,7 +119,7 @@ plotData = getGamesPerDay(ladder)
         <div class="panel-body">
           <div id="gamesPerDay">&nbsp;</div>
           <script type="text/javascript">
-          $.plot("#gamesPerDay", [ ${plotData} ], {'legend' : {show: false}, 'xaxis': {mode: 'time'}, grid: {hoverable: true}, colors: ['#0000FF']});
+            plotGamesPerDay("#gamesPerDay", [ ${plotData} ]);
           </script>
         </div>
       </div>
