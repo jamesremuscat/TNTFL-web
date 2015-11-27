@@ -45,8 +45,6 @@ goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgains
       <td class="ladder-stat ladder-skill">${"{:.3f}".format(player.elo)}</td>
       <td class="ladder-stat ladder-trend"><div id="${player.name | idsafe}_trend" class="ladder-trend">&nbsp;</div></td>
       <script type="text/javascript">
-        $(function() {
-          $.plot("#${player.name | idsafe}_trend", [ ${trend['trend']} ], {'legend' : {show: false}, 'xaxis': {show: false}, 'yaxis': {show: false}, 'grid': {'show': false}, 'series': {'shadowSize': 0}, 'colors': ['${trend["colour"]}']});
-        });
+        plotPlayerSkillTrend("#${player.name | idsafe}_trend", [${trend['trend']}], ['${trend["colour"]}']);
       </script>
     </tr>

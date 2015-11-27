@@ -108,32 +108,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
         <div class="panel-body">
           <div id="playerchart">&nbsp;</div>
           <script type="text/javascript">
-            $(function() {
-              $.plot("#playerchart", [ ${skillHistory} ], {'legend' : {show: false}, 'xaxis': {mode: 'time'}, grid: {hoverable: true}, colors: ['#0000FF']});
-            });
-
-            $("<div id='tooltip'></div>").css({
-        position: "absolute",
-        display: "none",
-        border: "1px solid #fdd",
-        padding: "2px",
-        "background-color": "#fee",
-        opacity: 0.80
-      }).appendTo("body");
-
-      $("#playerchart").bind("plothover", function (event, pos, item) {
-
-          if (item) {
-            var x = item.datapoint[0].toFixed(2),
-              y = item.datapoint[1].toFixed(2);
-
-            $("#tooltip").html(y)
-              .css({top: item.pageY+5, left: item.pageX+5})
-              .fadeIn(200);
-          } else {
-            $("#tooltip").hide();
-          }
-      });
+            plotPlayerSkill("#playerchart", [ ${skillHistory} ]);
           </script>
         </div>
       </div>
@@ -165,7 +140,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
             </tbody>
           </table>
           <script type="text/javascript">
-          $("#pps").tablesorter({sortList:[[9,1]], 'headers': { 1: { 'sorter': false}}});
+            $("#pps").tablesorter({sortList:[[9,1]], 'headers': { 1: { 'sorter': false}}});
           </script>
         </div>
       </div>
@@ -215,20 +190,6 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
             ${self.blocks.render("achievement-stat", games=list(reversed(games)), ach=ach)}
             % endfor
           </div>
-          <script>
-              function togglecollapse(name){
-                var element = document.getElementById(name + '-collapse');
-                var image = document.getElementById(name + '-arrow');
-                if (element.style.display == "block"){
-                    element.style.display = "none";
-                    image.src = "../../img/arrow-down.png";
-                }
-                else{
-                    element.style.display = "block";
-                    image.src = "../../img/arrow-up.png";
-                }
-          }
-        </script>
         </div>
       </div>
     </div>

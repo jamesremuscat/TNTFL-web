@@ -6,8 +6,6 @@ from datetime import date, datetime
 from tntfl.game import Game
 from tntfl.player import Player
 from tntfl.achievements import Achievement
-from tntfl.pundit import Pundit
-import tntfl.templateUtils as utils
 
 def totimestamp(dt, epoch=datetime(1970,1,1)):
     td = dt - epoch
@@ -31,8 +29,6 @@ def getMostSignificantGames(games):
 <%inherit file="html.mako" />
 <%namespace name="blocks" file="blocks.mako" />
 <%
-pundit = Pundit()
-
 redGoals = 0
 blueGoals = 0
 for game in ladder.games:
@@ -91,9 +87,7 @@ plotData = getGamesPerDay(ladder)
           <h2 class="panel-title">Most Significant Games</h2>
         </div>
         <div class="panel-body">
-% for game in mostSignificantGames[0:5]:
-    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, game, ladder))}
-% endfor
+          ${self.blocks.render("gameList", games=mostSignificantGames[0:5], base=self.attr.base)}
         </div>
       </div>
     </div>
@@ -103,9 +97,7 @@ plotData = getGamesPerDay(ladder)
           <h2 class="panel-title">Least Significant Games</h2>
         </div>
         <div class="panel-body">
-% for game in mostSignificantGames[-5:]:
-    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, game, ladder))}
-% endfor
+          ${self.blocks.render("gameList", games=mostSignificantGames[-5:], base=self.attr.base)}
         </div>
       </div>
     </div>
@@ -119,7 +111,7 @@ plotData = getGamesPerDay(ladder)
         <div class="panel-body">
           <div id="gamesPerDay">&nbsp;</div>
           <script type="text/javascript">
-          $.plot("#gamesPerDay", [ ${plotData} ], {'legend' : {show: false}, 'xaxis': {mode: 'time'}, grid: {hoverable: true}, colors: ['#0000FF']});
+            plotGamesPerDay("#gamesPerDay", [ ${plotData} ]);
           </script>
         </div>
       </div>

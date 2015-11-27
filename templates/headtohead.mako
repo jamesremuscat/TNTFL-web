@@ -130,9 +130,7 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
                   <div id="histogram">
                   </div>
                   <script type="text/javascript">
-                  $(function() {
-                    $.plot("#histogram", [ ${histograms['player1']}, ${histograms['player2']} ], {'legend' : {show: false}, 'xaxis': {'ticks': 10}, grid: {hoverable: true}, colors: ['#FF0000', '#0000FF'], 'series' : {'bars' : {'show': true, 'align': 'center'}}});
-                  });
+                    plotHeadToHeadGoals("#histogram", [${histograms['player1']}, ${histograms['player2']}]);
                   </script>
                 </div>
               </div>
