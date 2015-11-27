@@ -2,21 +2,6 @@
 <%!
 from datetime import datetime
 
-headings = [
-    "Pos",
-    "Player",
-    "Games",
-    "Wins",
-    "Draws",
-    "Losses",
-    "For",
-    "Against",
-    "Goal ratio",
-    "Overrated",
-    "Skill",
-    "Trend"
-]
-
 def rankPlayers(players):
     ranked = []
     rank = 1
@@ -35,9 +20,18 @@ ranked = rankPlayers(ladder.getPlayers())
       <table class="table table-hover ladder" id="ladder">
         <thead>
             <tr>
-% for heading in headings:
-              <th class="${"headerSortUp" if sortCol==loop.index and sortOrder==1 else "headerSortDown" if sortCol==loop.index else ""}">${heading}</th>
-% endfor
+              <th>Pos</th>
+              <th>Player</th>
+              <th>Games</th>
+              <th>Wins</th>
+              <th>Draws</th>
+              <th>Losses</th>
+              <th>For</th>
+              <th>Against</th>
+              <th>Goal ratio</th>
+              <th>Overrated</th>
+              <th>Skill</th>
+              <th>Trend</th>
             </tr>
         </thead>
         <tbody>
