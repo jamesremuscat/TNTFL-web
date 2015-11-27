@@ -4,6 +4,7 @@ base = "../../"
 from tntfl.game import Game
 from tntfl.web import get_template
 from tntfl.player import PerPlayerStat
+from tntfl.pundit import Pundit
 import tntfl.templateUtils as utils
 
 def getPerPlayerStats(player):
@@ -33,6 +34,7 @@ def getSkillHistory(player):
 %>
 <%inherit file="html.mako" />
 <%
+pundit = Pundit()
 
 streaks = player.getStreaks()
 winStreak = streaks['win']
@@ -185,7 +187,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
           <h2 class="panel-title">Most Significant Game</h2>
         </div>
         <div class="panel-body">
-      ${self.blocks.render("game", game=player.mostSignificantGame(), base=self.attr.base)}
+      ${self.blocks.render("game", game=player.mostSignificantGame(), base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.mostSignificantGame(), ladder))}
         </div>
       </div>
       <div class="panel panel-default">
@@ -193,7 +195,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
           <h2 class="panel-title">First Ever Game</h2>
         </div>
         <div class="panel-body">
-      ${self.blocks.render("game", game=player.games[0], base=self.attr.base)}
+      ${self.blocks.render("game", game=player.games[0], base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.games[0], ladder))}
         </div>
       </div>
   % else:

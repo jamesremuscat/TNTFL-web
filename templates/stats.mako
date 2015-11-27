@@ -6,6 +6,8 @@ from datetime import date, datetime
 from tntfl.game import Game
 from tntfl.player import Player
 from tntfl.achievements import Achievement
+from tntfl.pundit import Pundit
+import tntfl.templateUtils as utils
 
 def totimestamp(dt, epoch=datetime(1970,1,1)):
     td = dt - epoch
@@ -29,6 +31,8 @@ def getMostSignificantGames(games):
 <%inherit file="html.mako" />
 <%namespace name="blocks" file="blocks.mako" />
 <%
+pundit = Pundit()
+
 redGoals = 0
 blueGoals = 0
 for game in ladder.games:
@@ -88,7 +92,7 @@ plotData = getGamesPerDay(ladder)
         </div>
         <div class="panel-body">
 % for game in mostSignificantGames[0:5]:
-    ${self.blocks.render("game", game=game, base=self.attr.base)}
+    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, game, ladder))}
 % endfor
         </div>
       </div>
@@ -100,7 +104,7 @@ plotData = getGamesPerDay(ladder)
         </div>
         <div class="panel-body">
 % for game in mostSignificantGames[-5:]:
-    ${self.blocks.render("game", game=game, base=self.attr.base)}
+    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, game, ladder))}
 % endfor
         </div>
       </div>
