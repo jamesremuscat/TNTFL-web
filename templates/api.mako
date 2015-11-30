@@ -34,6 +34,12 @@ base = "../"
               </ul>
             </li>
             <li>
+                <b>Games:</b> /games.cgi?view=json&from=<i>time</i>&to=<i>time</i>
+                <ul>
+                    <li>Example: <a href="${self.attr.base}games.cgi?view=json&from=1443623743&to=1448897743">${self.attr.base}games.cgi?view=json&from=1443623743&to=1448897743</a>
+                </ul>
+            </li>
+            <li>
               <b>Add Game:</b> game/add[/json] (POST)
               <ul>
                 <li>Request should be a POST containing the following fields:
