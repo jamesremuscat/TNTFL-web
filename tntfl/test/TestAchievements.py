@@ -112,6 +112,35 @@ class Unit(unittest.TestCase):
         result = sut.applies(opponent, game, player, None)
         self.assertFalse(result)
 
+    def testComrades(self):
+        sut = Comrades()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 99):
+            game = Game(player.name, 5, opponent.name, 5, 0)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+            result = sut.applies(opponent, game, player, None)
+            self.assertFalse(result)
+            
+        game = Game(player.name, 5, opponent.name, 5, 0)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+        result = sut.applies(opponent, game, player, None)
+        self.assertTrue(result)
+
+        game = Game(player.name, 5, opponent.name, 5, 0)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+        result = sut.applies(opponent, game, player, None)
+        self.assertFalse(result)
+
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 class Functional(unittest.TestCase):
     def testEarlyBird(self):
