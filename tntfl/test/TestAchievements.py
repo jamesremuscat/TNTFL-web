@@ -5,7 +5,7 @@ from tntfl.game import Game
 from tntfl.ladder import TableFootballLadder
 from tntfl.achievements import *
 
-class TestAchievements(unittest.TestCase):
+class Unit(unittest.TestCase):
     def testAgainstTheOdds_Under50(self):
         ach = AgainstTheOdds()
         player = Player("foo")
@@ -70,6 +70,47 @@ class TestAchievements(unittest.TestCase):
         opponent.game(game)
         result = ach.applies(player, game, opponent, None)
         self.assertTrue(result)
+
+    def testUnstable(self):
+        sut = Unstable()
+        player = Player("foo")
+        opponent = Player("bar")
+
+        game = Game(player.name, 5, opponent.name, 5, 0)
+        game.skillChangeToBlue = -5
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+        result = sut.applies(opponent, game, player, None)
+        self.assertFalse(result)
+
+        game = Game(player.name, 10, opponent.name, 0, 0)
+        game.skillChangeToBlue = -5
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+        result = sut.applies(opponent, game, player, None)
+        self.assertFalse(result)
+
+        game = Game(player.name, 0, "bar", 10, 1)
+        game.skillChangeToBlue = 5
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+        result = sut.applies(opponent, game, player, None)
+        self.assertTrue(result)
+
+        game = Game(player.name, 0, "bar", 10, 1)
+        game.skillChangeToBlue = 5
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+        result = sut.applies(opponent, game, player, None)
+        self.assertFalse(result)
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 class Functional(unittest.TestCase):

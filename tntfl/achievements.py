@@ -136,7 +136,7 @@ class Unstable(Achievement):
 
     def applies(self, player, game, opponent, ladder):
         result = False
-        delta = game.bluePosChange if player.name == game.bluePlayer else game.redPosChange
+        delta = game.skillChangeToBlue if player.name == game.bluePlayer else -game.skillChangeToBlue
         if player.name in Unstable.previousDeltas:
             previousDelta = Unstable.previousDeltas[player.name]
             if (previousDelta <= -5 and delta >= 5) or (previousDelta >= 5 and delta <= -5):
