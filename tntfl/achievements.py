@@ -147,13 +147,15 @@ class Unstable(Achievement):
 class Comrades(Achievement):
     name = "Comrades"
     description = "Play 100 games against the same opponent"
-    pairCounts = Counter()
+
+    def __init__(self):
+        self.pairCounts = Counter()
 
     def applies(self, player, game, opponent, ladder):
         pair = frozenset([player.name, opponent.name])
-        Comrades.pairCounts[pair] += 1
+        self.pairCounts[pair] += 1
         # Each game is counted twice with player/opponent switched, hence need to trigger on 199 and 200
-        return 199 <= Comrades.pairCounts[pair] <= 200
+        return 199 <= self.pairCounts[pair] <= 200
 
 
 class FestiveCheer(Achievement):
@@ -187,20 +189,22 @@ class Dedication(Achievement):
     description = "Play a game at least once every 60 days for a year"
     sixtyDays = 60 * 60 * 24 * 60
     oneYear = 60 * 60 * 24 * 365
-    streaks = {}
+
+    def __init__(self):
+        self.streaks = {}
 
     @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
-        if player.name in Dedication.streaks:
-            streak = Dedication.streaks[player.name]
-            if game.time - streak[1] <= Dedication.sixtyDays:
-                if game.time - streak[0] >= Dedication.oneYear:
+        if player.name in self.streaks:
+            streak = self.streaks[player.name]
+            if game.time - streak[1] <= self.sixtyDays:
+                if game.time - streak[0] >= self.oneYear:
                     return True
                 else:
-                    Dedication.streaks[player.name] = (streak[0], game.time)
+                    self.streaks[player.name] = (streak[0], game.time)
                     return False
 
-        Dedication.streaks[player.name] = (game.time, game.time)
+        self.streaks[player.name] = (game.time, game.time)
         return False
 
 
@@ -227,14 +231,16 @@ class EarlyBird(Achievement):
 class PokeMaster(Achievement):
     name = "Pok&#233;Master"
     description = "Collect all the scores"
-    pokedexes = defaultdict(set)
+
+    def __init__(self):
+        self.pokedexes = defaultdict(set)
 
     @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
         if game.redScore + game.blueScore != 10:
             return False
         score = game.blueScore if player.name == game.bluePlayer else game.redScore
-        pokedex = PokeMaster.pokedexes[player.name]
+        pokedex = self.pokedexes[player.name]
         pokedex.add(score)
         return len(pokedex) == 11
 
