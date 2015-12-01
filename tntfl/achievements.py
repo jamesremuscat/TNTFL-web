@@ -132,16 +132,15 @@ class Improver(Achievement):
 class Unstable(Achievement):
     name = "Unstable"
     description = "See-saw 5 or more skill points in consecutive games"
-    previousDeltas = {}
 
     def applies(self, player, game, opponent, ladder):
         result = False
-        delta = game.skillChangeToBlue if player.name == game.bluePlayer else -game.skillChangeToBlue
-        if player.name in Unstable.previousDeltas:
-            previousDelta = Unstable.previousDeltas[player.name]
+        if len(player.games) > 1:
+            previousGame = player.games[-2]
+            previousDelta = previousGame.skillChangeToBlue if player.name == previousGame.bluePlayer else -previousGame.skillChangeToBlue
+            delta = game.skillChangeToBlue if player.name == game.bluePlayer else -game.skillChangeToBlue
             if (previousDelta <= -5 and delta >= 5) or (previousDelta >= 5 and delta <= -5):
                 result = True
-        Unstable.previousDeltas[player.name] = delta
         return result
 
 
