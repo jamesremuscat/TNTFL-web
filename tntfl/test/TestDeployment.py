@@ -149,6 +149,13 @@ class Api(Deployment):
         self.assertEqual(response[1]['date'], 1120834874)
         self.assertEqual(response[2]['date'], 1120840777)
 
+    def testPositionSwap(self):
+        page = 'game/1443785561/json'
+        response = self._getJsonFrom(page)
+
+        self.assertEqual(response['positionSwap'], True)
+        self.assertEqual(response['date'], 1443785561)
+
     def testLadderReachable(self):
         self._testPageReachable('ladder.cgi')
 
