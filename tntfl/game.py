@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import datetime
 
 class Game(object):
 
@@ -29,15 +29,3 @@ class Game(object):
 
     def timeAsDatetime(self):
         return datetime.fromtimestamp(self.time)
-
-    @staticmethod
-    def formatTime(inTime):
-        time = datetime.fromtimestamp(float(inTime))
-        dateStr = time.strftime("%Y-%m-%d %H:%M")
-
-        if date.fromtimestamp(float(inTime)) == date.today():
-            dateStr = "%02d:%02d" % (time.hour, time.minute)
-        elif date.fromtimestamp(float(inTime)) > (date.today() - timedelta(7)):
-            dateStr = "%s %02d:%02d" % (("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")[time.weekday()], time.hour, time.minute)
-
-        return dateStr

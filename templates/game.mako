@@ -1,11 +1,14 @@
 <%page args="game, base, punditryAvailable=False"/>
+<%!
+import tntfl.templateUtils as utils
+%>
 <%
 redsStripe = game.redScore == 10 and game.blueScore == 0
 bluesStripe = game.blueScore == 10 and game.redScore == 0
 %>
 <div class="recent-game container-fluid">
   % if game.isDeleted():
-    <p class="bg-danger">This game was deleted by ${game.deletedBy} at ${game.formatTime(game.deletedAt)}</p>
+    <p class="bg-danger">This game was deleted by ${game.deletedBy} at ${utils.formatTime(game.deletedAt)}</p>
   % endif
   <div class="row recent-game-result">
     <div class="col-md-4 red-player ${"yellow-stripe" if redsStripe else ""}">
@@ -34,7 +37,7 @@ bluesStripe = game.blueScore == 10 and game.redScore == 0
     <div class="col-md-2">${"<span class='skill-change skill-change-red' title='Ladder rank change'>{:+}</span>".format(game.redPosChange) if game.redPosChange != 0 else ""}</div>
     <div class="col-md-2">${"<span class='skill-change skill-change-red' title='Skill change'>{:+.3f}</span>".format(-game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}</div>
     <div class="col-md-4"><a href="${base}game/${game.time}/">
-        ${game.formatTime(game.time)}</a>
+        ${utils.formatTime(game.time)}</a>
         % if punditryAvailable:
             <img src="${base}img/headset16.png"/>
         % endif

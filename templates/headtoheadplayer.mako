@@ -1,6 +1,6 @@
 <%page args="base, player, colour"/>
 <%!
-from tntfl.game import Game
+import tntfl.templateUtils as utils
 %>
 <%
 skillBounds = player.getSkillBounds()
@@ -18,14 +18,14 @@ skillBounds = player.getSkillBounds()
           <th>Highest ever skill</th>
           <td>${"{:.3f}".format(skillBounds['highest']['skill'])}<br />
 % if skillBounds['highest']['time'] > 0:
-          at <a href="${base}game/${skillBounds['highest']['time']}/">${Game.formatTime(skillBounds['highest']['time'])}</a></td>
+          at <a href="${base}game/${skillBounds['highest']['time']}/">${utils.formatTime(skillBounds['highest']['time'])}</a></td>
 % else:
           before first game</td>
 % endif
           <th>Lowest ever skill</th>
           <td>${"{:.3f}".format(skillBounds['lowest']['skill'])}<br />
 % if skillBounds['lowest']['time'] > 0:
-          at <a href="${base}game/${skillBounds['lowest']['time']}/">${Game.formatTime(skillBounds['lowest']['time'])}</a></td>
+          at <a href="${base}game/${skillBounds['lowest']['time']}/">${utils.formatTime(skillBounds['lowest']['time'])}</a></td>
 % else:
           before first game</td>
 % endif

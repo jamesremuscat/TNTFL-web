@@ -1,5 +1,7 @@
 <%page args="time, base"/>
-<%! from tntfl.game import Game %>
+<%!
+import tntfl.templateUtils as utils
+%>
 <a href="${base}game/${time}/">
-  ${Game.formatTime(time)}
+  ${utils.formatTime(time)}
 </a>
