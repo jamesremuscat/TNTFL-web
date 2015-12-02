@@ -7,7 +7,7 @@ from tntfl.achievements import *
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-class AgainstTheOdds(unittest.TestCase):
+class TestAgainstTheOdds(unittest.TestCase):
     def testUnder50(self):
         ach = AgainstTheOdds()
         player = Player("foo")
@@ -74,7 +74,7 @@ class AgainstTheOdds(unittest.TestCase):
         self.assertTrue(result)
 
 
-class Unstable(unittest.TestCase):
+class TestUnstable(unittest.TestCase):
     def test(self):
         sut = Unstable()
         player = Player("foo")
@@ -117,7 +117,7 @@ class Unstable(unittest.TestCase):
         self.assertFalse(result)
 
 
-class Comrades(unittest.TestCase):
+class TestComrades(unittest.TestCase):
     def test(self):
         sut = Comrades()
         player = Player("foo")
@@ -148,7 +148,7 @@ class Comrades(unittest.TestCase):
         self.assertFalse(result)
 
 
-class Dedication(unittest.TestCase):
+class TestDedication(unittest.TestCase):
     def test(self):
         sut = Dedication()
         player = Player("foo")
@@ -167,7 +167,7 @@ class Dedication(unittest.TestCase):
         self.assertTrue(result)
 
 
-class PokeMaster(unittest.TestCase):
+class TestPokeMaster(unittest.TestCase):
     def test(self):
         sut = PokeMaster()
         player = Player("foo")
@@ -188,7 +188,7 @@ class PokeMaster(unittest.TestCase):
         self.assertTrue(result)
 
 
-class TheDominator(unittest.TestCase):
+class TestTheDominator(unittest.TestCase):
     def test(self):
         sut = TheDominator()
         player = Player("foo")
@@ -274,7 +274,7 @@ class TheDominator(unittest.TestCase):
         self.assertFalse(result)
 
 
-class Consistency(unittest.TestCase):
+class TestConsistency(unittest.TestCase):
     def test(self):
         sut = Consistency()
         player = Player("foo")
@@ -362,7 +362,7 @@ class Consistency(unittest.TestCase):
         self.assertTrue(result)
 
 
-class EarlyBird(unittest.TestCase):
+class TestEarlyBird(unittest.TestCase):
     def test(self):
         ladder = TableFootballLadder(os.path.join(__location__, "testLadder.txt"), False)
         player = Player("foo")
