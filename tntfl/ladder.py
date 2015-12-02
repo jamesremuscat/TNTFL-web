@@ -86,9 +86,6 @@ class TableFootballLadder(object):
             game.bluePosChange = bluePosBefore - bluePosAfter  # It's this way around because a rise in position is to a lower numbered rank.
         if redPosBefore > 0:
             game.redPosChange = redPosBefore - redPosAfter
-        if bluePosBefore > 0 and redPosBefore > 0:
-            if bluePosBefore == redPosAfter or redPosBefore == bluePosAfter:
-                game.positionSwap = True
 
         game.redAchievements = self.achievements.getAllForGame(red, game, blue, self)
         game.blueAchievements = self.achievements.getAllForGame(blue, game, red, self)
