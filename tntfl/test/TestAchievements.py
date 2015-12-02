@@ -124,7 +124,7 @@ class Unit(unittest.TestCase):
             self.assertFalse(result)
             result = sut.applies(opponent, game, player, None)
             self.assertFalse(result)
-            
+
         game = Game(player.name, 5, opponent.name, 5, 0)
         player.game(game)
         opponent.game(game)
@@ -134,6 +134,90 @@ class Unit(unittest.TestCase):
         self.assertTrue(result)
 
         game = Game(player.name, 5, opponent.name, 5, 0)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+        result = sut.applies(opponent, game, player, None)
+        self.assertFalse(result)
+
+    def testTheDominator(self):
+        sut = TheDominator()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 9):
+            game = Game(player.name, 10, opponent.name, 0, i)
+            game.skillChangeToBlue = -1
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+
+        baz = Player("baz")
+        game = Game(player.name, 10, baz.name, 0, 9)
+        game.skillChangeToBlue = -1
+        player.game(game)
+        result = sut.applies(player, game, baz, None)
+        self.assertFalse(result)
+
+        game = Game(player.name, 10, opponent.name, 0, 10)
+        game.skillChangeToBlue = -1
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+        result = sut.applies(opponent, game, player, None)
+        self.assertFalse(result)
+
+    def testTheDominatorSwapSides(self):
+        sut = TheDominator()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 9):
+            game = Game(player.name, 10, opponent.name, 0, i)
+            game.skillChangeToBlue = -1
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+
+        baz = Player("baz")
+        game = Game(player.name, 10, baz.name, 0, 9)
+        game.skillChangeToBlue = -1
+        player.game(game)
+        result = sut.applies(player, game, baz, None)
+        self.assertFalse(result)
+
+        game = Game(opponent.name, 0, player.name, 10, 10)
+        game.skillChangeToBlue = 1
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+        result = sut.applies(opponent, game, player, None)
+        self.assertFalse(result)
+
+    def testTheDominatorInterupted(self):
+        sut = TheDominator()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 9):
+            game = Game(player.name, 10, opponent.name, 0, i)
+            game.skillChangeToBlue = -1
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+
+        baz = Player("baz")
+        game = Game(player.name, 10, baz.name, 0, 9)
+        game.skillChangeToBlue = -1
+        player.game(game)
+        result = sut.applies(player, game, baz, None)
+        self.assertFalse(result)
+
+        game = Game(player.name, 0, opponent.name, 10, 10)
+        game.skillChangeToBlue = -1
         player.game(game)
         opponent.game(game)
         result = sut.applies(player, game, opponent, None)
