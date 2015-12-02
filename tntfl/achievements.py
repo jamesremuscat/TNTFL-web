@@ -253,12 +253,9 @@ class TheDominator(Achievement):
         super(TheDominator, self).__init__()
         self.counts = Counter()
 
+    @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
         pairing = (player.name, opponent.name)
-        if self.counts[pairing] == 10:
-            # Can only Dominate a player once.
-            return False
-
         playerIsBlue = player.name == game.bluePlayer
         won = game.blueScore > game.redScore if playerIsBlue else game.redScore > game.blueScore
         points = game.skillChangeToBlue > 0 if playerIsBlue else game.skillChangeToBlue < 0
