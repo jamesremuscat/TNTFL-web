@@ -261,6 +261,92 @@ class Unit(unittest.TestCase):
         result = sut.applies(opponent, game, player, None)
         self.assertFalse(result)
 
+    def testConsistency(self):
+        sut = Consistency()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 4):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 4)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
+    def testConsistencyInterrupted(self):
+        sut = Consistency()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 4):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 3, opponent.name, 7, 4)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 5)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+
+    def testConsistencyCont(self):
+        sut = Consistency()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 4):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 4)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+        game = Game(player.name, 2, opponent.name, 8, 5)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+
+    def testConsistencyTwice(self):
+        sut = Consistency()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 4):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 4)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
+        for i in range(5, 9):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 9)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 class Functional(unittest.TestCase):
     def testEarlyBird(self):
