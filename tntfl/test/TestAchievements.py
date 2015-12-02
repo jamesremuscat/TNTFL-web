@@ -158,6 +158,25 @@ class Unit(unittest.TestCase):
         result = sut.applies(player, game, opponent, None)
         self.assertTrue(result)
 
+    def testPokeMaster(self):
+        sut = PokeMaster()
+        player = Player("foo")
+        opponent = Player("bar")
+        game = Game(player.name, 0, opponent.name, 10, 0)
+        player.game(game)
+        opponent.game(game)
+        for i in range(0, 10):
+            game = Game(player.name, i, opponent.name, 10 - i, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 10, opponent.name, 0, 10)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
     def testTheDominator(self):
         sut = TheDominator()
         player = Player("foo")
