@@ -1,3 +1,12 @@
+<%
+bluePosBefore = game.bluePosAfter + game.bluePosChange
+redPosBefore = game.redPosAfter + game.redPosChange
+positionSwap = False
+if bluePosBefore > 0 and redPosBefore > 0:
+    if bluePosBefore == game.redPosAfter or redPosBefore == game.bluePosAfter:
+        positionSwap = True
+%>
+
 {
 % if game.isDeleted():
   "deleted" : {
@@ -35,6 +44,6 @@
     % endfor
     ]
   },
-  "positionSwap" : ${"true" if game.positionSwap else "false"},
+  "positionSwap" : ${"true" if positionSwap else "false"},
   "date" : ${game.time}
 }

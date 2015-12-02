@@ -15,7 +15,6 @@ class Game(object):
         self.redAchievements = []
         self.blueAchievements = []
         self.skillChangeToBlue = 0
-        self.positionSwap = False
         self.deletedBy = None
         self.deletedAt = 0
 
