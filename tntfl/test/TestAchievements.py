@@ -233,7 +233,7 @@ class Unit(unittest.TestCase):
         result = sut.applies(opponent, game, player, None)
         self.assertFalse(result)
 
-    def testTheDominatorInterupted(self):
+    def testTheDominatorInterrupted(self):
         sut = TheDominator()
         player = Player("foo")
         opponent = Player("bar")
