@@ -261,8 +261,8 @@ class TheDominator(Achievement):
 
         playerIsBlue = player.name == game.bluePlayer
         won = game.blueScore > game.redScore if playerIsBlue else game.redScore > game.blueScore
-        won = won and game.skillChangeToBlue > 0 if playerIsBlue else game.skillChangeToBlue < 0
-        if won:
+        points = game.skillChangeToBlue > 0 if playerIsBlue else game.skillChangeToBlue < 0
+        if won and points:
             self.counts[pairing] += 1
         else:
             self.counts[pairing] = 0
