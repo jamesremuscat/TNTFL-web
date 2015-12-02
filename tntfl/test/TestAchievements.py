@@ -5,8 +5,10 @@ from tntfl.game import Game
 from tntfl.ladder import TableFootballLadder
 from tntfl.achievements import *
 
-class Unit(unittest.TestCase):
-    def testAgainstTheOdds_Under50(self):
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+class AgainstTheOdds(unittest.TestCase):
+    def testUnder50(self):
         ach = AgainstTheOdds()
         player = Player("foo")
         player.elo = 0
@@ -19,7 +21,7 @@ class Unit(unittest.TestCase):
         result = ach.applies(player, game, opponent, None)
         self.assertFalse(result)
 
-    def testAgainstTheOdds_Under50_2(self):
+    def testUnder50_2(self):
         ach = AgainstTheOdds()
         player = Player("foo")
         player.elo = 0
@@ -32,7 +34,7 @@ class Unit(unittest.TestCase):
         result = ach.applies(player, game, opponent, None)
         self.assertFalse(result)
 
-    def testAgainstTheOdds_Over50Lose(self):
+    def testOver50Lose(self):
         ach = AgainstTheOdds()
         player = Player("foo")
         player.elo = 0
@@ -45,7 +47,7 @@ class Unit(unittest.TestCase):
         result = ach.applies(player, game, opponent, None)
         self.assertFalse(result)
 
-    def testAgainstTheOdds_Over50(self):
+    def testOver50(self):
         ach = AgainstTheOdds()
         player = Player("foo")
         player.elo = 0
@@ -58,7 +60,7 @@ class Unit(unittest.TestCase):
         result = ach.applies(player, game, opponent, None)
         self.assertTrue(result)
 
-    def testAgainstTheOdds_Over50_2(self):
+    def testOver50_2(self):
         ach = AgainstTheOdds()
         player = Player("foo")
         player.elo = 0
@@ -71,7 +73,9 @@ class Unit(unittest.TestCase):
         result = ach.applies(player, game, opponent, None)
         self.assertTrue(result)
 
-    def testUnstable(self):
+
+class Unstable(unittest.TestCase):
+    def test(self):
         sut = Unstable()
         player = Player("foo")
         opponent = Player("bar")
@@ -112,7 +116,9 @@ class Unit(unittest.TestCase):
         result = sut.applies(opponent, game, player, None)
         self.assertFalse(result)
 
-    def testComrades(self):
+
+class Comrades(unittest.TestCase):
+    def test(self):
         sut = Comrades()
         player = Player("foo")
         opponent = Player("bar")
@@ -141,7 +147,49 @@ class Unit(unittest.TestCase):
         result = sut.applies(opponent, game, player, None)
         self.assertFalse(result)
 
-    def testTheDominator(self):
+
+class Dedication(unittest.TestCase):
+    def test(self):
+        sut = Dedication()
+        player = Player("foo")
+        opponent = Player("bar")
+        timeBetweenGames = 60*60*24* 59
+        for i in range(0, 7):
+            game = Game(player.name, 5, opponent.name, 5, i * timeBetweenGames)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 5, opponent.name, 5, 7 * timeBetweenGames)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
+
+class PokeMaster(unittest.TestCase):
+    def test(self):
+        sut = PokeMaster()
+        player = Player("foo")
+        opponent = Player("bar")
+        game = Game(player.name, 0, opponent.name, 10, 0)
+        player.game(game)
+        opponent.game(game)
+        for i in range(0, 10):
+            game = Game(player.name, i, opponent.name, 10 - i, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 10, opponent.name, 0, 10)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
+
+class TheDominator(unittest.TestCase):
+    def test(self):
         sut = TheDominator()
         player = Player("foo")
         opponent = Player("bar")
@@ -169,7 +217,7 @@ class Unit(unittest.TestCase):
         result = sut.applies(opponent, game, player, None)
         self.assertFalse(result)
 
-    def testTheDominatorSwapSides(self):
+    def testSwapSides(self):
         sut = TheDominator()
         player = Player("foo")
         opponent = Player("bar")
@@ -197,7 +245,7 @@ class Unit(unittest.TestCase):
         result = sut.applies(opponent, game, player, None)
         self.assertFalse(result)
 
-    def testTheDominatorInterupted(self):
+    def testInterrupted(self):
         sut = TheDominator()
         player = Player("foo")
         opponent = Player("bar")
@@ -225,9 +273,97 @@ class Unit(unittest.TestCase):
         result = sut.applies(opponent, game, player, None)
         self.assertFalse(result)
 
-__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-class Functional(unittest.TestCase):
-    def testEarlyBird(self):
+
+class Consistency(unittest.TestCase):
+    def test(self):
+        sut = Consistency()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 4):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 4)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
+    def testInterrupted(self):
+        sut = Consistency()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 4):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 3, opponent.name, 7, 4)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 5)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+
+    def testCont(self):
+        sut = Consistency()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 4):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 4)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+        game = Game(player.name, 2, opponent.name, 8, 5)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertFalse(result)
+
+    def testTwice(self):
+        sut = Consistency()
+        player = Player("foo")
+        opponent = Player("bar")
+        for i in range(0, 4):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 4)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
+        for i in range(5, 9):
+            game = Game(player.name, 2, opponent.name, 8, i)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 2, opponent.name, 8, 9)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
+
+class EarlyBird(unittest.TestCase):
+    def test(self):
         ladder = TableFootballLadder(os.path.join(__location__, "testLadder.txt"), False)
         player = Player("foo")
         opponent = Player("baz")
@@ -240,7 +376,7 @@ class Functional(unittest.TestCase):
         result = sut.applies(opponent, game, player, ladder)
         self.assertFalse(result)
 
-    def testEarlyBirdFirstGame(self):
+    def testFirstGame(self):
         ladder = TableFootballLadder(os.path.join(__location__, "emptyLadder.txt"), False)
         player = Player("foo")
         opponent = Player("baz")
