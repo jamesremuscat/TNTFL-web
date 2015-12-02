@@ -141,6 +141,23 @@ class Unit(unittest.TestCase):
         result = sut.applies(opponent, game, player, None)
         self.assertFalse(result)
 
+    def testDedication(self):
+        sut = Dedication()
+        player = Player("foo")
+        opponent = Player("bar")
+        timeBetweenGames = 60*60*24* 59
+        for i in range(0, 7):
+            game = Game(player.name, 5, opponent.name, 5, i * timeBetweenGames)
+            player.game(game)
+            opponent.game(game)
+            result = sut.applies(player, game, opponent, None)
+            self.assertFalse(result)
+        game = Game(player.name, 5, opponent.name, 5, 7 * timeBetweenGames)
+        player.game(game)
+        opponent.game(game)
+        result = sut.applies(player, game, opponent, None)
+        self.assertTrue(result)
+
     def testTheDominator(self):
         sut = TheDominator()
         player = Player("foo")
