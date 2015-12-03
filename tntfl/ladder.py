@@ -6,28 +6,38 @@ from tntfl.player import Player, Streak
 from tntfl.gameStore import GameStore
 from tntfl.game import Game
 
-class TableFootballLadder(object):
+class CachingGameStore(object):
     _cacheFilePath = "cache"
 
     def __init__(self, ladderFilePath, useCache = True):
-        self.games = []
-        self.players = {}
         self._gameStore = GameStore(ladderFilePath)
         self._usingCache = useCache
-        self.achievements = Achievements()
-        self._recentlyActivePlayers = (-1, [])
 
-        loaded = self._loadFromCache()
+    def loadGames(self, ladder):
+        loaded = self._loadFromCache(ladder)
         if not loaded:
-            self._loadFromStore()
-            self._writeToCache()
+            self._loadFromStore(ladder)
+            self._writeToCache(ladder)
 
-    def _loadFromCache(self):
+    def writeGame(self, game):
+        self._deleteCache()
+        self._gameStore.appendGame(game)
+
+    def deleteGame(self, gameTime, deletedBy):
+        self._deleteCache()
+        return self._gameStore.deleteGame(gameTime, deletedBy)
+
+    def _loadFromStore(self, ladder):
+        loadedGames = self._gameStore.getGames()
+        for loadedGame in loadedGames:
+            ladder.addGame(loadedGame)
+
+    def _loadFromCache(self, ladder):
         if os.path.exists(self._cacheFilePath) and self._usingCache:
-            self.games = pickle.load(open(self._cacheFilePath, 'rb'))
-            for game in [g for g in self.games if not g.isDeleted()]:
-                red = self.getPlayer(game.redPlayer)
-                blue = self.getPlayer(game.bluePlayer)
+            ladder.games = pickle.load(open(self._cacheFilePath, 'rb'))
+            for game in [g for g in ladder.games if not g.isDeleted()]:
+                red = ladder.getPlayer(game.redPlayer)
+                blue = ladder.getPlayer(game.bluePlayer)
                 red.game(game)
                 blue.game(game)
                 red.achieve(game.redAchievements, game)
@@ -35,18 +45,24 @@ class TableFootballLadder(object):
             return True
         return False
 
-    def _writeToCache(self):
+    def _writeToCache(self, ladder):
         if self._usingCache:
-            pickle.dump(self.games, open(self._cacheFilePath, 'wb'), pickle.HIGHEST_PROTOCOL)
+            pickle.dump(ladder.games, open(self._cacheFilePath, 'wb'), pickle.HIGHEST_PROTOCOL)
 
     def _deleteCache(self):
         if os.path.exists(self._cacheFilePath) and self._usingCache:
             os.remove(self._cacheFilePath)
 
-    def _loadFromStore(self):
-        loadedGames = self._gameStore.getGames()
-        for loadedGame in loadedGames:
-            self.addGame(loadedGame)
+
+class TableFootballLadder(object):
+
+    def __init__(self, ladderFilePath, useCache = True):
+        self.games = []
+        self.players = {}
+        self.achievements = Achievements()
+        self._recentlyActivePlayers = (-1, [])
+        self._gameStore = CachingGameStore(ladderFilePath, useCache)
+        self._gameStore.loadGames(self)
 
     def getPlayer(self, name):
         if name not in self.players:
@@ -140,14 +156,12 @@ class TableFootballLadder(object):
         redScore = int(redScore)
         blueScore = int(blueScore)
         if redScore >= 0 and blueScore >= 0 and (redScore + blueScore) > 0:
-            self._deleteCache()
             game = Game(redPlayer, redScore, bluePlayer, blueScore, int(time.time()))
             self.addGame(game)
-            self._gameStore.appendGame(game)
+            self._gameStore.writeGame(game)
         return game
 
     def deleteGame(self, gameTime, deletedBy):
-        self._deleteCache()
         return self._gameStore.deleteGame(gameTime, deletedBy)
 
     def getPlayers(self):
