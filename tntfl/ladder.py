@@ -6,32 +6,43 @@ from tntfl.player import Player, Streak
 from tntfl.gameStore import GameStore
 from tntfl.game import Game
 
-class TableFootballLadder(object):
+class CachingGameStore(object):
     _cacheFilePath = "cache"
 
-    def __init__(self, ladderFilePath, useCache = True, untilTime = None):
-        self.games = []
-        self.players = {}
+    def __init__(self, ladderFilePath, useCache = True):
         self._gameStore = GameStore(ladderFilePath)
         self._usingCache = useCache
-        self.achievements = Achievements()
-        self._recentlyActivePlayers = (-1, [])
-        ladderTime = {'now': untilTime == None, 'time': untilTime}
 
-        loaded = self._loadFromCache(ladderTime)
+    def loadGames(self, ladder, ladderTime):
+        loaded = self._loadFromCache(ladder, ladderTime)
         if not loaded:
-            self._loadFromStore(ladderTime)
+            self._loadFromStore(ladder, ladderTime)
             if ladderTime['now']:
-                self._writeToCache()
+                self._writeToCache(ladder)
 
-    def _loadFromCache(self, ladderTime):
+    def writeGame(self, game):
+        self._deleteCache()
+        self._gameStore.appendGame(game)
+
+    def deleteGame(self, gameTime, deletedBy):
+        self._deleteCache()
+        return self._gameStore.deleteGame(gameTime, deletedBy)
+
+    def _loadFromStore(self, ladder, ladderTime):
+        loadedGames = self._gameStore.getGames()
+        if not ladderTime['now']:
+            loadedGames = [g for g in loadedGames if g.time <= ladderTime['time']]
+        for loadedGame in loadedGames:
+            ladder.addGame(loadedGame)
+
+    def _loadFromCache(self, ladder, ladderTime):
         if os.path.exists(self._cacheFilePath) and self._usingCache:
-            self.games = pickle.load(open(self._cacheFilePath, 'rb'))
+            ladder.games = pickle.load(open(self._cacheFilePath, 'rb'))
             if not ladderTime['now']:
-                self.games = [g for g in self.games if g.time <= ladderTime['time']]
-            for game in [g for g in self.games if not g.isDeleted()]:
-                red = self.getPlayer(game.redPlayer)
-                blue = self.getPlayer(game.bluePlayer)
+                ladder.games = [g for g in ladder.games if g.time <= ladderTime['time']]
+            for game in [g for g in ladder.games if not g.isDeleted()]:
+                red = ladder.getPlayer(game.redPlayer)
+                blue = ladder.getPlayer(game.bluePlayer)
                 red.game(game)
                 blue.game(game)
                 red.achieve(game.redAchievements, game)
@@ -39,20 +50,26 @@ class TableFootballLadder(object):
             return True
         return False
 
-    def _writeToCache(self):
+    def _writeToCache(self, ladder):
         if self._usingCache:
-            pickle.dump(self.games, open(self._cacheFilePath, 'wb'), pickle.HIGHEST_PROTOCOL)
+            pickle.dump(ladder.games, open(self._cacheFilePath, 'wb'), pickle.HIGHEST_PROTOCOL)
 
     def _deleteCache(self):
         if os.path.exists(self._cacheFilePath) and self._usingCache:
             os.remove(self._cacheFilePath)
 
-    def _loadFromStore(self, ladderTime):
-        loadedGames = self._gameStore.getGames()
-        if not ladderTime['now']:
-            loadedGames = [g for g in loadedGames if g.time <= ladderTime['time']]
-        for loadedGame in loadedGames:
-            self.addGame(loadedGame)
+
+class TableFootballLadder(object):
+
+    def __init__(self, ladderFilePath, useCache = True, untilTime = None):
+        self.games = []
+        self.players = {}
+        self.achievements = Achievements()
+        self._recentlyActivePlayers = (-1, [])
+        self._gameStore = CachingGameStore(ladderFilePath, useCache)
+
+        ladderTime = {'now': untilTime == None, 'time': untilTime}
+        self._gameStore.loadGames(self, ladderTime)
 
     def getPlayer(self, name):
         if name not in self.players:
@@ -146,14 +163,12 @@ class TableFootballLadder(object):
         redScore = int(redScore)
         blueScore = int(blueScore)
         if redScore >= 0 and blueScore >= 0 and (redScore + blueScore) > 0:
-            self._deleteCache()
             game = Game(redPlayer, redScore, bluePlayer, blueScore, int(time.time()))
             self.addGame(game)
-            self._gameStore.appendGame(game)
+            self._gameStore.writeGame(game)
         return game
 
     def deleteGame(self, gameTime, deletedBy):
-        self._deleteCache()
         return self._gameStore.deleteGame(gameTime, deletedBy)
 
     def getPlayers(self):
