@@ -14,7 +14,9 @@ class CachingGameStore(object):
         self._usingCache = useCache
 
     def loadGames(self, ladder, ladderTime):
-        loaded = self._loadFromCache(ladder, ladderTime)
+        loaded = False
+        if ladderTime['now']:
+            loaded = self._loadFromCache(ladder, ladderTime)
         if not loaded:
             self._loadFromStore(ladder, ladderTime)
             if ladderTime['now']:
