@@ -105,3 +105,19 @@ function getSortOptions(tableQuery) {
 
   return hdrorder;
 }
+
+function initHistorySlider(id, fromTime, toTime) {
+  $(id).ionRangeSlider({
+      type: "double",
+      min: moment(1120521600, 'X').format('X'),
+      max: moment().format('X'),
+      from: fromTime,
+      to: toTime,
+      prettify: function (num) {
+        return moment(num, 'X').format('LL');
+      },
+      onFinish: function (data) {
+        window.location.href = ".?from=" + data.from + "&to=" + data.to;
+      }
+  });
+}

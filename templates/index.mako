@@ -6,22 +6,7 @@
 
   <div id="rangeSlider"></div>
   <script>
-    var firstGameDate = moment(1120521600, 'X');
-    var now = moment();
-
-    $("#rangeSlider").ionRangeSlider({
-        type: "double",
-        min: firstGameDate.format('X'),
-        max: now.format('X'),
-        from: ${"firstGameDate" if ladder._ladderTime['now'] else "moment(%d, 'X')" % ladder._ladderTime['range'][0]}.format('X'),
-        to: ${"now" if ladder._ladderTime['now'] else "moment(%d, 'X')" % ladder._ladderTime['range'][1]}.format('X'),
-        prettify: function (num) {
-          return moment(num, 'X').format('LL');
-        },
-        onFinish: function (data) {
-          window.location.href = ".?from=" + data.from + "&to=" + data.to;
-        }
-    });
+    initHistorySlider("#rangeSlider", ${ladder._ladderTime['range'][0]}, ${ladder._ladderTime['range'][1]});
   </script>
 
 % endif
