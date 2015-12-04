@@ -106,7 +106,7 @@ function getSortOptions(tableQuery) {
   return hdrorder;
 }
 
-function initHistorySlider(id, fromTime, toTime) {
+function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
   $(id).ionRangeSlider({
       type: "double",
       min: moment(1120521600, 'X').format('X'),
@@ -116,8 +116,6 @@ function initHistorySlider(id, fromTime, toTime) {
       prettify: function (num) {
         return moment(num, 'X').format('LL');
       },
-      onFinish: function (data) {
-        window.location.href = ".?from=" + data.from + "&to=" + data.to;
-      }
+      onFinish: fnOnFinish
   });
 }
