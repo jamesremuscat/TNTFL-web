@@ -11,6 +11,8 @@
     <!-- Bootstrap -->
     <link href="${self.attr.base}css/bootstrap.min.css" rel="stylesheet">
     <link href="${self.attr.base}css/ladder.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -20,11 +22,12 @@
     <![endif]-->
 
     <script type="text/javascript" src="${self.attr.base}js/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/jquery.flot.min.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/jquery.flot.time.min.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/jquery.floatThead.min.js"></script>
-    
+
     <script type="text/javascript" src="${self.attr.base}js/ladder.js"></script>
   </head>
   <body>
