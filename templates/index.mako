@@ -1,6 +1,10 @@
 <%! title = "" %>
+<%!
+import tntfl.templateUtils as utils
+%>
 <%inherit file="html.mako" />
 <div class="container-fluid">
+  Using games between ${utils.formatTime(ladder._ladderTime['range'][0])} and ${utils.formatTime(ladder._ladderTime['range'][1])}
   <div class="row">
     <div class="col-md-8">
       <div class="panel panel-default">
