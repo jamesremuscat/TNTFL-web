@@ -68,8 +68,8 @@ class TableFootballLadder(object):
         self._recentlyActivePlayers = (-1, [])
         self._gameStore = CachingGameStore(ladderFilePath, useCache)
 
-        ladderTime = {'now': timeRange == None, 'range': timeRange}
-        self._gameStore.loadGames(self, ladderTime)
+        self._ladderTime = {'now': timeRange == None, 'range': timeRange}
+        self._gameStore.loadGames(self, self._ladderTime)
 
     def getPlayer(self, name):
         if name not in self.players:
@@ -125,10 +125,23 @@ class TableFootballLadder(object):
         delta = 25 * (result - predict)
         game.skillChangeToBlue = delta
 
-    def getActivePlayers(self, atTime = time.time()):
+    def getActivePlayers(self, atTime = None):
+        if atTime == None:
+            atTime = self._getTime()
         if self._recentlyActivePlayers[0] != atTime:
-            self._recentlyActivePlayers = (atTime, [p for p in self.players.values() if p.isActive(atTime)])
+            self._recentlyActivePlayers = (atTime, [p for p in self.players.values() if self.isPlayerActive(p, atTime)])
         return self._recentlyActivePlayers[1]
+
+    def isPlayerActive(self, player, atTime=None):
+        if atTime == None:
+            atTime = self._getTime()
+        return player.withinActive > atTime
+
+    def _getTime(self):
+        if self._ladderTime['now']:
+            return time.time()
+        else:
+            return self._ladderTime['range'][1]
 
     def getSkillBounds(self):
         highSkill = {'player': None, 'skill': 0, 'time': 0}
@@ -175,7 +188,7 @@ class TableFootballLadder(object):
         return sorted([p for p in self.players.values()], key=lambda x: x.elo, reverse=True)
 
     def getPlayerRank(self, playerName):
-        ranked = [p.name for p in self.getPlayers() if p.isActive()]
+        ranked = [p.name for p in self.getPlayers() if self.isPlayerActive(p)]
         if playerName in ranked:
             return ranked.index(playerName) + 1
         return -1

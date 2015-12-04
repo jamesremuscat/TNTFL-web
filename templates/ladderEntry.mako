@@ -21,7 +21,8 @@ def getTrend(player):
 <%
 trend = getTrend(player)
 
-daysAgo = (datetime.now() - player.games[-1].timeAsDatetime()).days
+theDate = datetime.now() if ladder._ladderTime['now'] else datetime.fromtimestamp(ladder._ladderTime['range'][1])
+daysAgo = (theDate - player.games[-1].timeAsDatetime()).days
 daysToGo = Player.DAYS_INACTIVE - daysAgo
 nearlyInactive = daysToGo <= 14 and rank != -1
 ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""

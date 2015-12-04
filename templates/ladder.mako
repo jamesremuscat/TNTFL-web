@@ -2,11 +2,11 @@
 <%!
 from datetime import datetime
 
-def rankPlayers(players):
+def rankPlayers(ladder):
     ranked = []
     rank = 1
-    for player in players:
-        if player.isActive():
+    for player in ladder.getPlayers():
+        if ladder.isPlayerActive(player):
             ranked.append([rank, player])
             rank += 1
         else:
@@ -14,7 +14,7 @@ def rankPlayers(players):
     return ranked
 %>
 <%
-ranked = rankPlayers(ladder.getPlayers())
+ranked = rankPlayers(ladder)
 %>
 <%namespace name="blocks" file="blocks.mako" />
       <table class="table table-hover ladder" id="ladder">

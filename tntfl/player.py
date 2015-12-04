@@ -113,10 +113,6 @@ class Player(object):
             else:
                 self.achievements[achievement] = [game]
 
-    def isActive(self, atTime=time.time()):
-        #  Using date.* classes is too slow here
-        return self.withinActive > atTime
-
     def overrated(self):
         if self.skillBuffer.isFull:
             lastSkill = self.skillBuffer.lastSkill()
