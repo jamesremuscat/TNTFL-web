@@ -11,7 +11,7 @@
       ${ladder._ladderTime['range'][0]},
       ${ladder._ladderTime['range'][1]},
       function (data) {
-        window.location.href = ".?from=" + data.from + "&to=" + data.to;
+        $("#ladderHolder").load("ladder.cgi?from=" + data.from + "&to=" + data.to);
       }
     );
   </script>
