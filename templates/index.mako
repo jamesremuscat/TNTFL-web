@@ -17,31 +17,27 @@ import time
 <div class="container-fluid">
 
 % if not ladder._ladderTime['now']:
-  <p>Using games between <input type="text" class="picker" id="startPicker"> and <input type="text" class="picker" id="endPicker"></p>
-  <script>
-  function changeDate() {
-    var startDate = $("#startPicker").datepicker("getDate").getTime() / 1000;
-    var endDate = $("#endPicker").datepicker("getDate").getTime() / 1000;
-    window.location.href = ".?from=" + startDate + "&to=" + endDate;
-  }
 
-  $(function() {
-    $("#startPicker").datepicker({
-      dateFormat:"yy-mm-dd",
-      onSelect:function(dateText) {
-        changeDate();
-      }
+  <div id="rangeSlider"></div>
+  <script>
+    var firstGameDate = moment(1120521600, 'X');
+    var now = moment();
+
+    $("#rangeSlider").ionRangeSlider({
+        type: "double",
+        min: firstGameDate.format('X'),
+        max: now.format('X'),
+        from: ${"firstGameDate" if ladder._ladderTime['now'] else "moment(%d, 'X')" % ladder._ladderTime['range'][0]}.format('X'),
+        to: ${"now" if ladder._ladderTime['now'] else "moment(%d, 'X')" % ladder._ladderTime['range'][1]}.format('X'),
+        prettify: function (num) {
+          return moment(num, 'X').format('LL');
+        },
+        onFinish: function (data) {
+          window.location.href = ".?from=" + data.from + "&to=" + data.to;
+        }
     });
-    $("#endPicker").datepicker({
-      dateFormat:"yy-mm-dd",
-      onSelect:function(dateText) {
-        changeDate();
-      }
-    });
-    $("#startPicker").datepicker("setDate", "${startStr}");
-    $("#endPicker").datepicker("setDate", "${endStr}");
-  });
   </script>
+
 % endif
 
   <div class="row">
