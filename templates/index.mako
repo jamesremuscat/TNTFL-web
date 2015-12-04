@@ -1,18 +1,4 @@
 <%! title = "" %>
-<%!
-import tntfl.templateUtils as utils
-from datetime import date, datetime, timedelta
-import time
-%>
-<%
-    start = datetime.fromtimestamp(0)
-    end = datetime.fromtimestamp(time.time())
-    if not ladder._ladderTime['now']:
-        start = datetime.fromtimestamp(float(ladder._ladderTime['range'][0]))
-        end = datetime.fromtimestamp(float(ladder._ladderTime['range'][1]))
-    startStr = start.strftime("%Y-%m-%d")
-    endStr = end.strftime("%Y-%m-%d")
-%>
 <%inherit file="html.mako" />
 <div class="container-fluid">
 
