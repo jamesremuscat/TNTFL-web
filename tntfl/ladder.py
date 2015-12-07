@@ -112,10 +112,11 @@ class TableFootballLadder(object):
         if redPosBefore > 0:
             game.redPosChange = redPosBefore - redPosAfter
 
-        game.redAchievements = self.achievements.getAllForGame(red, game, blue, self)
-        game.blueAchievements = self.achievements.getAllForGame(blue, game, red, self)
-        red.achieve(game.redAchievements, game)
-        blue.achieve(game.blueAchievements, game)
+        if self._ladderTime['now']:
+            game.redAchievements = self.achievements.getAllForGame(red, game, blue, self)
+            game.blueAchievements = self.achievements.getAllForGame(blue, game, red, self)
+            red.achieve(game.redAchievements, game)
+            blue.achieve(game.blueAchievements, game)
 
     #returns blueScore/10
     def predict(self, red, blue):
