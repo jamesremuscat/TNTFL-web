@@ -114,6 +114,8 @@ function reloadLadder() {
 function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
   $(id).ionRangeSlider({
       type: "double",
+      grid: true,
+      step: 86400, //one day
       min: moment(1120521600, 'X').format('X'),
       max: moment().format('X'),
       from: fromTime,
