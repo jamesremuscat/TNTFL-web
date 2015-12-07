@@ -102,6 +102,15 @@ function getSortOptions(tableQuery) {
   return hdrorder;
 }
 
+function reloadLadder() {
+  var sortOpts = getSortOptions("#ladder th");
+  var showInactive = 0;
+  if ($("tr.inactive")[0].style.display == "table-row") {
+    showInactive = 1;
+  }
+  $("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0] + "&sortOrder="+sortOpts[1] + "&showInactive=" + showInactive);
+}
+
 function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
   $(id).ionRangeSlider({
       type: "double",
