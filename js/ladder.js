@@ -116,7 +116,7 @@ function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
       type: "double",
       grid: true,
       step: 86400, //one day
-      min: moment(1120521600, 'X').format('X'),
+      min: moment(1120176000, 'X').format('X'),
       max: moment().format('X'),
       from: fromTime,
       to: toTime,
