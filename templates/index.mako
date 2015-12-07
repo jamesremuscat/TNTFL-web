@@ -27,14 +27,12 @@
         <script type="text/javascript">
           setInterval(
             function() {
-            	sortOpts = getSortOptions("#ladder th");
+            	var sortOpts = getSortOptions("#ladder th");
+          		var showInactive = 0;
             	if ($("tr.inactive")[0].style.display == "table-row") {
-            		showInactive = 1
+            		showInactive = 1;
             	}
-            	else {
-            		showInactive = 0
-            	}
-            	$("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0][0] + "&sortOrder="+sortOpts[0][1] + "&showInactive=" + showInactive)
+            	$("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0] + "&sortOrder="+sortOpts[1] + "&showInactive=" + showInactive);
           	},
             600000
           );

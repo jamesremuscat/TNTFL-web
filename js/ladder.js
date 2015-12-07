@@ -86,20 +86,16 @@ function plotGamesPerDay(id, data){
 
 function getSortOptions(tableQuery) {
   //returns an array of a tablesorter sort order
-  var hdrorder = new Array();
-  var hdrs = $(tableQuery);
-  var arrayindex = 0;
-  hdrs.each(function(index) {
+  var hdrorder = null;
+  $(tableQuery).each(function(index) {
     if ($(this).hasClass('headerSortDown')) {
-      hdrorder[arrayindex] = [index, 0];
-      arrayindex++;
+      hdrorder = [index, 0];
     } else if ($(this).hasClass('headerSortUp')) {
-      hdrorder[arrayindex] = [index, 1];
-      arrayindex++;
+      hdrorder = [index, 1];
     }
   });
 
-  if (hdrorder.length == 0 && tableQuery != ".floatThead-table th") {
+  if (hdrorder == null && tableQuery != ".floatThead-table th") {
     return getSortOptions(".floatThead-table th")
   }
 
