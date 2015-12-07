@@ -27,6 +27,7 @@
     <script type="text/javascript" src="${self.attr.base}js/jquery.flot.time.min.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/jquery.floatThead.min.js"></script>
 
+    <script src="http://fgnass.github.io/spin.js/spin.min.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/ion.rangeSlider-2.1.2/js/ion-rangeSlider/ion.rangeSlider.min.js"></script>
     <link rel="stylesheet" href="${self.attr.base}js/ion.rangeSlider-2.1.2/css/ion.rangeSlider.css">
     <link rel="stylesheet" href="${self.attr.base}js/ion.rangeSlider-2.1.2/css/ion.rangeSlider.skinFlat.css">

@@ -11,6 +11,9 @@
       ${ladder._ladderTime['range'][0]},
       ${ladder._ladderTime['range'][1]},
       function (data) {
+        $("#ladderHolder").empty();
+        var spinner = new Spinner().spin();
+        $("#ladderHolder").append(spinner.el);
         $("#ladderHolder").load("ladder.cgi?from=" + data.from + "&to=" + data.to);
       }
     );
