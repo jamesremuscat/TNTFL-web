@@ -24,12 +24,6 @@
         <div class="panel-body" id="ladderHolder">
           ${self.blocks.render("ladder", base=self.attr.base)}
         </div>
-        <script type="text/javascript">
-          setInterval(
-            function(){reloadLadder();},
-            600000
-          );
-        </script>
       </div>
     </div>
     <div class="col-md-4">
@@ -41,6 +35,7 @@
           ${self.blocks.render("recent", base=self.attr.base, games=ladder.games)}
         </div>
         <script type="text/javascript">
+          setInterval(function() {reloadLadder();}, 600000);
           setInterval(function() {$("#recentHolder").load("recent.cgi")}, 600000);
         </script>
       </div>
