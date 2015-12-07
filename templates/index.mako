@@ -14,7 +14,7 @@
         $("#ladderHolder").empty();
         var spinner = new Spinner().spin();
         $("#ladderHolder").append(spinner.el);
-        $("#ladderHolder").load("ladder.cgi?from=" + data.from + "&to=" + data.to);
+        $("#ladderHolder").load("ladder.cgi?gamesFrom=" + data.from + "&gamesTo=" + data.to);
       }
     );
   </script>

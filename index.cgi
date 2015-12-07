@@ -5,9 +5,9 @@ from tntfl.web import serve_template
 
 form = cgi.FieldStorage()
 
-if "to" in form and "from" in form:
-    toTime = int(form["to"].value)
-    fromTime = int(form["from"].value)
+if "gamesFrom" in form and "gamesTo" in form:
+    fromTime = int(form["gamesFrom"].value)
+    toTime = int(form["gamesTo"].value)
     ladder = TableFootballLadder("ladder.txt", timeRange=(fromTime, toTime))
 else:
     ladder = TableFootballLadder("ladder.txt")
