@@ -31,7 +31,7 @@ class CachingGameStore(object):
     def _loadFromStore(self, ladder, ladderTime):
         loadedGames = self._gameStore.getGames()
         if not ladderTime['now']:
-            loadedGames = [g for g in loadedGames if g.time <= ladderTime['time']]
+            loadedGames = [g for g in loadedGames if ladderTime['range'][0] <= g.time and g.time <= ladderTime['range'][1]]
         for loadedGame in loadedGames:
             ladder.addGame(loadedGame)
 
@@ -39,7 +39,7 @@ class CachingGameStore(object):
         if os.path.exists(self._cacheFilePath) and self._usingCache:
             ladder.games = pickle.load(open(self._cacheFilePath, 'rb'))
             if not ladderTime['now']:
-                ladder.games = [g for g in ladder.games if g.time <= ladderTime['time']]
+                ladder.games = [g for g in ladder.games if ladderTime['range'][0] <= g.time and g.time <= ladderTime['range'][1]]
             for game in [g for g in ladder.games if not g.isDeleted()]:
                 red = ladder.getPlayer(game.redPlayer)
                 blue = ladder.getPlayer(game.bluePlayer)
@@ -61,14 +61,14 @@ class CachingGameStore(object):
 
 class TableFootballLadder(object):
 
-    def __init__(self, ladderFilePath, useCache = True, untilTime = None):
+    def __init__(self, ladderFilePath, useCache = True, timeRange=None):
         self.games = []
         self.players = {}
         self.achievements = Achievements()
         self._recentlyActivePlayers = (-1, [])
         self._gameStore = CachingGameStore(ladderFilePath, useCache)
 
-        ladderTime = {'now': untilTime == None, 'time': untilTime}
+        ladderTime = {'now': timeRange == None, 'range': timeRange}
         self._gameStore.loadGames(self, ladderTime)
 
     def getPlayer(self, name):

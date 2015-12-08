@@ -5,9 +5,10 @@ from tntfl.web import serve_template
 
 form = cgi.FieldStorage()
 
-if "time" in form:
-    time = int(form["time"].value)
-    ladder = TableFootballLadder("ladder.txt", untilTime=time)
+if "to" in form and "from" in form:
+    toTime = int(form["to"].value)
+    fromTime = int(form["from"].value)
+    ladder = TableFootballLadder("ladder.txt", timeRange=(fromTime, toTime))
 else:
     ladder = TableFootballLadder("ladder.txt")
 serve_template("index.mako", ladder=ladder)
