@@ -42,16 +42,8 @@ ${blocks.render("ladderEntry", player=player[1], rank=player[0], base=base)}
     </tbody>
   </table>
   <p>Updated at ${datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
-  <div class="controls form">
+  <div class="controls form" id="showInactiveButtons">
     <button class="button_active form-control" onclick="$('.inactive').show(); $('.button_active').hide();">Show inactive</button>
     <button class="form-control inactive" onclick="$('.inactive').hide(); $('.button_active').show();">Hide inactive</button>
   </div>
-  <script type="text/javascript">
-    $("#ladder").tablesorter({'sortList': [[${sortCol},${sortOrder}]], 'headers': { 11: { 'sorter': false}}});
-    $("#ladder").floatThead();
-    // ${showInactive}
-% if showInactive == "1":
-    $('.inactive').show(); $('.button_active').hide();
-% endif
-  </script>
 </div>

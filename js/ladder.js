@@ -99,16 +99,32 @@ function getSortOptions(tableQuery) {
     return getSortOptions(".floatThead-table th")
   }
 
+  if (hdrorder == null) {
+    hdrorder = [10,0];
+  }
+
   return hdrorder;
 }
 
-function reloadLadder() {
+function reloadLadder(dates, loaded) {
   var sortOpts = getSortOptions("#ladder th");
   var showInactive = 0;
-  if ($("tr.inactive")[0].style.display == "table-row") {
-    showInactive = 1;
-  }
-  $("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0] + "&sortOrder="+sortOpts[1] + "&showInactive=" + showInactive);
+  $("#showInactiveButtons").each(function(index) {
+    if ($(this).hasClass('inactive') && $(this).style.display == "table-row") {
+      showInactive = 1;
+    }
+  });
+
+  $("#ladderHolder").load("ladder.cgi" + dates,
+    function() {
+      $("#ladder").tablesorter({'sortList': [[sortOpts[0], sortOpts[1]]], 'headers': { 11: { 'sorter': false}}});
+      $("#ladder").floatThead();
+      if (showInactive) {
+        $('.inactive').show();
+        $('.button_active').hide();
+      }
+    }
+  );
 }
 
 function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
