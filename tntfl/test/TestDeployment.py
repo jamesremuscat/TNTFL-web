@@ -157,6 +157,23 @@ class Api(Deployment):
         self.assertEqual(response[0]['date'], 1448895666)
         self.assertEqual(response[1]['date'], 1448897511)
 
+    def testGamesDeletedJson(self):
+        page = 'games.cgi?view=json&from=1448887743&to=1448890745'
+        response = self._getJsonFrom(page)
+        self.assertEqual(len(response), 4)
+
+        self.assertEqual(response[0]['deleted']['at'], 1448889773)
+        self.assertEqual(response[0]['deleted']['by'], 'tlr')
+        self.assertEqual(response[0]['date'], 1448889571)
+        self.assertEqual(response[1]['date'], 1448889749)
+
+    def testGamesNoDeletedJson(self):
+        page = 'games.cgi?view=json&from=1448887743&to=1448890745&includeDeleted=0'
+        response = self._getJsonFrom(page)
+        self.assertEqual(len(response), 3)
+
+        self.assertEqual(response[0]['date'], 1448889749)
+
     def testPositionSwap(self):
         page = 'game/1443785561/json'
         response = self._getJsonFrom(page)
