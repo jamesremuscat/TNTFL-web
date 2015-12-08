@@ -14,8 +14,10 @@
         $("#ladderHolder").empty();
         var spinner = new Spinner().spin();
         $("#ladderHolder").append(spinner.el);
-        //window.location.href = ".?gamesFrom=" + data.from + "&gamesTo=" + data.to;
-        $("#ladderHolder").load("ladder.cgi?gamesFrom=" + data.from + "&gamesTo=" + data.to);
+        var dates = "?gamesFrom=" + data.from + "&gamesTo=" + data.to;
+        window.history.pushState("object or string", "Title", dates);
+        //window.location.href = "." + dates;
+        $("#ladderHolder").load("ladder.cgi" + dates);
       }
     );
   </script>
