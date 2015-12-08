@@ -115,7 +115,7 @@ function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
   $(id).ionRangeSlider({
       type: "double",
       grid: true,
-      step: 86400, //one day
+      force_edges: true,
       min: moment(1120176000, 'X').format('X'),
       max: moment().format('X'),
       from: fromTime,
