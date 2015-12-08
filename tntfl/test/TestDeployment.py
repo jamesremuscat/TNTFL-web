@@ -122,7 +122,7 @@ class Api(Deployment):
         response = self._getJsonFrom('recent/json')
 
     def testGamesJson(self):
-        page = 'games.cgi?view=json;from=1120830176;to=1120840777'
+        page = 'games.cgi?view=json&from=1120830176&to=1120840777'
         response = self._getJsonFrom(page)
         self.assertEqual(len(response), 3)
 
