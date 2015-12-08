@@ -40,7 +40,7 @@
       <div class="container-fluid">
         <p class="navbar-text tntfl-header">Table Football Ladder</p>
         <ul class="nav navbar-nav">
-        <li><a href="${self.attr.base}">Home</a></li>
+        <li><a href="${self.attr.base}.">Home</a></li>
         <li><a href="${self.attr.base}stats/">Stats</a></li>
         <li><a href="${self.attr.base}speculate/">Speculate</a></li>
         <li><a href="${self.attr.base}api/">API</a></li>
