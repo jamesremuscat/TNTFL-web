@@ -149,6 +149,14 @@ class Api(Deployment):
         self.assertEqual(response[1]['date'], 1120834874)
         self.assertEqual(response[2]['date'], 1120840777)
 
+    def testGamesLimitJson(self):
+        page = 'games.cgi?view=json&from=1448887743&to=1448897743&limit=2'
+        response = self._getJsonFrom(page)
+        self.assertEqual(len(response), 2)
+
+        self.assertEqual(response[0]['date'], 1448895666)
+        self.assertEqual(response[1]['date'], 1448897511)
+
     def testPositionSwap(self):
         page = 'game/1443785561/json'
         response = self._getJsonFrom(page)
