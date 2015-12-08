@@ -44,8 +44,10 @@ goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgains
       <td class="ladder-stat">${"{:.3f}".format(goalRatio)}</td>
       <td class="ladder-stat">${"{:.3f}".format(player.overrated())}</td>
       <td class="ladder-stat ladder-skill">${"{:.3f}".format(player.elo)}</td>
-      <td class="ladder-stat ladder-trend"><div id="${player.name | idsafe}_trend" class="ladder-trend">&nbsp;</div></td>
-      <script type="text/javascript">
-        plotPlayerSkillTrend("#${player.name | idsafe}_trend", [${trend['trend']}], ['${trend["colour"]}']);
-      </script>
+      <td class="ladder-stat ladder-trend">
+        <div id="${player.name | idsafe}_trend" class="ladder-trend"></div>
+        <script type="text/javascript">
+          plotPlayerSkillTrend("#${player.name | idsafe}_trend", [${trend['trend']}], ['${trend["colour"]}']);
+        </script>
+      </td>
     </tr>
