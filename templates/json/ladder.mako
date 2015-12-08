@@ -1,6 +1,6 @@
 <%! base = "../" %>
 <%inherit file="json.mako" />[
-<% players = [p for p in ladder.getPlayers() if p.isActive() ]%>
+<% players = [p for p in ladder.getPlayers() if ladder.isPlayerActive(p) ]%>
 %for player in players:
 {
   "rank" : ${loop.index + 1},

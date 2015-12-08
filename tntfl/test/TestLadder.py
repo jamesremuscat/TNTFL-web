@@ -50,3 +50,8 @@ class Test(TestCase):
         self.assertEquals(0, streaks['current'].count)
         self.assertEquals(12, streaks['win'].count)
         self.assertEquals(14, streaks['lose'].count)
+
+    def testGamesRange(self):
+        l = TableFootballLadder(os.path.join(__location__, "testLadder.txt"), False, [5000000000, 5000000002])
+        self.assertEqual(3, len(l.games))
+        self.assertEqual(3, len(l.players))

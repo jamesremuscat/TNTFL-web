@@ -13,11 +13,14 @@ class CachingGameStore(object):
         self._gameStore = GameStore(ladderFilePath)
         self._usingCache = useCache
 
-    def loadGames(self, ladder):
-        loaded = self._loadFromCache(ladder)
+    def loadGames(self, ladder, ladderTime):
+        loaded = False
+        if ladderTime['now']:
+            loaded = self._loadFromCache(ladder, ladderTime)
         if not loaded:
-            self._loadFromStore(ladder)
-            self._writeToCache(ladder)
+            self._loadFromStore(ladder, ladderTime)
+            if ladderTime['now']:
+                self._writeToCache(ladder)
 
     def writeGame(self, game):
         self._deleteCache()
@@ -27,14 +30,18 @@ class CachingGameStore(object):
         self._deleteCache()
         return self._gameStore.deleteGame(gameTime, deletedBy)
 
-    def _loadFromStore(self, ladder):
+    def _loadFromStore(self, ladder, ladderTime):
         loadedGames = self._gameStore.getGames()
+        if not ladderTime['now']:
+            loadedGames = [g for g in loadedGames if ladderTime['range'][0] <= g.time and g.time <= ladderTime['range'][1]]
         for loadedGame in loadedGames:
             ladder.addGame(loadedGame)
 
-    def _loadFromCache(self, ladder):
+    def _loadFromCache(self, ladder, ladderTime):
         if os.path.exists(self._cacheFilePath) and self._usingCache:
             ladder.games = pickle.load(open(self._cacheFilePath, 'rb'))
+            if not ladderTime['now']:
+                ladder.games = [g for g in ladder.games if ladderTime['range'][0] <= g.time and g.time <= ladderTime['range'][1]]
             for game in [g for g in ladder.games if not g.isDeleted()]:
                 red = ladder.getPlayer(game.redPlayer)
                 blue = ladder.getPlayer(game.bluePlayer)
@@ -56,13 +63,15 @@ class CachingGameStore(object):
 
 class TableFootballLadder(object):
 
-    def __init__(self, ladderFilePath, useCache = True):
+    def __init__(self, ladderFilePath, useCache = True, timeRange=None):
         self.games = []
         self.players = {}
         self.achievements = Achievements()
         self._recentlyActivePlayers = (-1, [])
         self._gameStore = CachingGameStore(ladderFilePath, useCache)
-        self._gameStore.loadGames(self)
+
+        self._ladderTime = {'now': timeRange == None, 'range': timeRange}
+        self._gameStore.loadGames(self, self._ladderTime)
 
     def getPlayer(self, name):
         if name not in self.players:
@@ -103,10 +112,11 @@ class TableFootballLadder(object):
         if redPosBefore > 0:
             game.redPosChange = redPosBefore - redPosAfter
 
-        game.redAchievements = self.achievements.getAllForGame(red, game, blue, self)
-        game.blueAchievements = self.achievements.getAllForGame(blue, game, red, self)
-        red.achieve(game.redAchievements, game)
-        blue.achieve(game.blueAchievements, game)
+        if self._ladderTime['now']:
+            game.redAchievements = self.achievements.getAllForGame(red, game, blue, self)
+            game.blueAchievements = self.achievements.getAllForGame(blue, game, red, self)
+            red.achieve(game.redAchievements, game)
+            blue.achieve(game.blueAchievements, game)
 
     #returns blueScore/10
     def predict(self, red, blue):
@@ -118,10 +128,23 @@ class TableFootballLadder(object):
         delta = 25 * (result - predict)
         game.skillChangeToBlue = delta
 
-    def getActivePlayers(self, atTime = time.time()):
+    def getActivePlayers(self, atTime = None):
+        if atTime == None:
+            atTime = self._getTime()
         if self._recentlyActivePlayers[0] != atTime:
-            self._recentlyActivePlayers = (atTime, [p for p in self.players.values() if p.isActive(atTime)])
+            self._recentlyActivePlayers = (atTime, [p for p in self.players.values() if self.isPlayerActive(p, atTime)])
         return self._recentlyActivePlayers[1]
+
+    def isPlayerActive(self, player, atTime=None):
+        if atTime == None:
+            atTime = self._getTime()
+        return player.withinActive > atTime
+
+    def _getTime(self):
+        if self._ladderTime['now']:
+            return time.time()
+        else:
+            return self._ladderTime['range'][1]
 
     def getSkillBounds(self):
         highSkill = {'player': None, 'skill': 0, 'time': 0}
@@ -168,7 +191,7 @@ class TableFootballLadder(object):
         return sorted([p for p in self.players.values()], key=lambda x: x.elo, reverse=True)
 
     def getPlayerRank(self, playerName):
-        ranked = [p.name for p in self.getPlayers() if p.isActive()]
+        ranked = [p.name for p in self.getPlayers() if self.isPlayerActive(p)]
         if playerName in ranked:
             return ranked.index(playerName) + 1
         return -1

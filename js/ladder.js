@@ -86,22 +86,62 @@ function plotGamesPerDay(id, data){
 
 function getSortOptions(tableQuery) {
   //returns an array of a tablesorter sort order
-  var hdrorder = new Array();
-  var hdrs = $(tableQuery);
-  var arrayindex = 0;
-  hdrs.each(function(index) {
+  var hdrorder = null;
+  $(tableQuery).each(function(index) {
     if ($(this).hasClass('headerSortDown')) {
-      hdrorder[arrayindex] = [index, 0];
-      arrayindex++;
+      hdrorder = [index, 0];
     } else if ($(this).hasClass('headerSortUp')) {
-      hdrorder[arrayindex] = [index, 1];
-      arrayindex++;
+      hdrorder = [index, 1];
     }
   });
 
-  if (hdrorder.length == 0 && tableQuery != ".floatThead-table th") {
+  if (hdrorder == null && tableQuery != ".floatThead-table th") {
     return getSortOptions(".floatThead-table th")
   }
 
+  if (hdrorder == null) {
+    hdrorder = [10,1];
+  }
+
   return hdrorder;
+}
+
+function reloadLadder(dates) {
+  var sortOpts = getSortOptions("#ladder th");
+  var showInactive = 0;
+  $("#showInactiveButtons").each(function(index) {
+    if ($(this).hasClass('inactive') && $(this).style.display == "table-row") {
+      showInactive = 1;
+    }
+  });
+
+  $("#ladderHolder").empty();
+  var spinner = new Spinner().spin();
+  $("#ladderHolder").append(spinner.el);
+  $("#ladderHolder").load("ladder.cgi" + dates,
+    function() {
+      $("#ladder").tablesorter({'sortList': [[sortOpts[0], sortOpts[1]]], 'headers': { 11: { 'sorter': false}}});
+      $("#ladder").floatThead();
+      if (showInactive) {
+        $('.inactive').show();
+        $('.button_active').hide();
+      }
+    }
+  );
+}
+
+function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
+  $(id).ionRangeSlider({
+      type: "double",
+      grid: true,
+      force_edges: true,
+      min: moment(1120176000, 'X').format('X'),
+      max: moment().format('X'),
+      from: fromTime,
+      to: toTime,
+      prettify: function (num) {
+        return moment(num, 'X').format('LL');
+      },
+      onFinish: fnOnFinish
+  });
 }
