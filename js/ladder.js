@@ -100,13 +100,13 @@ function getSortOptions(tableQuery) {
   }
 
   if (hdrorder == null) {
-    hdrorder = [10,0];
+    hdrorder = [10,1];
   }
 
   return hdrorder;
 }
 
-function reloadLadder(dates, loaded) {
+function reloadLadder(dates) {
   var sortOpts = getSortOptions("#ladder th");
   var showInactive = 0;
   $("#showInactiveButtons").each(function(index) {
@@ -115,6 +115,9 @@ function reloadLadder(dates, loaded) {
     }
   });
 
+  $("#ladderHolder").empty();
+  var spinner = new Spinner().spin();
+  $("#ladderHolder").append(spinner.el);
   $("#ladderHolder").load("ladder.cgi" + dates,
     function() {
       $("#ladder").tablesorter({'sortList': [[sortOpts[0], sortOpts[1]]], 'headers': { 11: { 'sorter': false}}});
