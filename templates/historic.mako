@@ -14,7 +14,7 @@
           <h2 class="panel-title">Monthly Rankings</h2>
         </div>
         <div class="panel-body" id="monthsHolder">
-          ${self.blocks.render("monthlyRankingList", base=self.attr.base)}
+          ${self.blocks.render("monthlyRankingList", year=2015)}
         </div>
       </div>
     </div>

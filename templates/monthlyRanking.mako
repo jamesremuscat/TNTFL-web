@@ -1,4 +1,4 @@
-<%page args="ladder, monthStart, monthEnd"/>
+<%page args="monthStart, monthEnd"/>
 <%!
 from datetime import date
 from tntfl.ladder import TableFootballLadder
