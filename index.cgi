@@ -1,12 +1,6 @@
 #!/usr/bin/env python
-import cgi
+from tntfl.ladder import TableFootballLadder
 from tntfl.web import serve_template
 
-form = cgi.FieldStorage()
-
-timeRange=None
-if "gamesFrom" in form and "gamesTo" in form:
-    fromTime = int(form["gamesFrom"].value)
-    toTime = int(form["gamesTo"].value)
-    timeRange=(fromTime, toTime)
-serve_template("index.mako", timeRange=timeRange)
+ladder = TableFootballLadder("ladder.txt")
+serve_template("index.mako", ladder=ladder)
