@@ -11,27 +11,34 @@
     <div class="col-md-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h2 class="panel-title">Recent Games</h2>
+          <h2 class="panel-title">Months</h2>
         </div>
-        <div class="panel-body" id="recentHolder"></div>
+        <div class="panel-body" id="monthsHolder">
+          <a href="#" onClick='what()'>What</a>
+        </div>
       </div>
     </div>
   </div>
   <script type="text/javascript">
+    function what() {
+      var fromDate = 1143754991;
+      var toDate = 1356576477;
+      var dates = "?gamesFrom=" + fromDate + "&gamesTo=" + toDate;
+        window.history.pushState("object or string", "Title", dates);
+        reloadLadder(dates);
+        $("#rangeSlider").data("ionRangeSlider").update({from: fromDate, to: toDate});
+    }
+
     initHistorySlider(
       "#rangeSlider",
       ${timeRange[0]},
       ${timeRange[1]}
     );
-    
+
     var dates = "${'?gamesFrom=%d&gamesTo=%d' % (timeRange[0], timeRange[1]) if timeRange is not None else ''}";
     reloadLadder(dates);
-
-    var spinner2 = new Spinner().spin();
-    $("#recentHolder").append(spinner2.el);
-    $("#recentHolder").load("recent.cgi");
-
     setInterval(function() {reloadLadder("");}, 600000);
-    setInterval(function() {$("#recentHolder").load("recent.cgi")}, 600000);
+
+
   </script>
 </div>
