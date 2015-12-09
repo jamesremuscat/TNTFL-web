@@ -38,6 +38,5 @@ from datetime import date
 
     var dates = "${'?gamesFrom=%d&gamesTo=%d' % (timeRange[0], timeRange[1])}";
     reloadLadder(dates);
-    setInterval(function() {reloadLadder("");}, 600000);
   </script>
 </div>
