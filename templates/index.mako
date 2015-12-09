@@ -1,31 +1,27 @@
 <%! title = "" %>
 <%inherit file="html.mako" />
 <div class="container-fluid">
-
-% if timeRange != None:
-
-  <div id="rangeSlider"></div>
-  <script>
-    initHistorySlider(
-      "#rangeSlider",
-      ${timeRange[0]},
-      ${timeRange[1]},
-      function (data) {
-        var dates = "?gamesFrom=" + data.from + "&gamesTo=" + data.to;
-        window.history.pushState("object or string", "Title", dates);
-        //window.location.href = "." + dates;
-        reloadLadder(dates);
-      }
-    );
-  </script>
-
-% endif
-
   <div class="row">
     <div class="col-md-8">
       <div class="panel panel-default">
         <div class="panel-body" id="ladderHolder">
+          ${self.blocks.render("ladder", base=self.attr.base)}
         </div>
+        <script type="text/javascript">
+          setInterval(
+            function() {
+              var sortOpts = getSortOptions("#ladder th");
+              var showInactive = 0;
+              $("#showInactiveButtons").each(function(index) {
+                if ($(this).hasClass('inactive') && $(this).style.display == "table-row") {
+                  showInactive = 1;
+                }
+              });
+              $("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0][0] + "&sortOrder="+sortOpts[0][1] + "&showInactive=" + showInactive)
+            },
+            600000
+          );
+        </script>
       </div>
     </div>
     <div class="col-md-4">
@@ -34,19 +30,9 @@
           <h2 class="panel-title">Recent Games</h2>
         </div>
         <div class="panel-body" id="recentHolder">
+          ${self.blocks.render("recent", base=self.attr.base, games=ladder.games)}
         </div>
         <script type="text/javascript">
-          var dates = "";
-          %if timeRange != None:
-            dates = "?gamesFrom=" + ${timeRange[0]} + "&gamesTo=" + ${timeRange[1]};
-          %endif
-          reloadLadder(dates);
-
-          var spinner2 = new Spinner().spin();
-          $("#recentHolder").append(spinner2.el);
-          $("#recentHolder").load("recent.cgi");
-          
-          setInterval(function() {reloadLadder("");}, 600000);
           setInterval(function() {$("#recentHolder").load("recent.cgi")}, 600000);
         </script>
       </div>

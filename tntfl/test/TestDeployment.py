@@ -50,6 +50,9 @@ class Pages(Deployment):
     def testStatsReachable(self):
         self._testPageReachable('stats/')
 
+    def testHistoricReachable(self):
+        self._testPageReachable('historic.cgi')
+
     def _testResponse(self, response):
         super(Pages, self)._testResponse(response)
         self.assertTrue("<!DOCTYPE html>" in response)
@@ -106,11 +109,27 @@ class Api(Deployment):
         response = self._getJsonFrom('player/ndt/games/json')
         self.assertEqual(len(response), 490)
 
-    def testLadderJsonReachable(self):
-        response = self._getJsonFrom('ladder/json')
-
     def testRecentJsonReachable(self):
         response = self._getJsonFrom('recent/json')
+
+
+class LadderApi(Deployment):
+    def testReachable(self):
+        response = self._getJsonFrom('ladder/json')
+
+    def testRange(self):
+        page = 'ladder/?gamesFrom=1223308996&gamesTo=1223400000&view=json'
+        response = self._getJsonFrom(page)
+
+        self.assertEqual(len(response), 3)
+        self.assertEqual(response[0]['rank'], 1)
+        self.assertEqual(response[0]['name'], 'jrem')
+        self.assertEqual(response[0]['skill'], 16.5027380839)
+        self.assertEqual(urlparse.urljoin(self._page(page), response[0]['href']), urlparse.urljoin(self.urlBase, "player/jrem/json"))
+        self.assertEqual(response[2]['rank'], 3)
+        self.assertEqual(response[2]['name'], 'kjb')
+        self.assertEqual(response[2]['skill'], -12.5)
+        self.assertEqual(urlparse.urljoin(self._page(page), response[2]['href']), urlparse.urljoin(self.urlBase, "player/kjb/json"))
 
 
 class GameApi(Deployment):

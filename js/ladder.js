@@ -130,7 +130,14 @@ function reloadLadder(dates) {
   );
 }
 
-function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
+function updateLadderTo(range) {
+  var dates = "?gamesFrom=" + range[0] + "&gamesTo=" + range[1];
+  window.history.pushState("object or string", "Title", dates);
+  reloadLadder(dates);
+  $("#rangeSlider").data("ionRangeSlider").update({from: range[0], to: range[1]});
+}
+
+function initHistorySlider(id, fromTime, toTime) {
   $(id).ionRangeSlider({
       type: "double",
       grid: true,
@@ -142,6 +149,11 @@ function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
       prettify: function (num) {
         return moment(num, 'X').format('LL');
       },
-      onFinish: fnOnFinish
+      onFinish: function (data) {
+        var dates = "?gamesFrom=" + data.from + "&gamesTo=" + data.to;
+        window.history.pushState("object or string", "Title", dates);
+        //window.location.href = "." + dates;
+        reloadLadder(dates);
+      }
   });
 }
