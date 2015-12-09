@@ -6,11 +6,21 @@ import os
 
 class Deployment(unittest.TestCase):
     urlBase = os.path.join('http://www/~tlr/', os.path.split(os.getcwd())[1]) + "/"
-    _username = 'tlr'
-    _password = ''
 
     def _page(self, page):
         return urlparse.urljoin(self.urlBase, page)
+
+    def _getJsonFrom(self, page):
+        response = urllib2.urlopen(self._page(page))
+        return json.load(response)
+
+    def _testPageReachable(self, page):
+        response = urllib2.urlopen(self._page(page))
+        self._testResponse(response.read())
+
+    def _testResponse(self, response):
+        self.assertTrue("Traceback (most recent call last):" not in response)
+
 
 class Pages(Deployment):
     def testIndexReachable(self):
@@ -24,20 +34,6 @@ class Pages(Deployment):
 
     def testGameReachable(self):
         self._testPageReachable('game/1223308996/')
-
-    def testDeleteAuthenticationRequired(self):
-        try:
-            self._testPageReachable('game/1223308996/delete')
-        except urllib2.HTTPError as e:
-            self.assertEqual(e.code, 401)
-
-    def testDeleteReachable(self):
-        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password(None, self.urlBase, self._username, self._password)
-        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-        opener = urllib2.build_opener(handler)
-        response = opener.open(self._page('game/1223308996/delete')).read()
-        self._testResponse(response)
 
     def testHeadToHeadReachable(self):
         self._testPageReachable('headtohead/jrem/sam/')
@@ -54,17 +50,71 @@ class Pages(Deployment):
     def testStatsReachable(self):
         self._testPageReachable('stats/')
 
-    def _testPageReachable(self, page):
-        response = urllib2.urlopen(self._page(page)).read()
+    def _testResponse(self, response):
+        super(Pages, self)._testResponse(response)
+        self.assertTrue("<!DOCTYPE html>" in response)
+
+class DeletePage(Deployment):
+    _username = 'tlr'
+    _password = ''
+
+    def testAuthenticationRequired(self):
+        with self.assertRaises(urllib2.HTTPError) as cm:
+            self._testPageReachable('game/1223308996/delete')
+        e = cm.exception
+        self.assertEqual(e.code, 401)
+
+    def testReachable(self):
+        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+        password_mgr.add_password(None, self.urlBase, self._username, self._password)
+        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+        opener = urllib2.build_opener(handler)
+        response = opener.open(self._page('game/1223308996/delete')).read()
         self._testResponse(response)
 
     def _testResponse(self, response):
+        super(DeletePage, self)._testResponse(response)
         self.assertTrue("<!DOCTYPE html>" in response)
-        self.assertTrue("Traceback (most recent call last):" not in response)
+
+
+class PageBits(Deployment):
+    def testLadderReachable(self):
+        self._testPageReachable('ladder.cgi')
+
+    def testRecentReachable(self):
+        self._testPageReachable('recent.cgi')
+
 
 class Api(Deployment):
+    def testPlayerJson(self):
+        page = 'player/ndt/json'
+        response = self._getJsonFrom(page)
+        self.assertEqual(response['name'], "ndt")
+        self.assertEqual(response['rank'], -1)
+        self.assertEqual(response['active'], False)
+        self.assertEqual(response['skill'], 65.7308777725)
+        self.assertEqual(response['overrated'], -20.2998078551)
+        self.assertEqual(urlparse.urljoin(self._page(page), response['games']['href']), urlparse.urljoin(self.urlBase, "player/ndt/games/json"))
+        self.assertEqual(response['total']['for'], 2895)
+        self.assertEqual(response['total']['against'], 2005)
+        self.assertEqual(response['total']['games'], 490)
+        self.assertEqual(response['total']['wins'], 286)
+        self.assertEqual(response['total']['losses'], 96)
+        self.assertEqual(response['total']['gamesToday'], 0)
 
-    def testGameJson(self):
+    def testPlayerGamesJsonReachable(self):
+        response = self._getJsonFrom('player/ndt/games/json')
+        self.assertEqual(len(response), 490)
+
+    def testLadderJsonReachable(self):
+        response = self._getJsonFrom('ladder/json')
+
+    def testRecentJsonReachable(self):
+        response = self._getJsonFrom('recent/json')
+
+
+class GameApi(Deployment):
+    def test(self):
         page = 'game/1223308996/json'
         response = self._getJsonFrom(page)
 
@@ -95,33 +145,15 @@ class Api(Deployment):
         self.assertEqual(response['positionSwap'], False)
         self.assertEqual(response['date'], 1223308996)
 
-    def testPlayerJson(self):
-        page = 'player/ndt/json'
+    def testPositionSwap(self):
+        page = 'game/1443785561/json'
         response = self._getJsonFrom(page)
-        self.assertEqual(response['name'], "ndt")
-        self.assertEqual(response['rank'], -1)
-        self.assertEqual(response['active'], False)
-        self.assertEqual(response['skill'], 65.7308777725)
-        self.assertEqual(response['overrated'], -20.2998078551)
-        self.assertEqual(urlparse.urljoin(self._page(page), response['games']['href']), urlparse.urljoin(self.urlBase, "player/ndt/games/json"))
-        self.assertEqual(response['total']['for'], 2895)
-        self.assertEqual(response['total']['against'], 2005)
-        self.assertEqual(response['total']['games'], 490)
-        self.assertEqual(response['total']['wins'], 286)
-        self.assertEqual(response['total']['losses'], 96)
-        self.assertEqual(response['total']['gamesToday'], 0)
+        self.assertEqual(response['positionSwap'], True)
+        self.assertEqual(response['date'], 1443785561)
 
-    def testPlayerGamesJsonReachable(self):
-        response = self._getJsonFrom('player/ndt/games/json')
-        self.assertEqual(len(response), 490)
 
-    def testLadderJsonReachable(self):
-        response = self._getJsonFrom('ladder/json')
-
-    def testRecentJsonReachable(self):
-        response = self._getJsonFrom('recent/json')
-
-    def testGamesJson(self):
+class GamesApi(Deployment):
+    def test(self):
         page = 'games.cgi?view=json&from=1120830176&to=1120840777'
         response = self._getJsonFrom(page)
         self.assertEqual(len(response), 3)
@@ -145,52 +177,27 @@ class Api(Deployment):
 
         self.assertEqual(response[0]['positionSwap'], False)
         self.assertEqual(response[0]['date'], 1120830176)
-
         self.assertEqual(response[1]['date'], 1120834874)
         self.assertEqual(response[2]['date'], 1120840777)
 
-    def testGamesLimitJson(self):
+    def testLimit(self):
         page = 'games.cgi?view=json&from=1448887743&to=1448897743&limit=2'
         response = self._getJsonFrom(page)
         self.assertEqual(len(response), 2)
-
         self.assertEqual(response[0]['date'], 1448895666)
         self.assertEqual(response[1]['date'], 1448897511)
 
-    def testGamesDeletedJson(self):
+    def testDeleted(self):
         page = 'games.cgi?view=json&from=1448887743&to=1448890745'
         response = self._getJsonFrom(page)
         self.assertEqual(len(response), 4)
-
         self.assertEqual(response[0]['deleted']['at'], 1448889773)
         self.assertEqual(response[0]['deleted']['by'], 'tlr')
         self.assertEqual(response[0]['date'], 1448889571)
         self.assertEqual(response[1]['date'], 1448889749)
 
-    def testGamesNoDeletedJson(self):
+    def testNoDeleted(self):
         page = 'games.cgi?view=json&from=1448887743&to=1448890745&includeDeleted=0'
         response = self._getJsonFrom(page)
         self.assertEqual(len(response), 3)
-
         self.assertEqual(response[0]['date'], 1448889749)
-
-    def testPositionSwap(self):
-        page = 'game/1443785561/json'
-        response = self._getJsonFrom(page)
-
-        self.assertEqual(response['positionSwap'], True)
-        self.assertEqual(response['date'], 1443785561)
-
-    def testLadderReachable(self):
-        self._testPageReachable('ladder.cgi')
-
-    def testRecentReachable(self):
-        self._testPageReachable('recent.cgi')
-
-    def _getJsonFrom(self, page):
-        response = urllib2.urlopen(self._page(page))
-        return json.load(response)
-
-    def _testPageReachable(self, page):
-        response = urllib2.urlopen(self._page(page))
-        self.assertTrue("Traceback (most recent call last):" not in response.read())
