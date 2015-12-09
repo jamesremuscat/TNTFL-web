@@ -14,21 +14,12 @@
           <h2 class="panel-title">Months</h2>
         </div>
         <div class="panel-body" id="monthsHolder">
-          <a href="#" onClick='what()'>What</a>
+          ${self.blocks.render("monthlyRankingList", base=self.attr.base)}
         </div>
       </div>
     </div>
   </div>
   <script type="text/javascript">
-    function what() {
-      var fromDate = 1143754991;
-      var toDate = 1356576477;
-      var dates = "?gamesFrom=" + fromDate + "&gamesTo=" + toDate;
-        window.history.pushState("object or string", "Title", dates);
-        reloadLadder(dates);
-        $("#rangeSlider").data("ionRangeSlider").update({from: fromDate, to: toDate});
-    }
-
     initHistorySlider(
       "#rangeSlider",
       ${timeRange[0]},
