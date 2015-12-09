@@ -1,4 +1,7 @@
 <%! title = "" %>
+<%!
+from datetime import date
+%>
 <%inherit file="html.mako" />
 <div class="container-fluid">
   <div id="rangeSlider"></div>
@@ -13,8 +16,15 @@
         <div class="panel-heading">
           <h2 class="panel-title">Monthly Rankings</h2>
         </div>
-        <div class="panel-body" id="monthsHolder">
-          ${self.blocks.render("monthlyRankingList", year=2015)}
+        <div class="panel-body">
+          <div class="row">
+            % for year in reversed(range(2005, date.today().year + 1)):
+              % if loop.index % 4 == 0:
+                </div><div class="row">
+              % endif
+              ${self.blocks.render("monthlyRankingList", year=year)}
+            % endfor
+          </div>
         </div>
       </div>
     </div>
@@ -29,7 +39,5 @@
     var dates = "${'?gamesFrom=%d&gamesTo=%d' % (timeRange[0], timeRange[1]) if timeRange is not None else ''}";
     reloadLadder(dates);
     setInterval(function() {reloadLadder("");}, 600000);
-
-
   </script>
 </div>
