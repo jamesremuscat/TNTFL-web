@@ -130,6 +130,13 @@ function reloadLadder(dates) {
   );
 }
 
+function updateLadderTo(range) {
+  var dates = "?gamesFrom=" + range[0] + "&gamesTo=" + range[1];
+  window.history.pushState("object or string", "Title", dates);
+  reloadLadder(dates);
+  $("#rangeSlider").data("ionRangeSlider").update({from: range[0], to: range[1]});
+}
+
 function initHistorySlider(id, fromTime, toTime) {
   $(id).ionRangeSlider({
       type: "double",
