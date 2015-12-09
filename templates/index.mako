@@ -30,10 +30,7 @@
         <div class="panel-body" id="recentHolder">
         </div>
         <script type="text/javascript">
-          var dates = "";
-          %if timeRange != None:
-            dates = "?gamesFrom=" + ${timeRange[0]} + "&gamesTo=" + ${timeRange[1]};
-          %endif
+          var dates = "${'?gamesFrom=%d&gamesTo=%d' % (timeRange[0], timeRange[1]) if timeRange is not None else ''}";
           reloadLadder(dates);
 
           var spinner2 = new Spinner().spin();
