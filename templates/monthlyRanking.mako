@@ -1,7 +1,6 @@
 <%page args="monthStart, monthEnd"/>
 <%!
 from datetime import date
-from tntfl.ladder import TableFootballLadder
 %>
 <%
 epoch = date.fromtimestamp(0)
