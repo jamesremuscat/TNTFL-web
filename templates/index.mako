@@ -9,13 +9,7 @@
     initHistorySlider(
       "#rangeSlider",
       ${timeRange[0]},
-      ${timeRange[1]},
-      function (data) {
-        var dates = "?gamesFrom=" + data.from + "&gamesTo=" + data.to;
-        window.history.pushState("object or string", "Title", dates);
-        //window.location.href = "." + dates;
-        reloadLadder(dates);
-      }
+      ${timeRange[1]}
     );
   </script>
 
@@ -45,7 +39,7 @@
           var spinner2 = new Spinner().spin();
           $("#recentHolder").append(spinner2.el);
           $("#recentHolder").load("recent.cgi");
-          
+
           setInterval(function() {reloadLadder("");}, 600000);
           setInterval(function() {$("#recentHolder").load("recent.cgi")}, 600000);
         </script>

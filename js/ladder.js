@@ -130,7 +130,7 @@ function reloadLadder(dates) {
   );
 }
 
-function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
+function initHistorySlider(id, fromTime, toTime) {
   $(id).ionRangeSlider({
       type: "double",
       grid: true,
@@ -142,6 +142,11 @@ function initHistorySlider(id, fromTime, toTime, fnOnFinish) {
       prettify: function (num) {
         return moment(num, 'X').format('LL');
       },
-      onFinish: fnOnFinish
+      onFinish: function (data) {
+        var dates = "?gamesFrom=" + data.from + "&gamesTo=" + data.to;
+        window.history.pushState("object or string", "Title", dates);
+        //window.location.href = "." + dates;
+        reloadLadder(dates);
+      }
   });
 }
