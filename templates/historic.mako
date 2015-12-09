@@ -11,7 +11,7 @@
     <div class="col-md-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h2 class="panel-title">Months</h2>
+          <h2 class="panel-title">Monthly Rankings</h2>
         </div>
         <div class="panel-body" id="monthsHolder">
           ${self.blocks.render("monthlyRankingList", base=self.attr.base)}

@@ -13,6 +13,6 @@ players = [p for p in l.getPlayers() if l.isPlayerActive(p)]
 
 <div>
   <a href="#" onClick='updateLadderTo([${(monthStart - epoch).total_seconds()}, ${(monthEnd - epoch).total_seconds()}])'>
-    ${monthStart.month}${players[0].name}
+    ${monthStart.strftime('%B')} - 1st: ${players[0].name}
   </a>
 </div>
