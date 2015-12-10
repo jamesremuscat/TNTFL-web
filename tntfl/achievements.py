@@ -8,9 +8,7 @@ def oncePerPlayer(applies):
     Decorate an Achievement class's applies() function with oncePerPlayer to limit the achievement
     to a maximum of once per player.
     '''
-    def actualApplies(self, player, game, opponent, ladder):
-        return applies(self, player, game, opponent, ladder)
-    return lambda self, p, g, o, l: False if self.__class__ in p.achievements.keys() else actualApplies(self, p, g, o, l)
+    return lambda self, p, g, o, l: False if self.__class__ in p.achievements.keys() else applies(self, p, g, o, l)
 
 
 class Achievement(object):
