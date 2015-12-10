@@ -308,9 +308,8 @@ class BossFight(Achievement):
 
 
 class Achievements(object):
-    achievements = []
-
     def __init__(self):
+        self.achievements = []
         for clz in Achievement.__subclasses__():
             self.achievements.append(clz())
 
