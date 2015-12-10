@@ -318,9 +318,4 @@ class Achievements(object):
         Identifies all achievements unlocked by player in game against opponent.
         This method should be called AFTER Player.game() has been called with game for BOTH players.
         '''
-        theseAchievements = []
-        if player.games[-1] == game:
-            for clz in self.achievements:
-                if clz.applies(player, game, opponent, ladder):
-                    theseAchievements.append(clz.__class__)
-        return theseAchievements
+        return [a.__class__ for a in self.achievements if a.applies(player, game, opponent, ladder)]
