@@ -27,11 +27,11 @@
     <script type="text/javascript" src="${self.attr.base}js/jquery.flot.time.min.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/jquery.floatThead.min.js"></script>
 
-    <script type="text/javascript" src="http://fgnass.github.io/spin.js/spin.min.js"></script>
+    <script type="text/javascript" src="${self.attr.base}js/spin.min.js"></script>
     <script type="text/javascript" src="${self.attr.base}js/ion.rangeSlider-2.1.2/js/ion-rangeSlider/ion.rangeSlider.min.js"></script>
     <link rel="stylesheet" href="${self.attr.base}js/ion.rangeSlider-2.1.2/css/ion.rangeSlider.css">
     <link rel="stylesheet" href="${self.attr.base}js/ion.rangeSlider-2.1.2/css/ion.rangeSlider.skinFlat.css">
-    <script type="text/javascript" src="http://momentjs.com/downloads/moment.js"></script>
+    <script type="text/javascript" src="${self.attr.base}js/moment.js"></script>
 
     <script type="text/javascript" src="${self.attr.base}js/ladder.js"></script>
   </head>
@@ -44,7 +44,7 @@
         <li><a href="${self.attr.base}stats/">Stats</a></li>
         <li><a href="${self.attr.base}speculate/">Speculate</a></li>
         <li><a href="${self.attr.base}api/">API</a></li>
-        <li><a href="${self.attr.base}historic.cgi">Monthly</a></li>
+        <li><a href="${self.attr.base}historic.cgi">Slice</a></li>
       </ul>
 
         <form class="navbar-form navbar-right game-entry" method="post" action="${self.attr.base}game/add/">

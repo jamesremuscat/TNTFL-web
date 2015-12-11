@@ -9,14 +9,14 @@ from tntfl.game import Game
 class CachingGameStore(object):
     _cacheFilePath = "cache"
 
-    def __init__(self, ladderFilePath, useCache = True):
+    def __init__(self, ladderFilePath, useCache):
         self._gameStore = GameStore(ladderFilePath)
         self._usingCache = useCache
 
     def loadGames(self, ladder, ladderTime):
         loaded = False
         if ladderTime['now']:
-            loaded = self._loadFromCache(ladder, ladderTime)
+            loaded = self._loadFromCache(ladder)
         if not loaded:
             self._loadFromStore(ladder, ladderTime)
             if ladderTime['now']:
@@ -37,11 +37,9 @@ class CachingGameStore(object):
         for loadedGame in loadedGames:
             ladder.addGame(loadedGame)
 
-    def _loadFromCache(self, ladder, ladderTime):
+    def _loadFromCache(self, ladder):
         if os.path.exists(self._cacheFilePath) and self._usingCache:
             ladder.games = pickle.load(open(self._cacheFilePath, 'rb'))
-            if not ladderTime['now']:
-                ladder.games = [g for g in ladder.games if ladderTime['range'][0] <= g.time and g.time <= ladderTime['range'][1]]
             for game in [g for g in ladder.games if not g.isDeleted()]:
                 red = ladder.getPlayer(game.redPlayer)
                 blue = ladder.getPlayer(game.bluePlayer)
