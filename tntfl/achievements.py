@@ -8,9 +8,7 @@ def oncePerPlayer(applies):
     Decorate an Achievement class's applies() function with oncePerPlayer to limit the achievement
     to a maximum of once per player.
     '''
-    def actualApplies(self, player, game, opponent, ladder):
-        return applies(self, player, game, opponent, ladder)
-    return lambda self, p, g, o, l: False if self.__class__ in p.achievements.keys() else actualApplies(self, p, g, o, l)
+    return lambda self, p, g, o, l: False if self.__class__ in p.achievements.keys() else applies(self, p, g, o, l)
 
 
 class Achievement(object):
@@ -310,9 +308,8 @@ class BossFight(Achievement):
 
 
 class Achievements(object):
-    achievements = []
-
     def __init__(self):
+        self.achievements = []
         for clz in Achievement.__subclasses__():
             self.achievements.append(clz())
 
@@ -321,9 +318,4 @@ class Achievements(object):
         Identifies all achievements unlocked by player in game against opponent.
         This method should be called AFTER Player.game() has been called with game for BOTH players.
         '''
-        theseAchievements = []
-        if player.games[-1] == game:
-            for clz in self.achievements:
-                if clz.applies(player, game, opponent, ladder):
-                    theseAchievements.append(clz.__class__)
-        return theseAchievements
+        return [a.__class__ for a in self.achievements if a.applies(player, game, opponent, ladder)]
