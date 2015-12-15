@@ -1,4 +1,7 @@
 <%! base = "" %><%namespace name="blocks" file="blocks.mako" inheritable="True"/>Content-Type: text/html
+<%!
+from datetime import datetime
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +14,9 @@
     <!-- Bootstrap -->
     <link href="${self.attr.base}css/bootstrap.min.css" rel="stylesheet">
     <link href="${self.attr.base}css/ladder.css" rel="stylesheet">
+    % if datetime.now().month == 12:
+      <link href="${self.attr.base}css/christmas.css" rel="stylesheet">
+    % endif
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
 
