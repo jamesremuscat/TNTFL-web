@@ -69,6 +69,7 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
                 </div>
                 <div class="panel-body">
                   ${self.blocks.render("recent", base=self.attr.base, games=sharedGames, limit=5)}
+                  <a class="pull-right" href="games/">See all games</a>
                 </div>
               </div>
             </div>

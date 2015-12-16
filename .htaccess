@@ -24,6 +24,7 @@ RewriteRule ^player(.cgi)?/([a-zA-Z]+)/$ player.cgi?player=$2 [QSA]
 RewriteRule ^player(.cgi)?/([a-zA-Z]+)/games/ player.cgi?player=$2&method=games [QSA]
 
 RewriteRule ^headtohead(.cgi)?/([a-zA-Z]+)/([a-zA-Z]+)/$ headtohead.cgi?player1=$2&player2=$3 [QSA]
+RewriteRule ^headtohead(.cgi)?/([a-zA-Z]+)/([a-zA-Z]+)/games/ headtohead.cgi?player1=$2&player2=$3&method=games [QSA]
 
 RewriteRule ^ladder(.cgi)?/? ladder.cgi 
 RewriteRule ^api(.cgi)?/ api.cgi 

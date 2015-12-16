@@ -44,6 +44,9 @@ class Pages(Deployment):
     def testPlayerGamesReachable(self):
         self._testPageReachable('player/jrem/games/')
 
+    def testHeadToHeadGamesReachable(self):
+        self._testPageReachable('headtohead/jrem/ndt/games/')
+
     def testSpeculateReachable(self):
         self._testPageReachable('speculate/')
 
