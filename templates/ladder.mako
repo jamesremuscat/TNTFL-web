@@ -42,8 +42,8 @@ ${blocks.render("ladderEntry", player=player[1], rank=player[0], base=base)}
     </tbody>
   </table>
   <p>Updated at ${datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
-  <div class="controls form" id="showInactiveButtons">
+  <div class="controls form">
     <button class="button_active form-control" onclick="$('.inactive').show(); $('.button_active').hide();">Show inactive</button>
-    <button class="form-control inactive" onclick="$('.inactive').hide(); $('.button_active').show();">Hide inactive</button>
+    <button id="inactiveButton" class="form-control inactive" onclick="$('.inactive').hide(); $('.button_active').show();">Hide inactive</button>
   </div>
 </div>

@@ -107,13 +107,7 @@ function getSortOptions(tableQuery) {
 }
 
 function isShowInactive() {
-  var showInactive = 0;
-  $("#showInactiveButtons").each(function(index) {
-    if ($(this).hasClass('inactive') && $(this).style.display == "table-row") {
-      showInactive = 1;
-    }
-  });
-  return showInactive;
+  return $("#inactiveButton").is(':visible');
 }
 
 function ladderTablePostProc(sortOpts, showInactive) {
