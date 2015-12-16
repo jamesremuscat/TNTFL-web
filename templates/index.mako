@@ -17,7 +17,7 @@
                   showInactive = 1;
                 }
               });
-              $("#ladderHolder").load("ladder.cgi?sortCol=" + sortOpts[0][0] + "&sortOrder="+sortOpts[0][1] + "&showInactive=" + showInactive)
+              $("#ladderHolder").load("ladder.cgi", function(){postLadder(sortOpts, showInactive);})
             },
             600000
           );
