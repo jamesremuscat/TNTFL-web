@@ -348,6 +348,11 @@ h3.statbox {
   padding-top: 48px !important;
 }
 
+.achievement-AgainstAllOdds {
+  background: url("../img/poker5.png") top center no-repeat;
+  padding-top: 48px !important;
+}
+
 .achievement-Deviant {
   background: url("../img/football92.png") top center no-repeat;
   padding-top: 48px !important;

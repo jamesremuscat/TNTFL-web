@@ -73,6 +73,32 @@ class TestAgainstTheOdds(unittest.TestCase):
         result = ach.applies(player, game, opponent, None)
         self.assertTrue(result)
 
+class TestAgainstAllOdds(unittest.TestCase):
+    def testUnder100(self):
+        ach = AgainstAllOdds()
+        player = Player("foo")
+        player.elo = 0
+        opponent = Player("bar")
+        opponent.elo = 99
+        game = Game(player.name, 10, opponent.name, 0, 0)
+        game.skillChangeToBlue = -50
+        player.game(game)
+        opponent.game(game)
+        result = ach.applies(player, game, opponent, None)
+        self.assertFalse(result)
+
+    def testOver100(self):
+        ach = AgainstAllOdds()
+        player = Player("foo")
+        player.elo = 0
+        opponent = Player("bar")
+        opponent.elo = 100
+        game = Game(player.name, 10, opponent.name, 0, 0)
+        game.skillChangeToBlue = -1
+        player.game(game)
+        opponent.game(game)
+        result = ach.applies(player, game, opponent, None)
+        self.assertTrue(result)
 
 class TestUnstable(unittest.TestCase):
     def test(self):
