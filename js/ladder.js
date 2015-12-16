@@ -106,6 +106,16 @@ function getSortOptions(tableQuery) {
   return hdrorder;
 }
 
+function isShowInactive() {
+  var showInactive = 0;
+  $("#showInactiveButtons").each(function(index) {
+    if ($(this).hasClass('inactive') && $(this).style.display == "table-row") {
+      showInactive = 1;
+    }
+  });
+  return showInactive;
+}
+
 function postLadder(sortOpts, showInactive) {
   $("#ladder").tablesorter({'sortList': [[sortOpts[0], sortOpts[1]]], 'headers': { 11: { 'sorter': false}}});
   $("#ladder").floatThead();
@@ -117,12 +127,7 @@ function postLadder(sortOpts, showInactive) {
 
 function reloadLadder(dates) {
   var sortOpts = getSortOptions("#ladder th");
-  var showInactive = 0;
-  $("#showInactiveButtons").each(function(index) {
-    if ($(this).hasClass('inactive') && $(this).style.display == "table-row") {
-      showInactive = 1;
-    }
-  });
+  var showInactive = isShowInactive();
 
   $("#ladderHolder").empty();
   var spinner = new Spinner().spin();

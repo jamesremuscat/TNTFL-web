@@ -11,12 +11,7 @@
           setInterval(
             function() {
               var sortOpts = getSortOptions("#ladder th");
-              var showInactive = 0;
-              $("#showInactiveButtons").each(function(index) {
-                if ($(this).hasClass('inactive') && $(this).style.display == "table-row") {
-                  showInactive = 1;
-                }
-              });
+              var showInactive = isShowInactive();
               $("#ladderHolder").load("ladder.cgi", function(){postLadder(sortOpts, showInactive);})
             },
             600000
@@ -34,12 +29,7 @@
         </div>
         <script type="text/javascript">
           var sortOpts = getSortOptions("#ladder th");
-          var showInactive = 0;
-          $("#showInactiveButtons").each(function(index) {
-            if ($(this).hasClass('inactive') && $(this).style.display == "table-row") {
-              showInactive = 1;
-            }
-          });
+          var showInactive = isShowInactive();
           postLadder(sortOpts, showInactive);
           setInterval(function() {$("#recentHolder").load("recent.cgi")}, 600000);
         </script>
