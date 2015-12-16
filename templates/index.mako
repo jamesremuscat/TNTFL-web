@@ -7,16 +7,6 @@
         <div class="panel-body" id="ladderHolder">
           ${self.blocks.render("ladder", base=self.attr.base)}
         </div>
-        <script type="text/javascript">
-          setInterval(
-            function() {
-              var sortOpts = getSortOptions("#ladder th");
-              var showInactive = isShowInactive();
-              $("#ladderHolder").load("ladder.cgi", function(){postLadder(sortOpts, showInactive);})
-            },
-            600000
-          );
-        </script>
       </div>
     </div>
     <div class="col-md-4">
@@ -31,6 +21,15 @@
           var sortOpts = getSortOptions("#ladder th");
           var showInactive = isShowInactive();
           postLadder(sortOpts, showInactive);
+
+          setInterval(
+            function() {
+              var sortOpts = getSortOptions("#ladder th");
+              var showInactive = isShowInactive();
+              $("#ladderHolder").load("ladder.cgi", function(){postLadder(sortOpts, showInactive);})
+            },
+            600000
+          );
           setInterval(function() {$("#recentHolder").load("recent.cgi")}, 600000);
         </script>
       </div>
