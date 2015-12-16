@@ -129,12 +129,7 @@ function reloadLadder(dates) {
   $("#ladderHolder").append(spinner.el);
   $("#ladderHolder").load("ladder.cgi" + dates,
     function() {
-      $("#ladder").tablesorter({'sortList': [[sortOpts[0], sortOpts[1]]], 'headers': { 11: { 'sorter': false}}});
-      $("#ladder").floatThead();
-      if (showInactive) {
-        $('.inactive').show();
-        $('.button_active').hide();
-      }
+      postLadder(sortOpts, showInactive);
     }
   );
 }
