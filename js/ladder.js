@@ -116,7 +116,7 @@ function isShowInactive() {
   return showInactive;
 }
 
-function postLadder(sortOpts, showInactive) {
+function ladderTablePostProc(sortOpts, showInactive) {
   $("#ladder").tablesorter({'sortList': [[sortOpts[0], sortOpts[1]]], 'headers': { 11: { 'sorter': false}}});
   $("#ladder").floatThead();
   if (showInactive) {
@@ -134,7 +134,7 @@ function reloadLadder(dates) {
   $("#ladderHolder").append(spinner.el);
   $("#ladderHolder").load("ladder.cgi" + dates,
     function() {
-      postLadder(sortOpts, showInactive);
+      ladderTablePostProc(sortOpts, showInactive);
     }
   );
 }

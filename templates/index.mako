@@ -20,13 +20,13 @@
         <script type="text/javascript">
           var sortOpts = getSortOptions("#ladder th");
           var showInactive = isShowInactive();
-          postLadder(sortOpts, showInactive);
+          ladderTablePostProc(sortOpts, showInactive);
 
           setInterval(
             function() {
               var sortOpts = getSortOptions("#ladder th");
               var showInactive = isShowInactive();
-              $("#ladderHolder").load("ladder.cgi", function(){postLadder(sortOpts, showInactive);})
+              $("#ladderHolder").load("ladder.cgi", function(){ladderTablePostProc(sortOpts, showInactive);})
             },
             600000
           );
