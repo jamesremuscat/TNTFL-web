@@ -14,16 +14,16 @@ function plotPlayerSkillTrend(id, skill, colours) {
   );
 }
 
-function togglecollapse(name){
+function togglecollapse(name, base){
   var element = document.getElementById(name + '-collapse');
   var image = document.getElementById(name + '-arrow');
   if (element.style.display == "block"){
       element.style.display = "none";
-      image.src = "../../img/arrow-down.png";
+      image.src = base + "img/arrow-down.png";
   }
   else{
       element.style.display = "block";
-      image.src = "../../img/arrow-up.png";
+      image.src = base + "img/arrow-up.png";
   }
 }
 

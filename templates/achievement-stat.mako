@@ -1,4 +1,4 @@
-<%page args="ach, games"/>
+<%page args="ach, games, base"/>
 <%!
 import tntfl.templateUtils as utils
 %>
@@ -9,14 +9,14 @@ import tntfl.templateUtils as utils
     </div>
     <div class="panel-body achievement-${ach.__name__}">
       ${len(games)}
-      <img src="../../img/arrow-down.png"
+      <img src="${base}img/arrow-down.png"
            id="achievement-${ach.__name__}-arrow"
-           onclick="togglecollapse('achievement-${ach.__name__}')"
+           onclick="togglecollapse('achievement-${ach.__name__}', '${base}')"
        />
       <ul class="list-unstyled achievement-games" id="achievement-${ach.__name__}-collapse">
 %for game in games:
         <li>
-            <a href="../../game/${game.time}">${utils.formatTime(game.time)}</a>
+            <a href="${base}game/${game.time}">${utils.formatTime(game.time)}</a>
         </li>
 %endfor
       </ul>

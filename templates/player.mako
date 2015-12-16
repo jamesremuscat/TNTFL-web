@@ -187,7 +187,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
              % if loop.index % 4 == 0:
              </div><div class="row">
              % endif
-            ${self.blocks.render("achievement-stat", games=list(reversed(games)), ach=ach)}
+            ${self.blocks.render("achievement-stat", games=list(reversed(games)), ach=ach, base=base)}
             % endfor
           </div>
         </div>
