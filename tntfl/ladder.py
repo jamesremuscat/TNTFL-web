@@ -130,7 +130,7 @@ class TableFootballLadder(object):
         if atTime == None:
             atTime = self._getTime()
         if self._recentlyActivePlayers[0] != atTime:
-            self._recentlyActivePlayers = (atTime, [p for p in self.players.values() if self.isPlayerActive(p, atTime)])
+            self._recentlyActivePlayers = (atTime, filter(lambda p: p.withinActive > atTime, self.players.values()))
         return self._recentlyActivePlayers[1]
 
     def isPlayerActive(self, player, atTime=None):
