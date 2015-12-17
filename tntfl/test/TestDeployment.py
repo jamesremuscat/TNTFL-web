@@ -44,6 +44,9 @@ class Pages(Deployment):
     def testPlayerGamesReachable(self):
         self._testPageReachable('player/jrem/games/')
 
+    def testHeadToHeadGamesReachable(self):
+        self._testPageReachable('headtohead/jrem/ndt/games/')
+
     def testSpeculateReachable(self):
         self._testPageReachable('speculate/')
 
@@ -108,6 +111,12 @@ class Api(Deployment):
     def testPlayerGamesJsonReachable(self):
         response = self._getJsonFrom('player/ndt/games/json')
         self.assertEqual(len(response), 490)
+        self.assertEqual(response[0]['date'], 1392725064)
+
+    def testHeadToHeadGamesJsonReachable(self):
+        response = self._getJsonFrom('headtohead/cjm/ndt/games/json')
+        self.assertEqual(len(response), 9)
+        self.assertEqual(response[0]['date'], 1394037228)
 
     def testRecentJsonReachable(self):
         response = self._getJsonFrom('recent/json')
