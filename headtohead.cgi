@@ -19,9 +19,9 @@ try:
             player2 = ladder.players[form["player2"].value]
             if "method" in form:
                 if form["method"].value == "games":
-                    games = reversed(utils.getSharedGames(player1, player2))
+                    games = utils.getSharedGames(player1, player2)
                     pageTitle = "%s vs %s" % (player1.name, player2.name)
-                    serve_template("headtoheadgames.mako", pageTitle=pageTitle, games=games, ladder=ladder)
+                    serve_template("headtoheadgames.mako", pageTitle=pageTitle, games=reversed(games), length=len(games), ladder=ladder)
             else:
                 serve_template("headtohead.mako", ladder=ladder, player1=player1, player2=player2, depth=2)
         else:

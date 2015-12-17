@@ -112,6 +112,10 @@ class Api(Deployment):
         response = self._getJsonFrom('player/ndt/games/json')
         self.assertEqual(len(response), 490)
 
+    def testHeadToHeadGamesJsonReachable(self):
+        response = self._getJsonFrom('headtohead/cjm/ndt/games/json')
+        self.assertEqual(len(response), 9)
+
     def testRecentJsonReachable(self):
         response = self._getJsonFrom('recent/json')
 

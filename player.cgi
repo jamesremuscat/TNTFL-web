@@ -13,7 +13,7 @@ if "player" in form:
         player = ladder.players[form["player"].value.lower()]
         if "method" in form:
             if form["method"].value == "games":
-                serve_template("playerGames.mako", pageTitle="%s's games" % player.name, games=reversed(player.games), ladder=ladder)
+                serve_template("playerGames.mako", pageTitle="%s's games" % player.name, games=reversed(player.games), length=len(player.games), ladder=ladder)
         else:
             serve_template("player.mako", player=player, ladder=ladder)
     else:
