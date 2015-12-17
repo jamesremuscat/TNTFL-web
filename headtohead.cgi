@@ -21,7 +21,7 @@ try:
                 if form["method"].value == "games":
                     games = utils.getSharedGames(player1, player2)
                     pageTitle = "%s vs %s" % (player1.name, player2.name)
-                    serve_template("headtoheadgames.mako", pageTitle=pageTitle, games=reversed(games), length=len(games), ladder=ladder)
+                    serve_template("headtoheadgames.mako", pageTitle=pageTitle, games=games, ladder=ladder)
             else:
                 serve_template("headtohead.mako", ladder=ladder, player1=player1, player2=player2, depth=2)
         else:
