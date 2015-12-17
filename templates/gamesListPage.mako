@@ -1,9 +1,5 @@
-<%!
-title = ""
-base = "../../../"
-from tntfl.game import Game
-%>
-<%inherit file="html.mako" />
+<%page args="base, pageTitle, games"/>
+<%namespace name="blocks" file="blocks.mako" />
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-8">
@@ -12,7 +8,7 @@ from tntfl.game import Game
           <h1 class="panel-title">${pageTitle}</h1>
         </div>
         <div class="panel-body">
-          ${self.blocks.render("gameList", games=games, base=self.attr.base)}
+          ${blocks.render("gameList", games=games, base=base)}
         </div>
       </div>
     </div>
