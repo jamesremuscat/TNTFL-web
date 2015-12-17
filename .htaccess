@@ -1,4 +1,5 @@
 Options -MultiViews
+Header set Access-Control-Allow-Origin "*"
 
 RewriteEngine on
 RewriteBase /~tlr/tntfl
