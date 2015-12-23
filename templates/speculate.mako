@@ -39,7 +39,7 @@ base = "../"
           </form>
 % if len(games) > 0:
           <hr />
-            ${self.blocks.render("gameList", games=games, base=self.attr.base)}
+            ${self.blocks.render("gameList", games=games, base=self.attr.base, speculative=True)}
           <hr />
           <a href=".">Reset speculation</a>
 % endif
