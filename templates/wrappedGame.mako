@@ -18,21 +18,25 @@ def getPunditry(pundit, game, ladder):
 pundit = Pundit()
 facts = getPunditry(pundit, game, ladder)
 %>
-${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts))}
-<div class="recent-game container-fluid">
-  <div class="row achievements">
-    <div class="col-md-4">
-    % for ach in game.redAchievements:
-      ${self.blocks.render("achievement", ach=ach)}
-    % endfor
-    </div>
-    <div class="col-md-4">
-      ${self.blocks.render("punditry", facts=facts)}
-    </div>
-    <div class="col-md-4">
-    % for ach in game.blueAchievements:
-      ${self.blocks.render("achievement", ach=ach)}
-    % endfor
+<div class="panel panel-default">
+  <div class="panel-body">
+    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts))}
+    <div class="recent-game container-fluid">
+      <div class="row achievements">
+        <div class="col-md-4">
+        % for ach in game.redAchievements:
+          ${self.blocks.render("achievement", ach=ach)}
+        % endfor
+        </div>
+        <div class="col-md-4">
+          ${self.blocks.render("punditry", facts=facts)}
+        </div>
+        <div class="col-md-4">
+        % for ach in game.blueAchievements:
+          ${self.blocks.render("achievement", ach=ach)}
+        % endfor
+        </div>
+      </div>
     </div>
   </div>
 </div>
