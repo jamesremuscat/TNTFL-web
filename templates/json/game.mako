@@ -1,12 +1,13 @@
-<%
-bluePosBefore = game.bluePosAfter + game.bluePosChange
-redPosBefore = game.redPosAfter + game.redPosChange
-positionSwap = False
-if bluePosBefore > 0 and redPosBefore > 0:
-    if bluePosBefore == game.redPosAfter or redPosBefore == game.bluePosAfter:
-        positionSwap = True
+<%!
+def isPositionSwap(game):
+    bluePosBefore = game.bluePosAfter + game.bluePosChange
+    redPosBefore = game.redPosAfter + game.redPosChange
+    positionSwap = False
+    if bluePosBefore > 0 and redPosBefore > 0:
+        if bluePosBefore == game.redPosAfter or redPosBefore == game.bluePosAfter:
+            positionSwap = True
+    return positionSwap
 %>
-
 {
 % if game.isDeleted():
   "deleted" : {
@@ -44,6 +45,6 @@ if bluePosBefore > 0 and redPosBefore > 0:
     % endfor
     ]
   },
-  "positionSwap" : ${"true" if positionSwap else "false"},
+  "positionSwap" : ${"true" if isPositionSwap(game) else "false"},
   "date" : ${game.time}
 }
