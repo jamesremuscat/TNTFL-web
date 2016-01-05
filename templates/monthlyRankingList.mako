@@ -11,7 +11,7 @@ from datetime import date
     </div>
     <div class="panel-body ">
       %for i in reversed(range(1, 13)):
-        %if (year > 2005 or i >= 7) and (date.today().year < year or i <= date.today().month):
+        %if (year > 2005 or i >= 7) and (year < date.today().year or i <= date.today().month):
           ${blocks.render("monthlyRanking", monthStart=date(year, i, 1), monthEnd=date(year, i + 1, 1) if i < 12 else date(year+1, 1, 1))}
         %endif
       %endfor
