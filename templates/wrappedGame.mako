@@ -26,6 +26,20 @@ def getPunditry(pundit, game, ladder):
   </div>
 </%def>
 
+<%def name="punditry(facts)">
+  <div class="panel panel-default ">
+    <div class="panel-heading">
+      <h3 class="panel-title">Punditry</h3>
+    </div>
+    <div class="panel-body">
+      % for fact in facts:
+        ${fact}
+        <br/>
+      % endfor
+    </div>
+  </div>
+</%def>
+
 <%
 pundit = Pundit()
 facts = getPunditry(pundit, game, ladder)
@@ -42,7 +56,7 @@ facts = getPunditry(pundit, game, ladder)
         % endfor
         </div>
         <div class="col-md-4">
-          ${self.blocks.render("punditry", facts=facts)}
+          ${punditry(facts) if len(facts) > 0 else ""}
         </div>
         <div class="col-md-4">
         % for ach in game.blueAchievements:
