@@ -2,6 +2,7 @@
 <%!
 import tntfl.templateUtils as utils
 %>
+<%namespace name="blocks" file="blocks.mako"/>
 <%
 redsStripe = "yellow-stripe" if game.redScore == 10 and game.blueScore == 0 else ""
 bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 else ""
@@ -59,7 +60,7 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
     </div>
     <div class="col-md-4">
       %if not speculative:
-        <a href="${base}game/${game.time}/">${utils.formatTime(game.time)}</a>
+        ${blocks.render("gameLink", time=game.time, base=base)}
         % if punditryAvailable:
           <img src="${base}img/headset16.png"/>
         % endif
