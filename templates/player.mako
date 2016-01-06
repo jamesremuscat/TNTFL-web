@@ -96,6 +96,24 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
   </div>
 </%def>
 
+<%def name="perPlayerStat(player, stat)">
+    <%
+    goalRatio = (float(stat.goalsFor)/stat.goalsAgainst) if stat.goalsAgainst > 0 else 0
+    %>
+  <tr>
+    <td class="ladder-name"><a href="${base}player/${stat.opponent}">${stat.opponent}</a></td>
+    <td><a href="${base}headtohead/${player.name}/${stat.opponent}/" title="Head to Head"><span class="glyphicon glyphicon-transfer"></span></a></td>
+    <td class="ladder-stat">${stat.games}</td>
+    <td class="ladder-stat">${stat.wins}</td>
+    <td class="ladder-stat">${stat.draws}</td>
+    <td class="ladder-stat">${stat.losses}</td>
+    <td class="ladder-stat">${stat.goalsFor}</td>
+    <td class="ladder-stat">${stat.goalsAgainst}</td>
+    <td class="ladder-stat">${"{:.3f}".format(goalRatio)}</td>
+    <td class="ladder-stat ladder-skill">${"{:+.3f}".format(stat.skillChange)}</td>
+  </tr>
+</%def>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-8">
@@ -173,7 +191,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
             </thead>
             <tbody>
   % for stat in pps.values():
-    ${self.blocks.render("perPlayerStat", stat=stat, player=player, base=self.attr.base)}
+    ${perPlayerStat(player, stat)}
   % endfor
             </tbody>
           </table>
