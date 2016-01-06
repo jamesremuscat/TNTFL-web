@@ -81,17 +81,17 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
       <div class="panel-body achievement-${ach.__name__}">
         ${len(games)}
         <img src="${base}img/arrow-down.png"
-             id="achievement-${ach.__name__}-arrow"
-             onclick="togglecollapse('achievement-${ach.__name__}', '${base}')"
-         />
+          id="achievement-${ach.__name__}-arrow"
+          onclick="togglecollapse('achievement-${ach.__name__}', '${base}')"
+        />
         <ul class="list-unstyled achievement-games" id="achievement-${ach.__name__}-collapse">
-        %for game in games:
-          <li>
-            ${self.blocks.render("gameLink", time=game.time, base=base)}
-          </li>
-        %endfor
+          %for game in games:
+            <li>
+              ${self.blocks.render("gameLink", time=game.time, base=base)}
+            </li>
+          %endfor
         </ul>
-        </div>
+      </div>
     </div>
   </div>
 </%def>
@@ -123,37 +123,37 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
         </div>
         <div class="panel-body">
           <div class="row">
-          ${statBox(title="Current Ranking", body=(rank if rank != -1 else "-"), classes=ladderPositionCSS)}
-          ${statBox(title="Skill", body="{:.3f}".format(player.elo))}
-          ${statBox(title="Overrated", body="{:.3f}".format(player.overrated()), classes=overratedClass)}
-          ${statBox(title="Side preference", body="{:.2%}".format(redness if redness >= 0.5 else (1-redness)) + (" red" if redness >= 0.5 else " blue"), classes="side-preference", style=sideStyle)}
+            ${statBox(title="Current Ranking", body=(rank if rank != -1 else "-"), classes=ladderPositionCSS)}
+            ${statBox(title="Skill", body="{:.3f}".format(player.elo))}
+            ${statBox(title="Overrated", body="{:.3f}".format(player.overrated()), classes=overratedClass)}
+            ${statBox(title="Side preference", body="{:.2%}".format(redness if redness >= 0.5 else (1-redness)) + (" red" if redness >= 0.5 else " blue"), classes="side-preference", style=sideStyle)}
           </div>
           <div class="row">
-          ${statBox(title="Total games", body=len(player.games))}
-          ${statBox(title="Wins", body=player.wins)}
-          ${statBox(title="Losses", body=player.losses)}
-          ${statBox(title="Draws", body=(len(player.games) - player.wins - player.losses))}
+            ${statBox(title="Total games", body=len(player.games))}
+            ${statBox(title="Wins", body=player.wins)}
+            ${statBox(title="Losses", body=player.losses)}
+            ${statBox(title="Draws", body=(len(player.games) - player.wins - player.losses))}
           </div>
           <div class="row">
-          ${statBox(title="Goals for", body=player.goalsFor)}
-          ${statBox(title="Goals against", body=player.goalsAgainst)}
-          ${statBox(title="Goal ratio", body=("{:.3f}".format(goalRatio)), classes=goalRatioClass)}
-          ${statBox(title="10-0 wins", body=tenNilWins)}
+            ${statBox(title="Goals for", body=player.goalsFor)}
+            ${statBox(title="Goals against", body=player.goalsAgainst)}
+            ${statBox(title="Goal ratio", body=("{:.3f}".format(goalRatio)), classes=goalRatioClass)}
+            ${statBox(title="10-0 wins", body=tenNilWins)}
           </div>
           <div class="row">
-          ${statBox(title="Games today", body=player.gamesToday)}
-          ${statBox(title="Skill change today", body="{:.3f}".format(skillChange), classes=skillChangeClass)}
-          ${statBox(title="Rank change today", body=rankChange, classes=rankChangeClass)}
-          ${statBox(title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
+            ${statBox(title="Games today", body=player.gamesToday)}
+            ${statBox(title="Skill change today", body="{:.3f}".format(skillChange), classes=skillChangeClass)}
+            ${statBox(title="Rank change today", body=rankChange, classes=rankChangeClass)}
+            ${statBox(title="Current streak", body=get_template("durationStat.mako", value="{0} {1}".format(currentStreak.count, currentStreakType), fromDate=currentStreak.fromDate, toDate=currentStreak.toDate, base=self.attr.base))}
           </div>
           <div class="row">
-          ${statBox(title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['highest']['skill'], time=skillBounds['highest']['time'], base=self.attr.base))}
-          ${statBox(title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['lowest']['skill'], time=skillBounds['lowest']['time'], base=self.attr.base))}
-          ${statBox(title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak.count, fromDate=winStreak.fromDate, toDate=winStreak.toDate, base=self.attr.base))}
-          ${statBox(title="Longest losing streak", body=get_template("durationStat.mako", value=loseStreak.count, fromDate=loseStreak.fromDate, toDate=loseStreak.toDate, base=self.attr.base))}
+            ${statBox(title="Highest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['highest']['skill'], time=skillBounds['highest']['time'], base=self.attr.base))}
+            ${statBox(title="Lowest ever skill", body=get_template("pointInTimeStat.mako", skill=skillBounds['lowest']['skill'], time=skillBounds['lowest']['time'], base=self.attr.base))}
+            ${statBox(title="Longest winning streak", body=get_template("durationStat.mako", value=winStreak.count, fromDate=winStreak.fromDate, toDate=winStreak.toDate, base=self.attr.base))}
+            ${statBox(title="Longest losing streak", body=get_template("durationStat.mako", value=loseStreak.count, fromDate=loseStreak.fromDate, toDate=loseStreak.toDate, base=self.attr.base))}
           </div>
           <div class="row">
-          ${statBox(title="Total achievements", body=str(sum([len(g) for g in player.achievements.values()])) + '<div class="date"><a href="#achievements">See all</a></div>' )}
+            ${statBox(title="Total achievements", body=str(sum([len(g) for g in player.achievements.values()])) + '<div class="date"><a href="#achievements">See all</a></div>' )}
           </div>
         </div>
       </div>
@@ -176,23 +176,23 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
         <div class="panel-body">
           <table class="table table-striped table-hover ladder" id="pps">
             <thead>
-                <tr>
-                  <th>Opponent</th>
-                  <th></th>
-                  <th>Games</th>
-                  <th>Wins</th>
-                  <th>Draws</th>
-                  <th>Losses</th>
-                  <th>Goals scored</th>
-                  <th>Goals conceded</th>
-                  <th>Goal Ratio</th>
-                  <th>Skill change</th>
-                </tr>
+              <tr>
+                <th>Opponent</th>
+                <th></th>
+                <th>Games</th>
+                <th>Wins</th>
+                <th>Draws</th>
+                <th>Losses</th>
+                <th>Goals scored</th>
+                <th>Goals conceded</th>
+                <th>Goal Ratio</th>
+                <th>Skill change</th>
+              </tr>
             </thead>
             <tbody>
-  % for stat in pps.values():
-    ${perPlayerStat(player, stat)}
-  % endfor
+              % for stat in pps.values():
+                ${perPlayerStat(player, stat)}
+              % endfor
             </tbody>
           </table>
           <script type="text/javascript">
@@ -202,36 +202,37 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
       </div>
 
     </div>
+
     <div class="col-md-4">
-  % if len(player.games) > 0:
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h2 class="panel-title">Recent Games</h2>
-        </div>
-        <div class="panel-body">
+      % if len(player.games) > 0:
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h2 class="panel-title">Recent Games</h2>
+          </div>
+          <div class="panel-body">
             ${self.blocks.render("recent", base=self.attr.base, games=player.games, limit=5)}
-          <a class="pull-right" href="games/">See all games</a>
+            <a class="pull-right" href="games/">See all games</a>
+          </div>
         </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h2 class="panel-title">Most Significant Game</h2>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h2 class="panel-title">Most Significant Game</h2>
+          </div>
+          <div class="panel-body">
+            ${self.blocks.render("game", game=player.mostSignificantGame(), base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.mostSignificantGame(), ladder))}
+          </div>
         </div>
-        <div class="panel-body">
-      ${self.blocks.render("game", game=player.mostSignificantGame(), base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.mostSignificantGame(), ladder))}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h2 class="panel-title">First Ever Game</h2>
+          </div>
+          <div class="panel-body">
+            ${self.blocks.render("game", game=player.games[0], base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.games[0], ladder))}
+          </div>
         </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h2 class="panel-title">First Ever Game</h2>
-        </div>
-        <div class="panel-body">
-      ${self.blocks.render("game", game=player.games[0], base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.games[0], ladder))}
-        </div>
-      </div>
-  % else:
-      <p>This player has not played any games.</p>
-  % endif
+      % else:
+        <p>This player has not played any games.</p>
+      % endif
       <div class="panel panel-default">
         <a id="achievements"></a>
         <div class="panel-heading">
@@ -240,10 +241,10 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
         <div class="panel-body">
           <div class="row">
             % for ach, games in player.achievements.iteritems():
-             % if loop.index % 4 == 0:
-             </div><div class="row">
-             % endif
-            ${achievementStat(ach, list(reversed(games)))}
+              % if loop.index % 4 == 0:
+                </div><div class="row">
+              % endif
+              ${achievementStat(ach, list(reversed(games)))}
             % endfor
           </div>
         </div>
