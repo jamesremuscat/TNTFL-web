@@ -3,8 +3,8 @@
 import tntfl.templateUtils as utils
 %>
 <%
-redsStripe = game.redScore == 10 and game.blueScore == 0
-bluesStripe = game.blueScore == 10 and game.redScore == 0
+redsStripe = "yellow-stripe" if game.redScore == 10 and game.blueScore == 0 else ""
+bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 else ""
 %>
 
 <%def name="playerName(name)">
@@ -36,17 +36,17 @@ bluesStripe = game.blueScore == 10 and game.redScore == 0
     <p class="bg-danger">This game was deleted by ${game.deletedBy} at ${utils.formatTime(game.deletedAt)}</p>
   % endif
   <div class="row recent-game-result">
-    <div class="col-md-4 red-player ${"yellow-stripe" if redsStripe else ""}">
+    <div class="col-md-4 red-player ${redsStripe}">
       ${playerName(game.redPlayer)}
     </div>
-    <div class="col-md-1 ${"yellow-stripe" if redsStripe else ""}" style="padding:0px;">
+    <div class="col-md-1 ${redsStripe}" style="padding:0px;">
       ${cups(game.redAchievements)}
     </div>
-    <div class="col-md-2 ${"yellow-stripe" if redsStripe or bluesStripe else ""}">${game.redScore} - ${game.blueScore}</div>
-    <div class="col-md-1 ${"yellow-stripe" if bluesStripe else ""}" style="padding:0px;">
+    <div class="col-md-2 ${redsStripe} ${bluesStripe}">${game.redScore} - ${game.blueScore}</div>
+    <div class="col-md-1 ${bluesStripe}" style="padding:0px;">
       ${cups(game.blueAchievements)}
     </div>
-    <div class="col-md-4 blue-player ${"yellow-stripe" if bluesStripe else ""}">
+    <div class="col-md-4 blue-player ${bluesStripe}">
       ${playerName(game.bluePlayer)}
     </div>
   </div>
