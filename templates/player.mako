@@ -74,7 +74,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
         <ul class="list-unstyled achievement-games" id="achievement-${ach.__name__}-collapse">
         %for game in games:
           <li>
-            <a href="${base}game/${game.time}">${utils.formatTime(game.time)}</a>
+            ${self.blocks.render("gameLink", time=game.time, base=base)}
           </li>
         %endfor
         </ul>
