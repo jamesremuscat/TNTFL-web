@@ -7,6 +7,10 @@ redsStripe = game.redScore == 10 and game.blueScore == 0
 bluesStripe = game.blueScore == 10 and game.redScore == 0
 %>
 
+<%def name="playerName(name)">
+  <a href="${base}player/${name}/">${name}</a>
+</%def>
+
 <%def name="cups(achs)">
   <div style="display:table;margin-left: auto;margin-right: auto;">
     %for ach in achs:
@@ -21,7 +25,7 @@ bluesStripe = game.blueScore == 10 and game.redScore == 0
   % endif
   <div class="row recent-game-result">
     <div class="col-md-4 red-player ${"yellow-stripe" if redsStripe else ""}">
-      <a href="${base}player/${game.redPlayer}/">${game.redPlayer}</a>
+      ${playerName(game.redPlayer)}
     </div>
     <div class="col-md-1 ${"yellow-stripe" if redsStripe else ""}" style="padding:0px;">
       ${cups(game.redAchievements)}
@@ -31,7 +35,7 @@ bluesStripe = game.blueScore == 10 and game.redScore == 0
       ${cups(game.blueAchievements)}
     </div>
     <div class="col-md-4 blue-player ${"yellow-stripe" if bluesStripe else ""}">
-      <a href="${base}player/${game.bluePlayer}/">${game.bluePlayer}</a>
+      ${playerName(game.bluePlayer)}
     </div>
   </div>
   <div class="row">
