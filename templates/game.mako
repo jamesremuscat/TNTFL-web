@@ -25,6 +25,12 @@ bluesStripe = game.blueScore == 10 and game.redScore == 0
   </span>
 </%def>
 
+<%def name="skillChange(colour, change)">
+  <span class='skill-change skill-change-${colour}' title='Skill change'>
+    ${"{:+.3f}".format(change)}
+  </span>
+</%def>
+
 <div class="recent-game container-fluid">
   % if game.isDeleted():
     <p class="bg-danger">This game was deleted by ${game.deletedBy} at ${utils.formatTime(game.deletedAt)}</p>
@@ -49,7 +55,7 @@ bluesStripe = game.blueScore == 10 and game.redScore == 0
       ${rankChange("red", game.redPosChange) if game.redPosChange != 0 else ""}
     </div>
     <div class="col-md-2">
-      ${"<span class='skill-change skill-change-red' title='Skill change'>{:+.3f}</span>".format(-game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}
+      ${skillChange("red", -game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}
     </div>
     <div class="col-md-4">
       %if not speculative:
@@ -60,7 +66,7 @@ bluesStripe = game.blueScore == 10 and game.redScore == 0
       %endif
     </div>
     <div class="col-md-2">
-      ${"<span class='skill-change skill-change-blue' title='Skill change'>{:+.3f}</span>".format(game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}
+      ${skillChange("blue", game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}
     </div>
     <div class="col-md-2">
       ${rankChange("blue", game.bluePosChange) if game.bluePosChange != 0 else ""}
