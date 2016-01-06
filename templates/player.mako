@@ -58,6 +58,31 @@ rankChange = player.rankChangeToday()
 rankChangeClass = "positive" if rankChange > 0 else "negative" if rankChange < 0 else ""
 ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
 %>
+
+<%def name="achievementStat(ach, games)">
+  <div class="col-sm-3">
+    <div class="panel panel-default panel-statbox panel-achievement" title="${ach.description}">
+      <div class="panel-heading">
+        <h3 class="statbox">${ach.name}</h3>
+      </div>
+      <div class="panel-body achievement-${ach.__name__}">
+        ${len(games)}
+        <img src="${base}img/arrow-down.png"
+             id="achievement-${ach.__name__}-arrow"
+             onclick="togglecollapse('achievement-${ach.__name__}', '${base}')"
+         />
+        <ul class="list-unstyled achievement-games" id="achievement-${ach.__name__}-collapse">
+        %for game in games:
+          <li>
+            <a href="${base}game/${game.time}">${utils.formatTime(game.time)}</a>
+          </li>
+        %endfor
+        </ul>
+        </div>
+    </div>
+  </div>
+</%def>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-8">
@@ -187,7 +212,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
              % if loop.index % 4 == 0:
              </div><div class="row">
              % endif
-            ${self.blocks.render("achievement-stat", games=list(reversed(games)), ach=ach, base=base)}
+            ${achievementStat(ach, list(reversed(games)))}
             % endfor
           </div>
         </div>
