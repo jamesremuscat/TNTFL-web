@@ -69,7 +69,6 @@ def getTrend(player):
 <%
 ranked = rankPlayers(ladder)
 %>
-<%namespace name="blocks" file="blocks.mako" />
 <div>
   <table class="table table-hover ladder" id="ladder">
     <thead>
