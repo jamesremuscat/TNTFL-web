@@ -15,7 +15,9 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
 <%def name="cups(achs)">
   <div style="display:table;margin-left: auto;margin-right: auto;">
     %for ach in achs:
-      <div style="display:table-cell;"><img src="${base}img/trophy5_24.png" alt="Achievement unlocked!" title="Achievement unlocked!" style="width:100%;"/></div>
+      <div style="display:table-cell;">
+        <img src="${base}img/trophy5_24.png" alt="Achievement unlocked!" title="Achievement unlocked!" style="width:100%;"/>
+      </div>
     %endfor
   </div>
 </%def>
