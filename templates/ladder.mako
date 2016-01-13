@@ -3,6 +3,7 @@
 import re
 from datetime import datetime
 from tntfl.player import Player
+from tntfl.ladder import TableFootballLadder
 import tntfl.templateUtils as utils
 
 def rankPlayers(ladder):
@@ -37,7 +38,7 @@ def getTrend(player):
 
     theDate = datetime.now() if ladder._ladderTime['now'] else datetime.fromtimestamp(ladder._ladderTime['range'][1])
     daysAgo = (theDate - player.games[-1].timeAsDatetime()).days
-    daysToGo = Player.DAYS_INACTIVE - daysAgo
+    daysToGo = TableFootballLadder.DAYS_INACTIVE - daysAgo
     nearlyInactive = daysToGo <= 14 and rank != -1
     ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""
     ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""

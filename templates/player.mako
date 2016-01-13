@@ -56,7 +56,6 @@ skillChangeClass = "positive" if skillChange > 0 else "negative" if skillChange 
 skillHistory = getSkillHistory(player)
 rankChange = player.rankChangeToday()
 rankChangeClass = "positive" if rankChange > 0 else "negative" if rankChange < 0 else ""
-ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
 %>
 
 <%def name="statBox(title, body, classes='', style='', offset=0, width=3, caption='')">
@@ -123,7 +122,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
         </div>
         <div class="panel-body">
           <div class="row">
-            ${statBox(title="Current Ranking", body=(rank if rank != -1 else "-"), classes=ladderPositionCSS)}
+            ${statBox(title="Current Ranking", body=(rank if rank != -1 else "-"), classes=utils.getRankCSS(rank, len(ladder.getActivePlayers())))}
             ${statBox(title="Skill", body="{:.3f}".format(player.elo))}
             ${statBox(title="Overrated", body="{:.3f}".format(player.overrated()), classes=overratedClass)}
             ${statBox(title="Side preference", body="{:.2%}".format(redness if redness >= 0.5 else (1-redness)) + (" red" if redness >= 0.5 else " blue"), classes="side-preference", style=sideStyle)}
@@ -219,7 +218,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
             <h2 class="panel-title">Most Significant Game</h2>
           </div>
           <div class="panel-body">
-            ${self.blocks.render("game", game=player.mostSignificantGame(), base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.mostSignificantGame(), ladder))}
+            ${self.blocks.render("game", game=player.mostSignificantGame(), base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.mostSignificantGame(), ladder), totalActivePlayers=len(ladder.getActivePlayers(player.mostSignificantGame().time-1)))}
           </div>
         </div>
         <div class="panel panel-default">
@@ -227,7 +226,7 @@ ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder
             <h2 class="panel-title">First Ever Game</h2>
           </div>
           <div class="panel-body">
-            ${self.blocks.render("game", game=player.games[0], base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.games[0], ladder))}
+            ${self.blocks.render("game", game=player.games[0], base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.games[0], ladder), totalActivePlayers=len(ladder.getActivePlayers(player.games[0].time-1)))}
           </div>
         </div>
       % else:

@@ -43,11 +43,12 @@ def getPunditry(pundit, game, ladder):
 <%
 pundit = Pundit()
 facts = getPunditry(pundit, game, ladder)
+totalActivePlayers = len(ladder.getActivePlayers(game.time-1))
 %>
 
 <div class="panel panel-default">
   <div class="panel-body">
-    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts))}
+    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts), totalActivePlayers=totalActivePlayers)}
     <div class="recent-game container-fluid">
       <div class="row achievements">
         <div class="col-md-4">

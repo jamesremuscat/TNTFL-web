@@ -1,6 +1,7 @@
 from tntfl.player import Streak
 import tntfl.templateUtils as utils
 from datetime import datetime
+from tntfl.ladder import TableFootballLadder
 
 class FactChecker(object):
     _reportCount = 10    #eg report the 10 most significant games
@@ -270,7 +271,7 @@ class FirstGameSince(FactChecker):
 
     def getFact(self, player, game, opponent):
         if len(player.games) > 1:
-            retireTime = player.games[-2].time + (60 * 60 * 24 * player.DAYS_INACTIVE)
+            retireTime = player.games[-2].time + (60 * 60 * 24 * TableFootballLadder.DAYS_INACTIVE)
             if retireTime < game.time:
                 date = datetime.fromtimestamp(float(retireTime))
                 dateStr = date.strftime("%Y-%m-%d")
