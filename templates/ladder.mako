@@ -4,6 +4,18 @@ import re
 from tntfl.player import Player
 from datetime import datetime
 
+def getRankCSS(rank, totalActivePlayers):
+    ladderPositionCSS = "ladder-position"
+    if rank == -1:
+        ladderPositionCSS = ladderPositionCSS + " inactive"
+    elif rank == 1:
+        ladderPositionCSS = ladderPositionCSS + " ladder-first"
+    elif rank < totalActivePlayers * 0.1:
+        ladderPositionCSS = ladderPositionCSS + " ladder-silver"
+    else:
+        ladderPositionCSS = ladderPositionCSS + " ladder-bronze"
+    return ladderPositionCSS
+
 def rankPlayers(ladder):
     ranked = []
     rank = 1
@@ -30,7 +42,7 @@ def getTrend(player):
     return {'trend':trend, 'colour':trendColour}
 %>
 
-<%def name="ladderEntry(player, rank)">
+<%def name="ladderEntry(player, rank, totalActivePlayers)">
     <%
     trend = getTrend(player)
 
@@ -40,7 +52,7 @@ def getTrend(player):
     nearlyInactive = daysToGo <= 14 and rank != -1
     ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""
     ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
-    ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else " ladder-bronze")
+    ladderPositionCSS = getRankCSS(rank, totalActivePlayers)
 
     draws = len(player.games) - player.wins - player.losses
     goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
@@ -68,6 +80,7 @@ def getTrend(player):
 
 <%
 ranked = rankPlayers(ladder)
+totalActivePlayers = len([p for p in ladder.players.values() if ladder.isPlayerActive(p)])
 %>
 <div>
   <table class="table table-hover ladder" id="ladder">
@@ -89,7 +102,7 @@ ranked = rankPlayers(ladder)
     </thead>
     <tbody>
 % for player in ranked:
-    ${ladderEntry(player[1], player[0])}
+    ${ladderEntry(player[1], player[0], totalActivePlayers)}
 % endfor
     </tbody>
   </table>
