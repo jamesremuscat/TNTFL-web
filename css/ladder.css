@@ -34,7 +34,6 @@ table.ladder th {
   font-weight: bold;
   text-align: center;
   color: white;
-  width: 3em;
   border-radius: 4px;
   background-color: blue !important;
 }
@@ -118,6 +117,11 @@ div.ladder-trend {
 
 .skill-change-blue, .game-entry .blue {
   background-color: #C0C0FF;
+}
+
+.unpad {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .red-player, .red-player a {

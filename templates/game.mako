@@ -15,7 +15,9 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
 <%def name="cups(achs)">
   <div style="display:table;margin-left: auto;margin-right: auto;">
     %for ach in achs:
-      <div style="display:table-cell;"><img src="${base}img/trophy5_24.png" alt="Achievement unlocked!" title="Achievement unlocked!" style="width:100%;"/></div>
+      <div style="display:table-cell;">
+        <img src="${base}img/trophy5_24.png" alt="Achievement unlocked!" title="Achievement unlocked!" style="width:100%;"/>
+      </div>
     %endfor
   </div>
 </%def>
@@ -37,7 +39,10 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
     <p class="bg-danger">This game was deleted by ${game.deletedBy} at ${utils.formatTime(game.deletedAt)}</p>
   % endif
   <div class="row recent-game-result">
-    <div class="col-md-4 red-player ${redsStripe}">
+    <div class="col-md-1 ladder-position unpad">
+      ${game.redPosAfter + game.redPosChange}
+    </div>
+    <div class="col-md-3 red-player ${redsStripe}">
       ${playerName(game.redPlayer)}
     </div>
     <div class="col-md-1 ${redsStripe}" style="padding:0px;">
@@ -47,15 +52,18 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
     <div class="col-md-1 ${bluesStripe}" style="padding:0px;">
       ${cups(game.blueAchievements)}
     </div>
-    <div class="col-md-4 blue-player ${bluesStripe}">
+    <div class="col-md-1 ladder-position unpad">
+      ${game.bluePosAfter + game.bluePosChange}
+    </div>
+    <div class="col-md-3 blue-player ${bluesStripe}">
       ${playerName(game.bluePlayer)}
     </div>
   </div>
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-1 unpad">
       ${rankChange("red", game.redPosChange) if game.redPosChange != 0 else ""}
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
       ${skillChange("red", -game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}
     </div>
     <div class="col-md-4">
@@ -66,11 +74,11 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
         % endif
       %endif
     </div>
-    <div class="col-md-2">
-      ${skillChange("blue", game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}
-    </div>
-    <div class="col-md-2">
+    <div class="col-md-1 unpad">
       ${rankChange("blue", game.bluePosChange) if game.bluePosChange != 0 else ""}
+    </div>
+    <div class="col-md-3">
+      ${skillChange("blue", game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}
     </div>
   </div>
 </div>
