@@ -16,6 +16,7 @@ class Test(TestCase):
 
     def testLadder(self):
         l = TableFootballLadder(os.path.join(__location__, "testLadder.txt"), False)
+        l._theTime = 5000000004
         self.assertEqual(5, len(l.games))
         self.assertEqual(4, len(l.players))
 

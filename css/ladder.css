@@ -35,7 +35,6 @@ table.ladder th {
   text-align: center;
   color: white;
   border-radius: 4px;
-  background-color: blue !important;
 }
 
 .ladder-position.inactive {
@@ -63,6 +62,14 @@ button.inactive {
 
 .ladder-first {
   background-color:#D5AB00 !important;
+}
+
+.ladder-silver {
+  background-color:#BCC6CC !important;
+}
+
+.ladder-bronze {
+  background-color:#CD7F32 !important;
 }
 
 td.ladder-stat {

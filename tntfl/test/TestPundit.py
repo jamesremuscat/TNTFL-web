@@ -286,7 +286,7 @@ class Unit(unittest.TestCase):
         player.games.append(game)
         opponent.games.append(game)
         opponent.games.append(Game(opponent.name, 5, "baz", 5, 11))
-        retireTime = (60 * 60 * 24 * player.DAYS_INACTIVE)
+        retireTime = (60 * 60 * 24 * TableFootballLadder.DAYS_INACTIVE)
         game = Game(player.name, 5, opponent.name, 5, 11 + retireTime)
         player.games.append(game)
         opponent.games.append(game)
