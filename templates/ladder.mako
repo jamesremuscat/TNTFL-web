@@ -40,7 +40,7 @@ def getTrend(player):
     nearlyInactive = daysToGo <= 14 and rank != -1
     ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""
     ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
-    ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
+    ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else " ladder-bronze")
 
     draws = len(player.games) - player.wins - player.losses
     goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
