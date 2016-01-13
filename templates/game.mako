@@ -37,7 +37,10 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
     <p class="bg-danger">This game was deleted by ${game.deletedBy} at ${utils.formatTime(game.deletedAt)}</p>
   % endif
   <div class="row recent-game-result">
-    <div class="col-md-4 red-player ${redsStripe}">
+    <div class="col-md-1 ladder-position">
+      ${game.redPosAfter + game.redPosChange}
+    </div>
+    <div class="col-md-3 red-player ${redsStripe}">
       ${playerName(game.redPlayer)}
     </div>
     <div class="col-md-1 ${redsStripe}" style="padding:0px;">
@@ -47,7 +50,10 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
     <div class="col-md-1 ${bluesStripe}" style="padding:0px;">
       ${cups(game.blueAchievements)}
     </div>
-    <div class="col-md-4 blue-player ${bluesStripe}">
+    <div class="col-md-1 ladder-position">
+      ${game.bluePosAfter + game.bluePosChange}
+    </div>
+    <div class="col-md-3 blue-player ${bluesStripe}">
       ${playerName(game.bluePlayer)}
     </div>
   </div>
