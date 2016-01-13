@@ -58,10 +58,10 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
     </div>
   </div>
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-1">
       ${rankChange("red", game.redPosChange) if game.redPosChange != 0 else ""}
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
       ${skillChange("red", -game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}
     </div>
     <div class="col-md-4">
@@ -72,11 +72,11 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
         % endif
       %endif
     </div>
-    <div class="col-md-2">
-      ${skillChange("blue", game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}
-    </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
       ${rankChange("blue", game.bluePosChange) if game.bluePosChange != 0 else ""}
+    </div>
+    <div class="col-md-3">
+      ${skillChange("blue", game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}
     </div>
   </div>
 </div>
