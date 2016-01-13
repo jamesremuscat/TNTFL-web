@@ -1,20 +1,9 @@
 <%page args="sortCol=10, sortOrder=1, showInactive=0"/>
 <%!
 import re
-from tntfl.player import Player
 from datetime import datetime
-
-def getRankCSS(rank, totalActivePlayers):
-    ladderPositionCSS = "ladder-position"
-    if rank == -1:
-        ladderPositionCSS = ladderPositionCSS + " inactive"
-    elif rank == 1:
-        ladderPositionCSS = ladderPositionCSS + " ladder-first"
-    elif rank < totalActivePlayers * 0.1:
-        ladderPositionCSS = ladderPositionCSS + " ladder-silver"
-    else:
-        ladderPositionCSS = ladderPositionCSS + " ladder-bronze"
-    return ladderPositionCSS
+from tntfl.player import Player
+import tntfl.templateUtils as utils
 
 def rankPlayers(ladder):
     ranked = []
@@ -52,7 +41,7 @@ def getTrend(player):
     nearlyInactive = daysToGo <= 14 and rank != -1
     ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""
     ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
-    ladderPositionCSS = getRankCSS(rank, totalActivePlayers)
+    ladderPositionCSS = utils.getRankCSS(rank, totalActivePlayers)
 
     draws = len(player.games) - player.wins - player.losses
     goalRatio = (float(player.goalsFor) / player.goalsAgainst) if player.goalsAgainst > 0 else 0
