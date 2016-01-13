@@ -8,6 +8,7 @@
           ${self.blocks.render("ladder", base=self.attr.base)}
         </div>
       </div>
+      ${self.blocks.render("ladder-info", base=self.attr.base)}
     </div>
     <div class="col-md-4">
       <div class="panel panel-default">
@@ -20,6 +21,7 @@
         <script type="text/javascript">
           var sortOpts = getSortOptions("#ladder th");
           var showInactive = isShowInactive();
+          
           ladderTablePostProc(sortOpts, showInactive);
 
           setInterval(

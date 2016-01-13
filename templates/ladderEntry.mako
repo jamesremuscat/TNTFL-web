@@ -25,7 +25,7 @@ theDate = datetime.now() if ladder._ladderTime['now'] else datetime.fromtimestam
 daysAgo = (theDate - player.games[-1].timeAsDatetime()).days
 daysToGo = Player.DAYS_INACTIVE - daysAgo
 nearlyInactive = daysToGo <= 14 and rank != -1
-ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""
+ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else "top-player" if rank <= 5 else ""
 ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
 ladderPositionCSS = "ladder-position" + (" inactive" if rank == -1 else " ladder-first" if rank == 1 else "")
 

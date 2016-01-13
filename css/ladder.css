@@ -20,6 +20,13 @@ h2.panel-title {
   background-color: #FAEBCC;
 }
 
+.ladder>tbody>tr>td {
+  padding: 2px 8px;
+}
+.ladder tr.top-player td {
+  padding: 12px 8px;
+}
+
 table.ladder td {
   vertical-align: middle !important;
 }
@@ -35,8 +42,7 @@ table.ladder th {
   text-align: center;
   color: white;
   width: 3em;
-  border-radius: 4px;
-  background-color: blue !important;
+  background-color: #2A5B8D !important;
 }
 
 .ladder-position.inactive {
@@ -63,7 +69,7 @@ button.inactive {
 }
 
 .ladder-first {
-  background-color:#D5AB00 !important;
+  background-color:#F26760 !important;
 }
 
 td.ladder-stat {
@@ -148,7 +154,9 @@ div.ladder-trend {
 }
 
 .ladder thead tr th.headerSortUp, .ladder thead tr th.headerSortDown {
-  background: #C0C0FF;
+  /*background: #C0C0FF;*/
+  background: #397cc0;
+  color: #fff;
   background-position: right center;
   background-repeat: no-repeat;
   border-radius: 4px 4px 0 0;
@@ -271,6 +279,11 @@ h3.statbox {
 .panel-achievement .panel-body {
   text-align: center;
   padding: 0px;
+}
+@media(min-width:762px){
+  .panel-achievement .panel-body {
+    min-height: 68px;
+  }
 }
 
 .achievement-games {
@@ -396,4 +409,41 @@ h3.statbox {
 .achievement-PokeMaster {
   background: url("../img/ball80.png") top center no-repeat;
   padding-top: 48px !important;
+}
+
+
+/*
+ * "Slice" page rangeSlider
+ */
+.irs {
+  margin: 0 0 30px;
+}
+span.irs > span {
+  font-size: 12px;
+}
+
+/*
+ * Ladder Adjustments
+ */
+.ladder-position {
+
+}
+.controls.form {
+  padding: 10px;
+}
+
+.updated-time {
+  margin-top: -20px;
+  padding: 0;
+}
+
+
+/*
+ * Misc BS over-writes
+ */
+#ladderHolder {
+  padding: 0;
+}
+#ladderHolder .table {
+  margin-bottom: 0;
 }
