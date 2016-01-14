@@ -24,10 +24,10 @@ def getRankCSS(rank, totalActivePlayers, redScore=0, blueScore=0):
     ladderPositionCSS = "ladder-position"
     if rank == -1:
         ladderPositionCSS = ladderPositionCSS + " inactive"
-    if redScore == 10 and blueScore == 0:
-        ladderPositionCSS += " yellow-stripe"
-    elif blueScore == 10 and redScore == 0:
-        ladderPositionCSS += " yellow-stripe"
+    # if redScore == 10 and blueScore == 0:
+    #     ladderPositionCSS += " yellow-stripe"
+    # elif blueScore == 10 and redScore == 0:
+    #     ladderPositionCSS += " yellow-stripe"
     elif rank == 1:
         ladderPositionCSS = ladderPositionCSS + " ladder-first"
     elif rank <= totalActivePlayers * 0.1:
