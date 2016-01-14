@@ -19,15 +19,10 @@ class Streak(object):
         return self.gameTimes[-1] if self.count > 0 else 0
 
 class Player(object):
-
-    # Number of days inactivity after which players are considered inactive
-    DAYS_INACTIVE = 60
-
     def __init__(self, name):
         self.name = name
         self.elo = 0.0
         self.games = []
-        self.withinActive = 0
         self.wins = 0
         self.losses = 0
         self.goalsFor = 0
@@ -68,7 +63,6 @@ class Player(object):
             self.lowestSkill = {"time": game.time, "skill": self.elo}
 
         self.games.append(game)
-        self.withinActive = game.time + (60 * 60 * 24 * self.DAYS_INACTIVE)
 
     def getSkillBounds(self):
         return {"highest": self.highestSkill, "lowest": self.lowestSkill}

@@ -14,26 +14,54 @@ def getPunditry(pundit, game, ladder):
     return facts
 %>
 <%inherit file="html.mako" />
+
+<%def name="achievement(ach)">
+  <div class="panel panel-default panel-achievement">
+    <div class="panel-heading">
+      <h3 class="panel-title">${ach.name}</h3>
+    </div>
+    <div class="panel-body achievement-${ach.__name__}">
+      ${ach.description}
+    </div>
+  </div>
+</%def>
+
+<%def name="punditry(facts)">
+  <div class="panel panel-default ">
+    <div class="panel-heading">
+      <h3 class="panel-title">Punditry</h3>
+    </div>
+    <div class="panel-body">
+      % for fact in facts:
+        ${fact}
+        <br/>
+      % endfor
+    </div>
+  </div>
+</%def>
+
 <%
 pundit = Pundit()
 facts = getPunditry(pundit, game, ladder)
+totalActivePlayers = len(ladder.getActivePlayers(game.time-1))
 %>
+
 <div class="panel panel-default">
   <div class="panel-body">
-    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts))}
+    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts), totalActivePlayers=totalActivePlayers)}
     <div class="recent-game container-fluid">
       <div class="row achievements">
         <div class="col-md-4">
         % for ach in game.redAchievements:
-          ${self.blocks.render("achievement", ach=ach)}
+          ${achievement(ach)}
         % endfor
         </div>
         <div class="col-md-4">
-          ${self.blocks.render("punditry", facts=facts)}
+          ${punditry(facts) if len(facts) > 0 else ""}
         </div>
         <div class="col-md-4">
         % for ach in game.blueAchievements:
-          ${self.blocks.render("achievement", ach=ach)}
+          ${achievement(ach)}
         % endfor
         </div>
       </div>

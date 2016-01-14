@@ -38,6 +38,46 @@ def getHistograms(player1, player2, sharedGames):
 self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../"
 %>
 
+<%def name="headtoheadplayer(player, colour)">
+  <%
+  skillBounds = player.getSkillBounds()
+  %>
+  <div class="panel panel-default headtohead">
+    <h1 class="${colour}-player panel-title">${player.name}</h1>
+    <div class="panel-body">
+    <% rank = ladder.getPlayerRank(player.name) %>
+    <table class="player-stats">
+      <tr>
+        <th>Rank</th><td class="ladder-position ${"inactive" if rank == -1 else "ladder-first" if rank == 1 else ""}">${rank if rank != -1 else "-"}</td>
+        <th>Skill</th><td class="ladder-skill">${"{:.3f}".format(player.elo)}</td>
+      </tr>
+      <tr>
+        <th>Highest ever skill</th>
+        <td>
+          ${"{:.3f}".format(skillBounds['highest']['skill'])}
+          <br />
+          % if skillBounds['highest']['time'] > 0:
+            at <a href="${base}game/${skillBounds['highest']['time']}/">${utils.formatTime(skillBounds['highest']['time'])}</a>
+          % else:
+            before first game
+          % endif
+        </td>
+        <th>Lowest ever skill</th>
+        <td>
+          ${"{:.3f}".format(skillBounds['lowest']['skill'])}
+          <br />
+          % if skillBounds['lowest']['time'] > 0:
+            at <a href="${base}game/${skillBounds['lowest']['time']}/">${utils.formatTime(skillBounds['lowest']['time'])}</a>
+          % else:
+            before first game
+          % endif
+        </td>
+      </tr>
+      </table>
+      </div>
+  </div>
+</%def>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
@@ -62,7 +102,7 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
 %>
           <div class="row">
             <div class="col-md-4">
-            ${self.blocks.render("headtoheadplayer", base=self.attr.base, player=player1, colour="red")}
+            ${headtoheadplayer(player1, "red")}
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h2 class="panel-title">Recent Encounters</h2>
@@ -122,7 +162,7 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
               </div>
             </div>
             <div class="col-md-4">
-            ${self.blocks.render("headtoheadplayer", base=self.attr.base, player=player2, colour="blue")}
+            ${headtoheadplayer(player2, "blue")}
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h2 class="panel-title">Goal Distribution</h2>

@@ -34,9 +34,7 @@ table.ladder th {
   font-weight: bold;
   text-align: center;
   color: white;
-  width: 3em;
   border-radius: 4px;
-  background-color: blue !important;
 }
 
 .ladder-position.inactive {
@@ -64,6 +62,14 @@ button.inactive {
 
 .ladder-first {
   background-color:#D5AB00 !important;
+}
+
+.ladder-silver {
+  background-color:#BCC6CC !important;
+}
+
+.ladder-bronze {
+  background-color:#CD7F32 !important;
 }
 
 td.ladder-stat {
@@ -118,6 +124,11 @@ div.ladder-trend {
 
 .skill-change-blue, .game-entry .blue {
   background-color: #C0C0FF;
+}
+
+.unpad {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .red-player, .red-player a {
