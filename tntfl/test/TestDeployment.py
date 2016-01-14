@@ -216,7 +216,7 @@ class GamesApi(Deployment):
         self.assertEqual(response[1]['date'], 1448897511)
 
     def testDeleted(self):
-        page = 'games.cgi?view=json&from=1448887743&to=1448890745'
+        page = 'games.cgi?view=json&from=1448887743&to=1448890745&includeDeleted=1'
         response = self._getJsonFrom(page)
         self.assertEqual(len(response), 4)
         self.assertEqual(response[0]['deleted']['at'], 1448889773)
