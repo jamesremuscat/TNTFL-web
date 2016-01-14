@@ -61,6 +61,9 @@ class CachingGameStore(object):
 
 class TableFootballLadder(object):
 
+    # Number of days inactivity after which players are considered inactive
+    DAYS_INACTIVE = 60
+
     def __init__(self, ladderFilePath, useCache = True, timeRange=None):
         self.games = []
         self.players = {}
@@ -69,6 +72,7 @@ class TableFootballLadder(object):
         self._gameStore = CachingGameStore(ladderFilePath, useCache)
 
         self._ladderTime = {'now': timeRange == None, 'range': timeRange}
+        self._theTime = time.time()
         self._gameStore.loadGames(self, self._ladderTime)
 
     def getPlayer(self, name):
@@ -130,17 +134,20 @@ class TableFootballLadder(object):
         if atTime == None:
             atTime = self._getTime()
         if self._recentlyActivePlayers[0] != atTime:
-            self._recentlyActivePlayers = (atTime, filter(lambda p: p.withinActive > atTime, self.players.values()))
+            self._recentlyActivePlayers = (atTime, [p for p in self.players.values() if self.isPlayerActive(p, atTime)])
         return self._recentlyActivePlayers[1]
 
     def isPlayerActive(self, player, atTime=None):
         if atTime == None:
             atTime = self._getTime()
-        return player.withinActive > atTime
+        for game in reversed(player.games):
+            if game.time <= atTime:
+                return (atTime - game.time) < (60 * 60 * 24 * self.DAYS_INACTIVE)
+        return False
 
     def _getTime(self):
         if self._ladderTime['now']:
-            return time.time()
+            return self._theTime
         else:
             return self._ladderTime['range'][1]
 

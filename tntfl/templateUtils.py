@@ -19,3 +19,15 @@ def formatTime(inTime):
     elif date.fromtimestamp(float(inTime)) > (date.today() - timedelta(7)):
         dateStr = "%s %02d:%02d" % (("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")[time.weekday()], time.hour, time.minute)
     return dateStr
+
+def getRankCSS(rank, totalActivePlayers):
+    ladderPositionCSS = "ladder-position"
+    if rank == -1:
+        ladderPositionCSS = ladderPositionCSS + " inactive"
+    elif rank == 1:
+        ladderPositionCSS = ladderPositionCSS + " ladder-first"
+    elif rank <= totalActivePlayers * 0.1:
+        ladderPositionCSS = ladderPositionCSS + " ladder-silver"
+    else:
+        ladderPositionCSS = ladderPositionCSS + " ladder-bronze"
+    return ladderPositionCSS

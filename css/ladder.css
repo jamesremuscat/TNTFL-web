@@ -69,7 +69,17 @@ button.inactive {
 }
 
 .ladder-first {
-  background-color:#F26760 !important;
+  /*background-color:#F26760 !important;*/
+  background-color:#EEC900 !important;
+}
+
+.ladder-silver {
+  /*background-color:#BCC6CC !important;*/
+  background-color:#C0C0C0 !important;
+}
+
+.ladder-bronze {
+  background-color:#CD7F32 !important;
 }
 
 td.ladder-stat {
@@ -124,6 +134,11 @@ div.ladder-trend {
 
 .skill-change-blue, .game-entry .blue {
   background-color: #C0C0FF;
+}
+
+.unpad {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .red-player, .red-player a {
