@@ -20,14 +20,18 @@ def formatTime(inTime):
         dateStr = "%s %02d:%02d" % (("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")[time.weekday()], time.hour, time.minute)
     return dateStr
 
-def getRankCSS(rank, totalActivePlayers):
+def getRankCSS(rank, totalActivePlayers, redScore=0, blueScore=0):
     ladderPositionCSS = "ladder-position"
     if rank == -1:
         ladderPositionCSS = ladderPositionCSS + " inactive"
+    # if redScore == 10 and blueScore == 0:
+    #     ladderPositionCSS += " yellow-stripe"
+    # elif blueScore == 10 and redScore == 0:
+    #     ladderPositionCSS += " yellow-stripe"
     elif rank == 1:
         ladderPositionCSS = ladderPositionCSS + " ladder-first"
     elif rank <= totalActivePlayers * 0.1:
         ladderPositionCSS = ladderPositionCSS + " ladder-silver"
-    else:
+    elif rank <= totalActivePlayers * 0.3:
         ladderPositionCSS = ladderPositionCSS + " ladder-bronze"
     return ladderPositionCSS

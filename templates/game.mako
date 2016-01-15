@@ -33,52 +33,31 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
     ${"{:+.3f}".format(change)}
   </span>
 </%def>
-
-<div class="recent-game container-fluid">
   % if game.isDeleted():
     <p class="bg-danger">This game was deleted by ${game.deletedBy} at ${utils.formatTime(game.deletedAt)}</p>
   % endif
-  <div class="row recent-game-result">
-    <div class="col-md-1 ${utils.getRankCSS(game.redPosAfter + game.redPosChange, totalActivePlayers)} unpad">
-      ${game.redPosAfter + game.redPosChange}
-    </div>
-    <div class="col-md-3 red-player ${redsStripe}">
-      ${playerName(game.redPlayer)}
-    </div>
-    <div class="col-md-1 ${redsStripe}" style="padding:0px;">
-      ${cups(game.redAchievements)}
-    </div>
-    <div class="col-md-2 ${redsStripe} ${bluesStripe}">${game.redScore} - ${game.blueScore}</div>
-    <div class="col-md-1 ${bluesStripe}" style="padding:0px;">
-      ${cups(game.blueAchievements)}
-    </div>
-    <div class="col-md-1 ${utils.getRankCSS(game.bluePosAfter + game.bluePosChange, totalActivePlayers)} unpad">
-      ${game.bluePosAfter + game.bluePosChange}
-    </div>
-    <div class="col-md-3 blue-player ${bluesStripe}">
-      ${playerName(game.bluePlayer)}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-1 unpad">
-      ${rankChange("red", game.redPosChange) if game.redPosChange != 0 else ""}
-    </div>
-    <div class="col-md-3">
-      ${skillChange("red", -game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}
-    </div>
-    <div class="col-md-4">
-      %if not speculative:
+    <tr class="recent-game">
+      <td width="20%" class="player red-player ${redsStripe}">${playerName(game.redPlayer)}</td>
+      <td width="10%" class="rank ${utils.getRankCSS(game.redPosAfter + game.redPosChange, totalActivePlayers, game.redScore, game.blueScore)}">${game.redPosAfter + game.redPosChange}</td>
+      <td width="10%" class="ach ${redsStripe}">${cups(game.redAchievements)}</td>
+      
+      <td width="20%" class="score ${redsStripe} ${bluesStripe}">${game.redScore} - ${game.blueScore}</td>
+      
+      <td width="10%" class="ach ${bluesStripe}">${cups(game.blueAchievements)}</td>
+      <td width="10%" class="rank ${utils.getRankCSS(game.bluePosAfter + game.bluePosChange, totalActivePlayers, game.redScore, game.blueScore)}">${game.bluePosAfter + game.bluePosChange}</td>
+      <td width="20%" class="player blue-player ${bluesStripe}">${playerName(game.bluePlayer)}</td>
+    </tr>
+    <tr class="game-changes">
+      <td width="20%" class="score-change red">${skillChange("red", -game.skillChangeToBlue) if game.skillChangeToBlue <= 0 else ""}</td>
+      <td width="10%" class="rank-change red">${rankChange("red", game.redPosChange) if game.redPosChange != 0 else ""}</td>
+      <td class="detail" colspan="3">
+        %if not speculative:
         ${blocks.render("gameLink", time=game.time, base=base)}
         % if punditryAvailable:
           <img src="${base}img/headset16.png"/>
         % endif
-      %endif
-    </div>
-    <div class="col-md-1 unpad">
-      ${rankChange("blue", game.bluePosChange) if game.bluePosChange != 0 else ""}
-    </div>
-    <div class="col-md-3">
-      ${skillChange("blue", game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}
-    </div>
-  </div>
-</div>
+        %endif
+      </td>
+      <td width="10%" class="rank-change blue">${rankChange("blue", game.bluePosChange) if game.bluePosChange != 0 else ""}</td>
+      <td width="20%" class="score-change blue">${skillChange("blue", game.skillChangeToBlue) if game.skillChangeToBlue > 0 else ""}</td>
+    </tr>

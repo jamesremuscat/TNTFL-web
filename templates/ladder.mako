@@ -40,7 +40,7 @@ def getTrend(player):
     daysAgo = (theDate - player.games[-1].timeAsDatetime()).days
     daysToGo = TableFootballLadder.DAYS_INACTIVE - daysAgo
     nearlyInactive = daysToGo <= 14 and rank != -1
-    ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else ""
+    ladderRowCSS = "inactive" if rank == -1 else "nearly-inactive" if nearlyInactive else "" if rank <= 5 else ""
     ladderRowTitle = ("Player will become inactive in %s day%s" % (daysToGo, "s" if daysToGo > 0 else "")) if nearlyInactive else ""
     ladderPositionCSS = utils.getRankCSS(rank, totalActivePlayers)
 
@@ -72,7 +72,7 @@ def getTrend(player):
 ranked = rankPlayers(ladder)
 totalActivePlayers = len([p for p in ladder.players.values() if ladder.isPlayerActive(p)])
 %>
-<div>
+<%namespace name="blocks" file="blocks.mako" />
   <table class="table table-hover ladder" id="ladder">
     <thead>
       <tr>
@@ -96,9 +96,4 @@ totalActivePlayers = len([p for p in ladder.players.values() if ladder.isPlayerA
 % endfor
     </tbody>
   </table>
-  <p>Updated at ${datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
-  <div class="controls form">
-    <button class="button_active form-control" onclick="$('.inactive').show(); $('.button_active').hide();">Show inactive</button>
-    <button id="inactiveButton" class="form-control inactive" onclick="$('.inactive').hide(); $('.button_active').show();">Hide inactive</button>
-  </div>
-</div>
+  

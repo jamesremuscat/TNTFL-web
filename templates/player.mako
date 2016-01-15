@@ -218,7 +218,13 @@ rankChangeClass = "positive" if rankChange > 0 else "negative" if rankChange < 0
             <h2 class="panel-title">Most Significant Game</h2>
           </div>
           <div class="panel-body">
-            ${self.blocks.render("game", game=player.mostSignificantGame(), base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.mostSignificantGame(), ladder), totalActivePlayers=len(ladder.getActivePlayers(player.mostSignificantGame().time-1)))}
+            <div class="game table-responsive container-fluid">
+              <table class="table no-table-boder" style="margin-top: 20px;">
+                <tbody>
+                  ${self.blocks.render("game", game=player.mostSignificantGame(), base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.mostSignificantGame(), ladder), totalActivePlayers=len(ladder.getActivePlayers(player.mostSignificantGame().time-1)))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div class="panel panel-default">
@@ -226,7 +232,13 @@ rankChangeClass = "positive" if rankChange > 0 else "negative" if rankChange < 0
             <h2 class="panel-title">First Ever Game</h2>
           </div>
           <div class="panel-body">
-            ${self.blocks.render("game", game=player.games[0], base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.games[0], ladder), totalActivePlayers=len(ladder.getActivePlayers(player.games[0].time-1)))}
+            <div class="game table-responsive container-fluid">
+              <table class="table no-table-boder" style="margin-top: 20px;">
+                <tbody>
+                  ${self.blocks.render("game", game=player.games[0], base=self.attr.base, punditryAvailable=utils.punditryAvailable(pundit, player.games[0], ladder), totalActivePlayers=len(ladder.getActivePlayers(player.games[0].time-1)))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       % else:

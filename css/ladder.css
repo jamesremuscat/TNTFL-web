@@ -16,8 +16,16 @@ h2.panel-title {
   font-size: 18pt;
 }
 
-.panel-warning .panel-body, .panel-warning th {
+.panel-warning .panel-body,
+.panel-warning th {
   background-color: #FAEBCC;
+}
+
+.ladder>tbody>tr>td {
+  padding: 2px 8px;
+}
+.ladder tr.top-player td {
+  padding: 12px 8px;
 }
 
 table.ladder td {
@@ -34,7 +42,8 @@ table.ladder th {
   font-weight: bold;
   text-align: center;
   color: white;
-  border-radius: 4px;
+  width: 3em;
+  background-color: #2A5B8D;
 }
 
 .ladder-position.inactive {
@@ -61,11 +70,11 @@ button.inactive {
 }
 
 .ladder-first {
-  background-color:#D5AB00 !important;
+  background-color:#EEC900 !important;
 }
 
 .ladder-silver {
-  background-color:#BCC6CC !important;
+  background-color:#C0C0C0 !important;
 }
 
 .ladder-bronze {
@@ -77,7 +86,8 @@ td.ladder-stat {
   font-size: large;
 }
 
-td.ladder-name, td.ladder-skill {
+td.ladder-name,
+td.ladder-skill {
   font-size: x-large;
 }
 
@@ -91,9 +101,34 @@ div.ladder-trend {
   opacity: 0.3;
 }
 
-.recent-game {
+.recentHolder {
+  padding: 0;
+}
+
+.no-table-boder tr>td {
+  border-top: none!important;
+}
+
+.game-changes td {
+  border-spacing: 0;
+  padding: 0 0 30px!important;
+  vertical-align: top;
+}
+.game-changes .detail {
   text-align: center;
-  margin: 10px 0;
+}
+.recent-game {
+  font-size: x-large;
+}
+@media(min-width: 1200px) and (max-width: 1400px) {
+  .recent-game td {
+    font-size: large;
+  }
+}
+.recent-game td {
+  vertical-align: middle!important;
+  text-align: center;
+  margin: 20px 0 0;
 }
 .recent-game-result {
   font-size: x-large;
@@ -104,26 +139,30 @@ div.ladder-trend {
   overflow: hidden;
 }
 
-.recent-game .red-player, .headtohead .red-player {
-  border-radius: 4px 0 0 4px;
+.recent-game .red-player,
+.headtohead .red-player,
+.recent-game .blue-player,
+.headtohead .blue-player {
+  /*border-radius: 4px 0 0 4px;*/
 }
 
-.recent-game .blue-player, .headtohead .blue-player {
-  border-radius: 0 4px 4px 0;
-}
-
-.recent-game span.skill-change {
-  border-radius: 0 0 4px 4px;
+.game-changes .skill-change {
   display: inline-block;
   padding: 1px 5px;
 }
 
-.skill-change-red, .game-entry .red {
+.skill-change-red,
+.game-entry .red {
   background-color: #FFC0C0;
 }
 
-.skill-change-blue, .game-entry .blue {
+.skill-change-blue,
+.game-entry .blue {
   background-color: #C0C0FF;
+}
+
+.game .punditry {
+  font-size: medium;
 }
 
 .unpad {
@@ -131,17 +170,20 @@ div.ladder-trend {
   padding-right: 0px;
 }
 
-.red-player, .red-player a {
+.red-player,
+.red-player a {
   background-color: red;
   color: white;
 }
 
-.blue-player, .blue-player a {
+.blue-player,
+.blue-player a {
   background-color: blue;
   color: white;
 }
 
-.yellow-stripe, .yellow-stripe a {
+.yellow-stripe,
+.yellow-stripe a {
   background-color: #FFFF00;
   color: black;
 }
@@ -158,8 +200,11 @@ div.ladder-trend {
   font-weight: bold;
 }
 
-.ladder thead tr th.headerSortUp, .ladder thead tr th.headerSortDown {
-  background: #C0C0FF;
+.ladder thead tr th.headerSortUp,
+.ladder thead tr th.headerSortDown {
+  /*background: #C0C0FF;*/
+  background: #397cc0;
+  color: #fff;
   background-position: right center;
   background-repeat: no-repeat;
   border-radius: 4px 4px 0 0;
@@ -234,7 +279,9 @@ h3.statbox {
   border-radius: 4px;
 }
 
-#playerchart, #gamesPerDay, #histogram {
+#playerchart,
+#gamesPerDay,
+#histogram {
   height: 200px;
 }
 
@@ -256,17 +303,19 @@ h3.statbox {
   background-color: #F5F5F5;
 }
 
-.headtohead td, .headtohead th {
+.headtohead td,
+.headtohead th {
   width: 33%;
   text-align: center;
 }
 
-.headtohead .red-player, .headtohead .blue-player {
+.headtohead .red-player,
+.headtohead .blue-player {
   font-weight: bold;
 }
 
 .panel-warning tr:hover {
-  background-color: #FCF8E3 !important;
+  background-color: #FCF8E3;
 }
 
 .panel-achievement .panel-heading {
@@ -282,6 +331,11 @@ h3.statbox {
 .panel-achievement .panel-body {
   text-align: center;
   padding: 0px;
+}
+@media(min-width:762px){
+  .panel-achievement .panel-body {
+    min-height: 68px;
+  }
 }
 
 .achievement-games {
@@ -407,4 +461,41 @@ h3.statbox {
 .achievement-PokeMaster {
   background: url("../img/ball80.png") top center no-repeat;
   padding-top: 48px !important;
+}
+
+
+/*
+ * "Slice" page rangeSlider
+ */
+.irs {
+  margin: 0 0 30px;
+}
+span.irs > span {
+  font-size: 12px;
+}
+
+/*
+ * Ladder Adjustments
+ */
+.ladder-position {
+
+}
+.controls.form {
+  padding: 10px;
+}
+
+.updated-time {
+  margin-top: -20px;
+  padding: 0;
+}
+
+
+/*
+ * Misc BS over-writes
+ */
+#ladderHolder {
+  padding: 0;
+}
+#ladderHolder .table {
+  margin-bottom: 0;
 }
