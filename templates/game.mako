@@ -36,7 +36,7 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
   % if game.isDeleted():
     <p class="bg-danger">This game was deleted by ${game.deletedBy} at ${utils.formatTime(game.deletedAt)}</p>
   % endif
-    <tr class="recent-game">
+    <tr class="recent-game-result">
       <td width="20%" class="player red-player ${redsStripe}">${playerName(game.redPlayer)}</td>
       <td width="10%" class="rank ${utils.getRankCSS(game.redPosAfter + game.redPosChange, totalActivePlayers)}">${game.redPosAfter + game.redPosChange}</td>
       <td width="10%" class="ach ${redsStripe}">${cups(game.redAchievements)}</td>

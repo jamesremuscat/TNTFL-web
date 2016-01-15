@@ -117,14 +117,7 @@ div.ladder-trend {
 .game-changes .detail {
   text-align: center;
 }
-.recent-game {
-  font-size: x-large;
-}
-@media(min-width: 1200px) and (max-width: 1400px) {
-  .recent-game td {
-    font-size: large;
-  }
-}
+
 .recent-game td {
   vertical-align: middle!important;
   text-align: center;
@@ -132,6 +125,7 @@ div.ladder-trend {
 }
 .recent-game-result {
   font-size: x-large;
+  text-align: center;
 }
 
 .recent-game-result .col-md-2 {
@@ -159,10 +153,6 @@ div.ladder-trend {
 .skill-change-blue,
 .game-entry .blue {
   background-color: #C0C0FF;
-}
-
-.game .punditry {
-  font-size: medium;
 }
 
 .unpad {
