@@ -38,13 +38,13 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
   % endif
     <tr class="recent-game">
       <td width="20%" class="player red-player ${redsStripe}">${playerName(game.redPlayer)}</td>
-      <td width="10%" class="rank ${utils.getRankCSS(game.redPosAfter + game.redPosChange, totalActivePlayers, game.redScore, game.blueScore)}">${game.redPosAfter + game.redPosChange}</td>
+      <td width="10%" class="rank ${utils.getRankCSS(game.redPosAfter + game.redPosChange, totalActivePlayers)}">${game.redPosAfter + game.redPosChange}</td>
       <td width="10%" class="ach ${redsStripe}">${cups(game.redAchievements)}</td>
       
       <td width="20%" class="score ${redsStripe} ${bluesStripe}">${game.redScore} - ${game.blueScore}</td>
       
       <td width="10%" class="ach ${bluesStripe}">${cups(game.blueAchievements)}</td>
-      <td width="10%" class="rank ${utils.getRankCSS(game.bluePosAfter + game.bluePosChange, totalActivePlayers, game.redScore, game.blueScore)}">${game.bluePosAfter + game.bluePosChange}</td>
+      <td width="10%" class="rank ${utils.getRankCSS(game.bluePosAfter + game.bluePosChange, totalActivePlayers)}">${game.bluePosAfter + game.bluePosChange}</td>
       <td width="20%" class="player blue-player ${bluesStripe}">${playerName(game.bluePlayer)}</td>
     </tr>
     <tr class="game-changes">
