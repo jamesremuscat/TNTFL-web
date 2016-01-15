@@ -28,6 +28,6 @@ def getRankCSS(rank, totalActivePlayers):
         ladderPositionCSS = ladderPositionCSS + " ladder-first"
     elif rank <= totalActivePlayers * 0.1:
         ladderPositionCSS = ladderPositionCSS + " ladder-silver"
-    else:
+    elif rank <= totalActivePlayers * 0.3:
         ladderPositionCSS = ladderPositionCSS + " ladder-bronze"
     return ladderPositionCSS

@@ -46,17 +46,20 @@ facts = getPunditry(pundit, game, ladder)
 totalActivePlayers = len(ladder.getActivePlayers(game.time-1))
 %>
 
-<div class="panel panel-default">
-  <div class="panel-body">
-    ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts), totalActivePlayers=totalActivePlayers)}
-    <div class="recent-game container-fluid">
+<div class="game table-responsive container-fluid">
+  <table class="table no-table-boder" style="margin-top: 20px;">
+    <tbody>
+      ${self.blocks.render("game", game=game, base=self.attr.base, punditryAvailable=len(facts), totalActivePlayers=totalActivePlayers)}
+    </tbody>
+  </table>
+  <div class="recent-game container-fluid">
       <div class="row achievements">
         <div class="col-md-4">
         % for ach in game.redAchievements:
           ${achievement(ach)}
         % endfor
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 punditry">
           ${punditry(facts) if len(facts) > 0 else ""}
         </div>
         <div class="col-md-4">
@@ -66,9 +69,9 @@ totalActivePlayers = len(ladder.getActivePlayers(game.time-1))
         </div>
       </div>
     </div>
-  </div>
-</div>
+
 <p><a href="json">This game as JSON</a></p>
 % if not game.isDeleted():
-<a href="delete" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-lock"></span> Delete game</a>
+  <a href="delete" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-lock"></span> Delete game</a>
 % endif
+</div>
