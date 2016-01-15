@@ -161,6 +161,10 @@ div.ladder-trend {
   background-color: #C0C0FF;
 }
 
+.game .punditry {
+  font-size: medium;
+}
+
 .unpad {
   padding-left: 0px;
   padding-right: 0px;
