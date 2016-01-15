@@ -39,7 +39,7 @@ bluesStripe = "yellow-stripe" if game.blueScore == 10 and game.redScore == 0 els
     <tr class="recent-game">
       <td width="20%" class="player red-player ${redsStripe}">${playerName(game.redPlayer)}</td>
       <td width="10%" class="rank ${utils.getRankCSS(game.redPosAfter + game.redPosChange, totalActivePlayers, game.redScore, game.blueScore)}">${game.redPosAfter + game.redPosChange}</td>
-      <td width="10%" class="ach {redsStripe}">${cups(game.redAchievements)}</td>
+      <td width="10%" class="ach ${redsStripe}">${cups(game.redAchievements)}</td>
       
       <td width="20%" class="score ${redsStripe} ${bluesStripe}">${game.redScore} - ${game.blueScore}</td>
       
