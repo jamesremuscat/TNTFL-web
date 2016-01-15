@@ -43,7 +43,7 @@ table.ladder th {
   text-align: center;
   color: white;
   width: 3em;
-  background-color: #2A5B8D;
+  background-color: #2A5B8D !important;
 }
 
 .ladder-position.inactive {
