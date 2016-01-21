@@ -38,6 +38,7 @@ def getHistograms(player1, player2, sharedGames):
 <%inherit file="html.mako" />
 <%
 self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../"
+totalActivePlayers = len(ladder.getActivePlayers())
 %>
 
 <%def name="headtoheadplayer(player, colour)">
@@ -50,7 +51,7 @@ self.attr.base = "../../" if depth == 1 else "../../../" if depth == 2 else "../
     <% rank = ladder.getPlayerRank(player.name) %>
     <table class="player-stats">
       <tr>
-        <th>Rank</th><td class="ladder-position ${"inactive" if rank == -1 else "ladder-first" if rank == 1 else ""}">${rank if rank != -1 else "-"}</td>
+        <th>Rank</th><td class="rank ${utils.getRankCSS(ladder.getPlayerRank(player.name), totalActivePlayers)}">${rank if rank != -1 else "-"}</td>
         <th>Skill</th><td class="ladder-skill">${"{:.3f}".format(player.elo)}</td>
       </tr>
       <tr>
