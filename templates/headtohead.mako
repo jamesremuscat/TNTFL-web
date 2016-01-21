@@ -13,18 +13,20 @@ def getNumGoals(player, games):
 def getSkillChange(player, games):
     return sum(g.skillChangeToBlue if g.bluePlayer == player.name else -g.skillChangeToBlue for g in games)
 
+def incrementHistogramScore(histogramData, player, score):
+    if score not in histogramData[player]:
+        histogramData[player][score] = 0
+    histogramData[player][score] += 1
+
 def getHistograms(player1, player2, sharedGames):
     histogramData = {'player1': {}, 'player2': {}}
-    for i in range(11):
-        histogramData['player1'][i] = 0
-        histogramData['player2'][i] = 0
     for game in sharedGames:
         if game.redPlayer == player1.name:
-            histogramData['player1'][game.redScore] += 1
-            histogramData['player2'][game.blueScore] += 1
+            incrementHistogramScore(histogramData, 'player1', game.redScore)
+            incrementHistogramScore(histogramData, 'player2', game.blueScore)
         elif game.bluePlayer == player1.name:
-            histogramData['player1'][game.blueScore] += 1
-            histogramData['player2'][game.redScore] += 1
+            incrementHistogramScore(histogramData, 'player1', game.blueScore)
+            incrementHistogramScore(histogramData, 'player2', game.redScore)
     player1Histogram = []
     player2Histogram = []
     for goals, tally in histogramData['player1'].iteritems():
