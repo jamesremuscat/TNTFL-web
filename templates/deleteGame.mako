@@ -22,4 +22,10 @@ import os
     </div>
   </div>
 </div>
-${self.blocks.render("game", game=game, base=self.attr.base)}
+<div class="game table-responsive container-fluid">
+  <table class="table no-table-boder" style="margin-top: 20px;">
+    <tbody>
+      ${self.blocks.render("game", game=game, base=self.attr.base, totalActivePlayers=len(ladder.getActivePlayers(game.time-1)))}
+    </tbody>
+  </table>
+</div>

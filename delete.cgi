@@ -23,7 +23,7 @@ if "game" in form:
         for game in ladder.games:
             if game.time == gameTime and not found:
                 found = True
-                serve_template("deleteGame.mako", game=game)
+                serve_template("deleteGame.mako", ladder=ladder, game=game)
         if not found:
             fail_404()
             print
