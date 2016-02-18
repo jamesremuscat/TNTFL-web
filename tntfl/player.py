@@ -1,6 +1,5 @@
 import time
 from datetime import date
-from tntfl.aks import CircularSkillBuffer
 
 
 class Streak(object):
@@ -27,7 +26,6 @@ class Player(object):
         self.losses = 0
         self.goalsFor = 0
         self.goalsAgainst = 0
-        self.skillBuffer = CircularSkillBuffer(10)
         self.gamesAsRed = 0
         self.highestSkill = {"time": 0, "skill": 0}
         self.lowestSkill = {"time": 0, "skill": 0}
@@ -54,7 +52,6 @@ class Player(object):
         else:
             return
         self.elo += delta
-        self.skillBuffer.put(self.elo)
 
         if (self.elo > self.highestSkill["skill"]):
             self.highestSkill = {"time": game.time, "skill": self.elo}
@@ -108,9 +105,13 @@ class Player(object):
                 self.achievements[achievement] = [game]
 
     def overrated(self):
-        if self.skillBuffer.isFull:
-            lastSkill = self.skillBuffer.lastSkill()
-            return lastSkill - self.skillBuffer.avg()
+        if len(self.games) >= 10:
+            skill = 0
+            total = 0
+            for game in self.games[-10:]:
+                skill += game.skillChangeToBlue if game.bluePlayer == self.name else -game.skillChangeToBlue
+                total += skill
+            return skill - (total / 10)
         return 0
 
     def __str__(self):
