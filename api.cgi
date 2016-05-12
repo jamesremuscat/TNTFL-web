@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
-from tntfl.web import serve_template
+from tntfl.web import serve
+from wsgi import api
 
-serve_template("api.mako")
+serve_template(api())

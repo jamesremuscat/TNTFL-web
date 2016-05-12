@@ -159,5 +159,9 @@ def speculate_with(previousSpeculativeGames):
                         serialisedSpecGames=previousSpeculativeGames)
 
 
+@app.route("/api/")
+def api():
+    return get_template("api.mako")
+
 if __name__ == "__main__":
     app.run(debug=True)
