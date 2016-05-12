@@ -122,5 +122,42 @@ def head_to_head(playerOne, playerTwo):
         abort(404)
 
 
+@app.route("/speculate/", methods=['GET', 'POST'])
+def speculate():
+    form = request.form
+    previousGames = ""
+
+    if "previousGames" in form:
+        previousGames = form["previousGames"]
+
+    if "redPlayer" in form and "bluePlayer" in form:
+        redScore = form["redScore"] if "redScore" in form else 0
+        blueScore = form["blueScore"] if "blueScore" in form else 0
+        previousGames += ",{0},{1},{2},{3}".format(form["redPlayer"], redScore, blueScore, form["bluePlayer"])
+
+    if previousGames != "" and previousGames[0] == ",":
+        previousGames = previousGames[1:]
+
+    return speculate_with(previousGames)
+
+
+def speculate_with(previousSpeculativeGames):
+    gameParts = previousSpeculativeGames.split(",")
+    ladder = getLadder()
+    games = []
+
+    for i in range(0, len(gameParts) / 4):
+        g = Game(gameParts[4 * i], gameParts[4 * i + 1], gameParts[4 * i + 3], gameParts[4 * i + 2], time.time())
+        games.append(g)
+        ladder.addGame(g)
+
+    games.reverse()
+
+    return get_template("speculate.mako",
+                        ladder=ladder,
+                        games=games,
+                        serialisedSpecGames=previousSpeculativeGames)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
