@@ -1,5 +1,7 @@
+from collections import OrderedDict
 from flask import abort, Flask, redirect, request
 from tntfl.ladder import Game, TableFootballLadder
+from tntfl.achievements import Achievement
 from tntfl.web import get_template
 
 import time
@@ -91,6 +93,19 @@ def player_games(playerName):
         return get_template("playerGames.mako", player=ladder.players[playerName.lower()], ladder=ladder)
     else:
         abort(404)
+
+
+@app.route("/achievements/")
+def achievements():
+    ladder = getLadder()
+    achievements = {}
+
+    for ach in Achievement.achievements:
+        achievements[ach.__class__] = len(ach.players)
+
+    return get_template("achievements.mako",
+                        ladder=ladder,
+                        achievements=OrderedDict(sorted(achievements.iteritems(), reverse=True, key=lambda t: t[1])))
 
 
 if __name__ == "__main__":
