@@ -2,7 +2,7 @@
 
 import cgi
 from tntfl.ladder import TableFootballLadder
-from tntfl.web import serve_template
+from tntfl.web import fail_404, serve_template
 
 
 form = cgi.FieldStorage()
@@ -13,9 +13,9 @@ if "player" in form:
         player = ladder.players[form["player"].value.lower()]
         if "method" in form:
             if form["method"].value == "games":
-                serve_template("playerGames.mako", player=player, ladder=ladder)
+                serve_template("playerGames.mako", pageTitle="%s's games" % player.name, games=player.games, ladder=ladder)
         else:
             serve_template("player.mako", player=player, ladder=ladder)
     else:
-        print "Status: 404 Not Found"
+        fail_404()
         print

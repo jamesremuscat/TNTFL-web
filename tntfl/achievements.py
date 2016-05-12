@@ -1,5 +1,6 @@
 from collections import Counter, defaultdict
 import datetime
+import os.path
 
 
 def oncePerPlayer(applies):
@@ -7,32 +8,11 @@ def oncePerPlayer(applies):
     Decorate an Achievement class's applies() function with oncePerPlayer to limit the achievement
     to a maximum of once per player.
     '''
-    def actualApplies(self, player, game, opponent, ladder):
-        return applies(self, player, game, opponent, ladder)
-    return lambda self, p, g, o, l: False if p in self.players else actualApplies(self, p, g, o, l)
+    return lambda self, p, g, o, l: False if self.__class__ in p.achievements.keys() else applies(self, p, g, o, l)
 
 
 class Achievement(object):
-
-    achievements = []
-
-    def __init__(self):
-        self.players = []
-
-    @staticmethod
-    def getAllForGame(player, game, opponent, ladder):
-        '''
-        Identifies all achievements unlocked by player in game against opponent.
-        This method should be called AFTER Player.game() has been called with game for BOTH players.
-        '''
-        theseAchievements = []
-        if player.games[-1] == game:
-            for clz in Achievement.achievements:
-                if clz.applies(player, game, opponent, ladder):
-                    theseAchievements.append(clz.__class__)
-                    player.achieve(clz.__class__)
-                    clz.players.append(player)
-        return theseAchievements
+    pass
 
 
 class FirstGame(Achievement):
@@ -111,9 +91,19 @@ class AgainstTheOdds(Achievement):
 
     def applies(self, player, game, opponent, ladder):
         if game.redPlayer == player.name:
-            return (game.redScore > game.blueScore) and (player.elo - game.skillChangeToBlue) + 50 <= (opponent.elo + game.skillChangeToBlue)
+            return (game.redScore > game.blueScore) and (player.elo + game.skillChangeToBlue) + 50 <= (opponent.elo - game.skillChangeToBlue)
         else:
-            return (game.blueScore > game.redScore) and (player.elo + game.skillChangeToBlue) + 50 <= (opponent.elo - game.skillChangeToBlue)
+            return (game.blueScore > game.redScore) and (player.elo - game.skillChangeToBlue) + 50 <= (opponent.elo + game.skillChangeToBlue)
+
+class AgainstAllOdds(Achievement):
+    name = "Against All Odds"
+    description = "Beat a player 100 or more skillpoints higher than you"
+
+    def applies(self, player, game, opponent, ladder):
+        if game.redPlayer == player.name:
+            return (game.redScore > game.blueScore) and (player.elo + game.skillChangeToBlue) + 100 <= (opponent.elo - game.skillChangeToBlue)
+        else:
+            return (game.blueScore > game.redScore) and (player.elo - game.skillChangeToBlue) + 100 <= (opponent.elo + game.skillChangeToBlue)
 
 
 class TheBest(Achievement):
@@ -133,7 +123,7 @@ class TheWorst(Achievement):
     @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
         rank = game.bluePosAfter if player.name == game.bluePlayer else game.redPosAfter
-        return rank == len([p for p in ladder.players.values() if p.isActive(atTime=game.time)])
+        return rank == len(ladder.getActivePlayers(game.time))
 
 
 class Improver(Achievement):
@@ -142,7 +132,7 @@ class Improver(Achievement):
 
     @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
-        threshold = player.lowestSkill["skill"] + 100
+        threshold = player.getSkillBounds()['lowest']["skill"] + 100
         delta = game.skillChangeToBlue if player.name == game.bluePlayer else -game.skillChangeToBlue
         return player.elo >= threshold and player.elo - delta < threshold
 
@@ -150,29 +140,30 @@ class Improver(Achievement):
 class Unstable(Achievement):
     name = "Unstable"
     description = "See-saw 5 or more skill points in consecutive games"
-    previousDeltas = {}
 
     def applies(self, player, game, opponent, ladder):
         result = False
-        delta = game.bluePosChange if player.name == game.bluePlayer else game.redPosChange
-        if player.name in Unstable.previousDeltas:
-            previousDelta = Unstable.previousDeltas[player.name]
+        if len(player.games) > 1:
+            previousGame = player.games[-2]
+            previousDelta = previousGame.skillChangeToBlue if player.name == previousGame.bluePlayer else -previousGame.skillChangeToBlue
+            delta = game.skillChangeToBlue if player.name == game.bluePlayer else -game.skillChangeToBlue
             if (previousDelta <= -5 and delta >= 5) or (previousDelta >= 5 and delta <= -5):
                 result = True
-        Unstable.previousDeltas[player.name] = delta
         return result
 
 
 class Comrades(Achievement):
     name = "Comrades"
     description = "Play 100 games against the same opponent"
-    pairCounts = Counter()
+
+    def __init__(self):
+        self.pairCounts = Counter()
 
     def applies(self, player, game, opponent, ladder):
         pair = frozenset([player.name, opponent.name])
-        Comrades.pairCounts[pair] += 1
+        self.pairCounts[pair] += 1
         # Each game is counted twice with player/opponent switched, hence need to trigger on 199 and 200
-        return 199 <= Comrades.pairCounts[pair] <= 200
+        return 199 <= self.pairCounts[pair] <= 200
 
 
 class FestiveCheer(Achievement):
@@ -206,20 +197,22 @@ class Dedication(Achievement):
     description = "Play a game at least once every 60 days for a year"
     sixtyDays = 60 * 60 * 24 * 60
     oneYear = 60 * 60 * 24 * 365
-    streaks = {}
+
+    def __init__(self):
+        self.streaks = {}
 
     @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
-        if player.name in Dedication.streaks:
-            streak = Dedication.streaks[player.name]
-            if game.time - streak[1] <= Dedication.sixtyDays:
-                if game.time - streak[0] >= Dedication.oneYear:
+        if player.name in self.streaks:
+            streak = self.streaks[player.name]
+            if game.time - streak[1] <= self.sixtyDays:
+                if game.time - streak[0] >= self.oneYear:
                     return True
                 else:
-                    Dedication.streaks[player.name] = (streak[0], game.time)
+                    self.streaks[player.name] = (streak[0], game.time)
                     return False
 
-        Dedication.streaks[player.name] = (game.time, game.time)
+        self.streaks[player.name] = (game.time, game.time)
         return False
 
 
@@ -228,34 +221,34 @@ class EarlyBird(Achievement):
     description = "Play and win the first game of the day"
 
     def applies(self, player, game, opponent, ladder):
-        if len(ladder.games) < 2:
-            return True
+        prevGame = self.getMostRecentGame(game, ladder)
+        if prevGame == -1:
+            return player.wonGame(game)
         thisGame = datetime.datetime.fromtimestamp(game.time).date()
-        prevGame = datetime.datetime.fromtimestamp(ladder.games[-2].time).date()
-        won = (game.blueScore > game.redScore) if player.name == game.bluePlayer else (game.blueScore < game.redScore)
-        return thisGame != prevGame and won
+        return thisGame != prevGame and player.wonGame(game)
 
-
-class Slacker(Achievement):
-    name = "Slacker"
-    description = "Play four or more games in one day"
-
-    def applies(self, player, game, opponent, ladder):
-        thisGame = game.timeAsDatetime().date()
-        return player.gamesOn(thisGame) == 4
+    def getMostRecentGame(self, curGame, ladder):
+        numGames = len(ladder.games)
+        for i in xrange(numGames - 2, 0, -1):
+            game = ladder.games[i]
+            if not game.isDeleted():
+                return datetime.datetime.fromtimestamp(game.time).date()
+        return -1
 
 
 class PokeMaster(Achievement):
     name = "Pok&#233;Master"
     description = "Collect all the scores"
-    pokedexes = defaultdict(set)
+
+    def __init__(self):
+        self.pokedexes = defaultdict(set)
 
     @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
         if game.redScore + game.blueScore != 10:
             return False
         score = game.blueScore if player.name == game.bluePlayer else game.redScore
-        pokedex = PokeMaster.pokedexes[player.name]
+        pokedex = self.pokedexes[player.name]
         pokedex.add(score)
         return len(pokedex) == 11
 
@@ -268,21 +261,71 @@ class TheDominator(Achievement):
         super(TheDominator, self).__init__()
         self.counts = Counter()
 
+    @oncePerPlayer
     def applies(self, player, game, opponent, ladder):
         pairing = (player.name, opponent.name)
-        if self.counts[pairing] == 10:
-            # Can only Dominate a player once.
-            return False
-
         playerIsBlue = player.name == game.bluePlayer
         won = game.blueScore > game.redScore if playerIsBlue else game.redScore > game.blueScore
-        won = won and game.skillChangeToBlue > 0 if playerIsBlue else game.skillChangeToBlue < 0
-        if won:
+        points = game.skillChangeToBlue > 0 if playerIsBlue else game.skillChangeToBlue < 0
+        if won and points:
             self.counts[pairing] += 1
         else:
             self.counts[pairing] = 0
         return self.counts[pairing] == 10
 
 
-for clz in Achievement.__subclasses__():
-    Achievement.achievements.append(clz())
+class Consistency(Achievement):
+    name = "Nothing if not Consistent"
+    description = "Finish 5 consecutive games with the same score"
+
+    def __init__(self):
+        super(Consistency, self).__init__()
+        self.counts = defaultdict(list)
+
+    def applies(self, player, game, opponent, ladder):
+        score = (game.blueScore, game.redScore) if player.name == game.bluePlayer else (game.redScore, game.blueScore)
+        counts = self.counts[player.name]
+        if counts and counts[0] == score:
+            counts.append(score)
+            if len(counts) == 5:
+                self.counts[player.name] = []
+                return True
+        else:
+            self.counts[player.name] = [score]
+
+        return False
+
+
+class BossFight(Achievement):
+    """
+    Achievement that can be won by beating the player whose name is contained in ~/boss.txt.
+    """
+    name = "Boss Fight"
+    description = "Defeat the Final Boss"
+
+    def __init__(self):
+        super(BossFight, self).__init__()
+        self.boss = None
+        if os.path.isfile("boss.txt"):
+            with open("boss.txt", "r") as f:
+                self.boss = f.readline().strip()
+
+    def applies(self, player, game, opponent, ladder):
+        if self.boss != None:
+            won = game.blueScore > game.redScore if player.name == game.bluePlayer else game.redScore > game.blueScore
+            return self.boss and self.boss == opponent.name and won
+        return False
+
+
+class Achievements(object):
+    def __init__(self):
+        self.achievements = []
+        for clz in Achievement.__subclasses__():
+            self.achievements.append(clz())
+
+    def getAllForGame(self, player, game, opponent, ladder):
+        '''
+        Identifies all achievements unlocked by player in game against opponent.
+        This method should be called AFTER Player.game() has been called with game for BOTH players.
+        '''
+        return [a.__class__ for a in self.achievements if a.applies(player, game, opponent, ladder)]
