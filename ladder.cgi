@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 
+from tntfl.web import serve
+from wsgi import ladder_ajax
 import cgi
-from tntfl.ladder import TableFootballLadder
-from tntfl.web import serve_template
-
 
 form = cgi.FieldStorage()
 
-ladder = TableFootballLadder("ladder.txt")
-serve_template("ladder.mako", ladder=ladder, base="",
+serve(ladder_ajax(
                sortCol=form['sortCol'].value if "sortCol" in form else None,
                sortOrder=form["sortOrder"].value if "sortOrder" in form else None,
-               showInactive=form["showInactive"].value if "showInactive" in form else 0)
+               showInactive=form["showInactive"].value if "showInactive" in form else 0))

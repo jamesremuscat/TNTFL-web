@@ -48,5 +48,21 @@ def game_show(gameTime):
         abort(404)
 
 
+@app.route("/ladder.cgi")
+def ladder_cgi():
+    form = request.form
+    return ladder_ajax(form['sortCol'] if "sortCol" in form else None,
+                       form["sortOrder"] if "sortOrder" in form else None,
+                       form["showInactive"] if "showInactive" in form else 0
+                       )
+
+
+def ladder_ajax(sortCol, sortOrder, showInactive):
+    return get_template("ladder.mako", ladder=getLadder(), base="",
+                        sortCol=sortCol,
+                        sortOrder=sortOrder,
+                        showInactive=showInactive
+                        )
+
 if __name__ == "__main__":
     app.run(debug=True)
