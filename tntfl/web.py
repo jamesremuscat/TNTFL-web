@@ -7,6 +7,13 @@ tl = TemplateLookup(directories=['templates'])
 
 
 def serve_template(templatename, **kwargs):
+    form = cgi.FieldStorage()
+    if "view" in form and form["view"].value == "json":
+        contentType = "application/json"
+    else:
+        contentType = "text.html"
+    print "Content-Type: {}".format(contentType)
+    print
     print get_template(templatename, **kwargs)
 
 

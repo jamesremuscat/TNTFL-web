@@ -1,5 +1,4 @@
-<%! base = "" %><%namespace name="blocks" file="blocks.mako" inheritable="True"/>Content-Type: text/html
-
+<%! base = "" %><%namespace name="blocks" file="blocks.mako" inheritable="True"/>
 <!DOCTYPE html>
 <html lang="en">
   <head>
