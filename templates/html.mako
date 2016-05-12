@@ -9,8 +9,8 @@
     <title>${self.attr.title}</title>
 
     <!-- Bootstrap -->
-    <link href="${self.attr.base}css/bootstrap.min.css" rel="stylesheet">
-    <link href="${self.attr.base}css/ladder.css" rel="stylesheet">
+    <link href="${self.attr.base}static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${self.attr.base}static/css/ladder.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -19,11 +19,11 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <script src="${self.attr.base}js/jquery.min.js"></script>
-    <script type="text/javascript" src="${self.attr.base}js/jquery.tablesorter.min.js"></script> 
-    <script type="text/javascript" src="${self.attr.base}js/jquery.flot.min.js"></script> 
-    <script type="text/javascript" src="${self.attr.base}js/jquery.flot.time.min.js"></script> 
-    <script type="text/javascript" src="${self.attr.base}js/jquery.floatThead.min.js"></script>
+    <script src="${self.attr.base}static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="${self.attr.base}static/js/jquery.tablesorter.min.js"></script> 
+    <script type="text/javascript" src="${self.attr.base}static/js/jquery.flot.min.js"></script> 
+    <script type="text/javascript" src="${self.attr.base}static/js/jquery.flot.time.min.js"></script> 
+    <script type="text/javascript" src="${self.attr.base}static/js/jquery.floatThead.min.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-default">
@@ -54,7 +54,7 @@
     ${self.body()}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="${self.attr.base}js/bootstrap.min.js"></script>
+    <script src="${self.attr.base}static/js/bootstrap.min.js"></script>
   </body>
 
 </html>
