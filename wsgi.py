@@ -108,5 +108,19 @@ def achievements():
                         achievements=OrderedDict(sorted(achievements.iteritems(), reverse=True, key=lambda t: t[1])))
 
 
+@app.route("/headtohead/<playerOne>/<playerTwo>/")
+def head_to_head(playerOne, playerTwo):
+    ladder = getLadder()
+    if playerOne.lower() in ladder.players and playerTwo.lower() in ladder.players:
+        return get_template("headtohead.mako",
+                            ladder=getLadder(),
+                            depth=2,
+                            player1=ladder.players[playerOne],
+                            player2=ladder.players[playerTwo]
+                            )
+    else:
+        abort(404)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
