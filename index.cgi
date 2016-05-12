@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-from tntfl.ladder import TableFootballLadder
-from tntfl.web import serve_template
+from tntfl.web import serve
+from wsgi import index
 
-ladder = TableFootballLadder("ladder.txt")
-serve_template("index.mako", ladder=ladder)
+serve(index())
