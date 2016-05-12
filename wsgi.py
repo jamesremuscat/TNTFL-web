@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from flask import abort, Flask, redirect, request
+from flask import abort, Flask, redirect, request, Response
 from tntfl.ladder import Game, TableFootballLadder
 from tntfl.achievements import Achievement
 from tntfl.web import get_template
@@ -14,6 +14,10 @@ def getLadder():
     return TableFootballLadder("ladder.txt")
 
 
+def jsonny(jsonText):
+    return Response(jsonText, content_type="application/json")
+
+
 @app.route("/")
 def index():
     return get_template("index.mako", ladder=getLadder())
@@ -25,7 +29,8 @@ def stats():
 
 
 @app.route("/game/add/", methods=['GET', 'POST'])
-def game_add():
+@app.route("/game/add/<respFormat>", methods=['GET', 'POST'])
+def game_add(respFormat=None):
     ladder = getLadder()
     form = request.form
     if "bluePlayer" in form and "redPlayer" in form:
@@ -33,21 +38,22 @@ def game_add():
             blueScore = form["blueScore"] if "blueScore" in form else 0
             game = Game(form["redPlayer"], redScore, form["bluePlayer"], blueScore, time.time())
             ladder.addAndWriteGame(game)
-            if "view" in form and form["view"] == "json":
-                return get_template("wrappedGame.mako", game=game)
+            if respFormat == "json":
+                return jsonny(get_template("json/wrappedGame.mako", game=game))
             else:
                 return redirect("/game/%.0f" % game.time)
+    abort(400)
 
 
 @app.route("/game/<int:gameTime>/")
-def game_show(gameTime):
-    found = False
+@app.route("/game/<int:gameTime>/<respFormat>")
+def game_show(gameTime, respFormat=None):
     for game in getLadder().games:
-        if game.time == gameTime and not found:
+        if game.time == gameTime:
+            if respFormat == 'json':
+                return jsonny(get_template("json/wrappedGame.mako", game=game))
             return get_template("wrappedGame.mako", game=game)
-            found = True
-    if not found:
-        abort(404)
+    abort(404)
 
 
 @app.route("/ladder.cgi")
@@ -67,6 +73,11 @@ def ladder_ajax(sortCol, sortOrder, showInactive):
                         )
 
 
+@app.route("/ladder/json")
+def ladder_json():
+    return jsonny(get_template("json/ladder.mako", ladder=getLadder()))
+
+
 @app.route("/recent.cgi")
 def recent_cgi():
     form = request.form
@@ -77,20 +88,33 @@ def recent_ajax(limit=10):
     return get_template("recent.mako", ladder=getLadder(), base="", limit=limit)
 
 
+@app.route("/recent/json")
+def recent_json():
+    return jsonny(get_template("json/recent.mako", ladder=getLadder(), base="", limit=10))
+
+
 @app.route("/player/<playerName>/")
-def player(playerName):
+@app.route("/player/<playerName>/<respFormat>")
+def player(playerName, respFormat=None):
     ladder = getLadder()
     if playerName.lower() in ladder.players:
-        return get_template("player.mako", player=ladder.players[playerName.lower()], ladder=ladder)
+        if respFormat == "json":
+            return jsonny(get_template("json/player.mako", player=ladder.players[playerName.lower()], ladder=ladder))
+        else:
+            return get_template("player.mako", player=ladder.players[playerName.lower()], ladder=ladder)
     else:
         abort(404)
 
 
 @app.route("/player/<playerName>/games/")
-def player_games(playerName):
+@app.route("/player/<playerName>/games/<respFormat>")
+def player_games(playerName, respFormat=None):
     ladder = getLadder()
     if playerName.lower() in ladder.players:
-        return get_template("playerGames.mako", player=ladder.players[playerName.lower()], ladder=ladder)
+        if respFormat == 'json':
+            return jsonny(get_template("json/playerGames.mako", player=ladder.players[playerName.lower()], ladder=ladder))
+        else:
+            return get_template("playerGames.mako", player=ladder.players[playerName.lower()], ladder=ladder)
     else:
         abort(404)
 
