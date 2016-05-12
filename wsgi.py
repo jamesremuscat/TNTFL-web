@@ -75,5 +75,23 @@ def recent_ajax(limit=10):
     return get_template("recent.mako", ladder=getLadder(), base="", limit=limit)
 
 
+@app.route("/player/<playerName>/")
+def player(playerName):
+    ladder = getLadder()
+    if playerName.lower() in ladder.players:
+        return get_template("player.mako", player=ladder.players[playerName.lower()], ladder=ladder)
+    else:
+        abort(404)
+
+
+@app.route("/player/<playerName>/games/")
+def player_games(playerName):
+    ladder = getLadder()
+    if playerName.lower() in ladder.players:
+        return get_template("playerGames.mako", player=ladder.players[playerName.lower()], ladder=ladder)
+    else:
+        abort(404)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
