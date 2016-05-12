@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 import cgi
-from tntfl.ladder import TableFootballLadder
-from tntfl.web import serve_template
+from tntfl.web import serve
+from wsgi import recent_ajax
 
 
 form = cgi.FieldStorage()
 
-ladder = TableFootballLadder("ladder.txt")
-serve_template("recent.mako", ladder=ladder, base="", limit=form["limit"].value if "limit" in form else 10)
+
+serve(recent_ajax(int(form["limit"].value) if "limit" in form else 10))

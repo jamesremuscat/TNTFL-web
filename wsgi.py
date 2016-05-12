@@ -64,5 +64,16 @@ def ladder_ajax(sortCol, sortOrder, showInactive):
                         showInactive=showInactive
                         )
 
+
+@app.route("/recent.cgi")
+def recent_cgi():
+    form = request.form
+    return recent_ajax(form['limit'] if 'limit' in form else 10)
+
+
+def recent_ajax(limit=10):
+    return get_template("recent.mako", ladder=getLadder(), base="", limit=limit)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
