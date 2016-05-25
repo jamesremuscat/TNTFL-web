@@ -28,7 +28,7 @@ from datetime import date
       </div>
       <div class="panel-body ">
         %for i in reversed(range(1, 13)):
-          %if (year > 2005 or i >= 7) and (year < date.today().year or i <= date.today().month):
+          %if (year > 2016 or i >= 5) and (year < date.today().year or i <= date.today().month):
             ${monthlyRanking(date(year, i, 1), date(year, i + 1, 1) if i < 12 else date(year+1, 1, 1))}
           %endif
         %endfor
@@ -52,7 +52,7 @@ from datetime import date
         </div>
         <div class="panel-body">
           <div class="row">
-            % for year in reversed(range(2005, date.today().year + 1)):
+            % for year in reversed(range(2016, date.today().year + 1)):
               % if loop.index % 4 == 0:
                 </div><div class="row">
               % endif
@@ -67,7 +67,8 @@ from datetime import date
     initHistorySlider(
       "#rangeSlider",
       ${timeRange[0]},
-      ${timeRange[1]}
+      ${timeRange[1]},
+      "${base}"
     );
 
     var dates = "${'?gamesFrom=%d&gamesTo=%d' % (timeRange[0], timeRange[1])}";

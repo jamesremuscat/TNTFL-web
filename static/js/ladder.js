@@ -122,6 +122,9 @@ function ladderTablePostProc(sortOpts, showInactive) {
 function reloadLadder(dates, base) {
   var sortOpts = getSortOptions("#ladder th");
   var showInactive = isShowInactive();
+  if (base === undefined) {
+    base = "";
+  }
 
   $("#ladderHolder").empty();
   var spinner = new Spinner().spin();
@@ -140,7 +143,10 @@ function updateLadderTo(range) {
   $("#rangeSlider").data("ionRangeSlider").update({from: range[0], to: range[1]});
 }
 
-function initHistorySlider(id, fromTime, toTime) {
+function initHistorySlider(id, fromTime, toTime, base) {
+  if (base === undefined) {
+    base = "";
+  }
   $(id).ionRangeSlider({
       type: "double",
       grid: true,
@@ -156,7 +162,7 @@ function initHistorySlider(id, fromTime, toTime) {
         var dates = "?gamesFrom=" + data.from + "&gamesTo=" + data.to;
         window.history.pushState("object or string", "Title", dates);
         //window.location.href = "." + dates;
-        reloadLadder(dates);
+        reloadLadder(dates, base);
       }
   });
 }
