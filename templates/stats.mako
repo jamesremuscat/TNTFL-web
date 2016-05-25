@@ -78,10 +78,14 @@ plotData = getGamesPerDay(ladder)
             <dd><b>${"{:.3f}".format(skillBounds['highest']['skill'])}</b> (<a href="${self.attr.base}player/${skillBounds['highest']['player'].name}">${skillBounds['highest']['player'].name}</a>, ${self.blocks.render("gameLink", time=skillBounds['highest']['time'], base=self.attr.base)})</dd>
             <dt>Lowest ever skill</dt>
             <dd><b>${"{:.3f}".format(skillBounds['lowest']['skill'])}</b> (<a href="${self.attr.base}player/${skillBounds['lowest']['player'].name}">${skillBounds['lowest']['player'].name}</a>, ${self.blocks.render("gameLink", time=skillBounds['lowest']['time'], base=self.attr.base)})</dd>
+              % if streaks['win']['player'] is not None:
             <dt>Longest winning streak</dt>
             <dd><b>${streaks['win']['streak'].count}</b> (<a href="${self.attr.base}player/${streaks['win']['player'].name}">${streaks['win']['player'].name}</a>)</dd>
+              % endif
+              % if streaks['lose']['player'] is not None:
             <dt>Longest losing streak</dt>
             <dd><b>${streaks['lose']['streak'].count}</b> (<a href="${self.attr.base}player/${streaks['lose']['player'].name}">${streaks['lose']['player'].name}</a>)</dd>
+                % endif
           </dl>
 % else:
     <p>No records set!</p>
