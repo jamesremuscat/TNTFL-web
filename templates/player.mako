@@ -79,7 +79,7 @@ rankChangeClass = "positive" if rankChange > 0 else "negative" if rankChange < 0
       </div>
       <div class="panel-body achievement-${ach.__name__}">
         ${len(games)}
-        <img src="${base}img/arrow-down.png"
+        <img src="${base}static/img/arrow-down.png"
           id="achievement-${ach.__name__}-arrow"
           onclick="togglecollapse('achievement-${ach.__name__}', '${base}')"
         />
