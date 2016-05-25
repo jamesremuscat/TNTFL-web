@@ -48,7 +48,7 @@ from datetime import datetime
         <li><a href="${self.attr.base}stats/">Stats</a></li>
         <li><a href="${self.attr.base}speculate/">Speculate</a></li>
         <li><a href="${self.attr.base}api/">API</a></li>
-        <li><a href="${self.attr.base}historic.cgi">Slice</a></li>
+        <li><a href="${self.attr.base}historic/">Slice</a></li>
       </ul>
 
         <form class="navbar-form navbar-right game-entry" method="post" action="${self.attr.base}game/add/">

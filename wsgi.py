@@ -103,6 +103,7 @@ def recent_json():
 
 
 @app.route("/historic.cgi")
+@app.route("/historic/")
 def historic():
     form = request.form
     if "gamesFrom" in form and "gamesTo" in form:
