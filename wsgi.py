@@ -121,7 +121,7 @@ def historic():
 
 
 def historic_range(timeRange):
-    return get_template("historic.mako", timeRange=timeRange)
+    return get_template("historic.mako", base="../", timeRange=timeRange)
 
 
 @app.route("/player/<playerName>/")
