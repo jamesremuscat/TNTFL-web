@@ -63,17 +63,21 @@ def ladder_cgi():
         timeRange = (int(form["gamesFrom"]), int(form["gamesTo"]))
     else:
         timeRange = None
-        print request
+    if "base" in form:
+        base = form["base"]
+    else:
+        base = ""
     return ladder_ajax(
         form['sortCol'] if "sortCol" in form else None,
         form["sortOrder"] if "sortOrder" in form else None,
         form["showInactive"] if "showInactive" in form else 0,
-        timeRange=timeRange
+        timeRange=timeRange,
+        base=base
     )
 
 
-def ladder_ajax(sortCol, sortOrder, showInactive, timeRange=None):
-    return get_template("ladder.mako", ladder=getLadder(timeRange), base="",
+def ladder_ajax(sortCol, sortOrder, showInactive, timeRange=None, base=""):
+    return get_template("ladder.mako", ladder=getLadder(timeRange), base=base,
                         sortCol=sortCol,
                         sortOrder=sortOrder,
                         showInactive=showInactive

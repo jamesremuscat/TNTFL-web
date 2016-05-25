@@ -14,11 +14,17 @@ if "gamesFrom" in form and "gamesTo" in form:
 else:
     timeRange = None
 
+if "base" in form:
+    base = form["base"]
+else:
+    base = ""
+
 serve(
     ladder_ajax(
         sortCol=form['sortCol'].value if "sortCol" in form else None,
         sortOrder=form["sortOrder"].value if "sortOrder" in form else None,
         showInactive=form["showInactive"].value if "showInactive" in form else 0,
-        timeRange=timeRange
+        timeRange=timeRange,
+        base=base
     )
 )

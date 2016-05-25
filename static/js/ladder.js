@@ -129,7 +129,7 @@ function reloadLadder(dates, base) {
   $("#ladderHolder").empty();
   var spinner = new Spinner().spin();
   $("#ladderHolder").append(spinner.el);
-  $("#ladderHolder").load(base + "ladder.cgi" + dates,
+  $("#ladderHolder").load(base + "ladder.cgi" + dates + "&base=" + encodeURIComponent(base),
     function() {
       ladderTablePostProc(sortOpts, showInactive);
     }
