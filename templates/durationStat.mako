@@ -1,3 +1,4 @@
+<%page args="value, base, toDate, fromDate"/>
 <%namespace name="blocks" file="blocks.mako"/>${value}
 % if toDate > 0:
 <div class="date">

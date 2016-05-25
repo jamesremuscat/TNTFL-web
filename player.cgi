@@ -14,4 +14,3 @@ if "player" in form:
             serve(player_games(playerName))
     else:
         serve(player(playerName))
-

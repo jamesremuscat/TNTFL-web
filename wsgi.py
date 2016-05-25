@@ -1,17 +1,17 @@
-from collections import OrderedDict
+from datetime import date
 from flask import abort, Flask, redirect, request, Response
 from tntfl.ladder import Game, TableFootballLadder
-from tntfl.achievements import Achievement
 from tntfl.web import get_template
 
 import time
+import tntfl.templateUtils as utils
 
 
 app = Flask(__name__)
 
 
-def getLadder():
-    return TableFootballLadder("ladder.txt")
+def getLadder(timeRange=None):
+    return TableFootballLadder("ladder.txt", timeRange=timeRange)
 
 
 def jsonny(jsonText):
@@ -36,10 +36,9 @@ def game_add(respFormat=None):
     if "bluePlayer" in form and "redPlayer" in form:
             redScore = form["redScore"] if "redScore" in form else 0
             blueScore = form["blueScore"] if "blueScore" in form else 0
-            game = Game(form["redPlayer"], redScore, form["bluePlayer"], blueScore, time.time())
-            ladder.addAndWriteGame(game)
+            game = ladder.addAndWriteGame(form["redPlayer"], redScore, form["bluePlayer"], blueScore)
             if respFormat == "json":
-                return jsonny(get_template("json/wrappedGame.mako", game=game))
+                return jsonny(get_template("json/wrappedGame.mako", game=game, ladder=ladder))
             else:
                 return redirect("/game/%.0f" % game.time)
     abort(400)
@@ -48,25 +47,33 @@ def game_add(respFormat=None):
 @app.route("/game/<int:gameTime>/")
 @app.route("/game/<int:gameTime>/<respFormat>")
 def game_show(gameTime, respFormat=None):
-    for game in getLadder().games:
+    ladder = getLadder()
+    for game in ladder.games:
         if game.time == gameTime:
             if respFormat == 'json':
-                return jsonny(get_template("json/wrappedGame.mako", game=game))
-            return get_template("wrappedGame.mako", game=game)
+                return jsonny(get_template("json/wrappedGame.mako", game=game, ladder=ladder))
+            return get_template("wrappedGame.mako", game=game, ladder=ladder)
     abort(404)
 
 
 @app.route("/ladder.cgi")
 def ladder_cgi():
-    form = request.form
-    return ladder_ajax(form['sortCol'] if "sortCol" in form else None,
-                       form["sortOrder"] if "sortOrder" in form else None,
-                       form["showInactive"] if "showInactive" in form else 0
-                       )
+    form = request.args
+    if "gamesFrom" in form and "gamesTo" in form:
+        timeRange = (int(form["gamesFrom"]), int(form["gamesTo"]))
+    else:
+        timeRange = None
+        print request
+    return ladder_ajax(
+        form['sortCol'] if "sortCol" in form else None,
+        form["sortOrder"] if "sortOrder" in form else None,
+        form["showInactive"] if "showInactive" in form else 0,
+        timeRange=timeRange
+    )
 
 
-def ladder_ajax(sortCol, sortOrder, showInactive):
-    return get_template("ladder.mako", ladder=getLadder(), base="",
+def ladder_ajax(sortCol, sortOrder, showInactive, timeRange=None):
+    return get_template("ladder.mako", ladder=getLadder(timeRange), base="",
                         sortCol=sortCol,
                         sortOrder=sortOrder,
                         showInactive=showInactive
@@ -85,12 +92,35 @@ def recent_cgi():
 
 
 def recent_ajax(limit=10):
-    return get_template("recent.mako", ladder=getLadder(), base="", limit=limit)
+    ladder = getLadder()
+    return get_template("recent.mako", ladder=ladder, games=ladder.games, base="", limit=limit)
 
 
 @app.route("/recent/json")
 def recent_json():
-    return jsonny(get_template("json/recent.mako", ladder=getLadder(), base="", limit=10))
+    ladder = getLadder()
+    return jsonny(get_template("json/recent.mako", ladder=ladder, games=ladder.games, base="", limit=10))
+
+
+@app.route("/historic.cgi")
+def historic():
+    form = request.form
+    if "gamesFrom" in form and "gamesTo" in form:
+        fromTime = int(form["gamesFrom"])
+        toTime = int(form["gamesTo"])
+        timeRange = (fromTime, toTime)
+    else:
+        epoch = date.fromtimestamp(0)
+        startdate = date.today().replace(day=1)
+        enddate = startdate.replace(month=startdate.month + 1) if startdate.month < 12 else date(startdate.year + 1, 1, 1)
+        start = (startdate - epoch).total_seconds()
+        end = (enddate - epoch).total_seconds()
+        timeRange = (start, end)
+    return historic_range(timeRange)
+
+
+def historic_range(timeRange):
+    return get_template("historic.mako", timeRange=timeRange)
 
 
 @app.route("/player/<playerName>/")
@@ -111,10 +141,11 @@ def player(playerName, respFormat=None):
 def player_games(playerName, respFormat=None):
     ladder = getLadder()
     if playerName.lower() in ladder.players:
+        player = ladder.players[playerName.lower()]
         if respFormat == 'json':
-            return jsonny(get_template("json/playerGames.mako", player=ladder.players[playerName.lower()], ladder=ladder))
+            return jsonny(get_template("json/playerGames.mako", pageTitle="%s's games" % player.name, games=player.games, ladder=ladder))
         else:
-            return get_template("playerGames.mako", player=ladder.players[playerName.lower()], ladder=ladder)
+            return get_template("playerGames.mako", pageTitle="%s's games" % player.name, games=player.games, ladder=ladder)
     else:
         abort(404)
 
@@ -122,14 +153,10 @@ def player_games(playerName, respFormat=None):
 @app.route("/achievements/")
 def achievements():
     ladder = getLadder()
-    achievements = {}
-
-    for ach in Achievement.achievements:
-        achievements[ach.__class__] = len(ach.players)
 
     return get_template("achievements.mako",
                         ladder=ladder,
-                        achievements=OrderedDict(sorted(achievements.iteritems(), reverse=True, key=lambda t: t[1])))
+                        achievements=sorted(ladder.getAchievements().iteritems(), reverse=True, key=lambda t: t[1]))
 
 
 @app.route("/headtohead/<playerOne>/<playerTwo>/")
@@ -142,6 +169,25 @@ def head_to_head(playerOne, playerTwo):
                             player1=ladder.players[playerOne],
                             player2=ladder.players[playerTwo]
                             )
+    else:
+        abort(404)
+
+
+@app.route("/headtohead/<playerOne>/<playerTwo>/games")
+def head_to_head_games(playerOne, playerTwo):
+    ladder = getLadder()
+    if playerOne.lower() in ladder.players and playerTwo.lower() in ladder.players:
+        player1=ladder.players[playerOne]
+        player2=ladder.players[playerTwo]
+        games = utils.getSharedGames(player1, player2)
+        return get_template(
+            "headtoheadgames.mako",
+            ladder=getLadder(),
+            depth=2,
+            player1=player1,
+            player2=player2,
+            games=games
+        )
     else:
         abort(404)
 

@@ -6,6 +6,7 @@ from tntfl.ladder import Game, TableFootballLadder
 from tntfl.web import serve
 from wsgi import game_add, game_show
 
+
 form = cgi.FieldStorage()
 
 if "method" in form:

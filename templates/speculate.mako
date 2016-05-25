@@ -1,5 +1,7 @@
-<%! title = "Speculate | Table Football Ladder 3.0" %>
-<%! base = "../" %>
+<%!
+title = "Speculate | "
+base = "../"
+%>
 <%inherit file="html.mako" />
 <div class="container-fluid">
   <div class="row">
@@ -37,9 +39,7 @@
           </form>
 % if len(games) > 0:
           <hr />
-% for game in games:
-    ${self.blocks.render("game", game=game, base=self.attr.base)}
-% endfor
+            ${self.blocks.render("gameList", games=games, base=self.attr.base, speculative=True)}
           <hr />
           <a href=".">Reset speculation</a>
 % endif
