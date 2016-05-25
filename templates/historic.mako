@@ -1,4 +1,7 @@
-<%! title = "" %>
+<%!
+    title = ""
+    base = "../"
+%>
 <%!
 from datetime import date
 %>
@@ -68,6 +71,6 @@ from datetime import date
     );
 
     var dates = "${'?gamesFrom=%d&gamesTo=%d' % (timeRange[0], timeRange[1])}";
-    reloadLadder(dates);
+    reloadLadder(dates, "${base}");
   </script>
 </div>

@@ -19,11 +19,11 @@ function togglecollapse(name, base){
   var image = document.getElementById(name + '-arrow');
   if (element.style.display == "block"){
       element.style.display = "none";
-      image.src = base + "img/arrow-down.png";
+      image.src = base + "static/img/arrow-down.png";
   }
   else{
       element.style.display = "block";
-      image.src = base + "img/arrow-up.png";
+      image.src = base + "static/img/arrow-up.png";
   }
 }
 
@@ -119,14 +119,14 @@ function ladderTablePostProc(sortOpts, showInactive) {
   }
 }
 
-function reloadLadder(dates) {
+function reloadLadder(dates, base) {
   var sortOpts = getSortOptions("#ladder th");
   var showInactive = isShowInactive();
 
   $("#ladderHolder").empty();
   var spinner = new Spinner().spin();
   $("#ladderHolder").append(spinner.el);
-  $("#ladderHolder").load("ladder.cgi" + dates,
+  $("#ladderHolder").load(base + "ladder.cgi" + dates,
     function() {
       ladderTablePostProc(sortOpts, showInactive);
     }
