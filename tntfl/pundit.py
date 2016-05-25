@@ -279,7 +279,6 @@ class FirstGameSince(FactChecker):
         return None
 
 class Pundit(object):
-    _factCheckers = []
 
     def _addSubClasses(self, clz):
         for sclz in clz.__subclasses__():
@@ -287,6 +286,7 @@ class Pundit(object):
             self._addSubClasses(sclz)
 
     def __init__(self):
+        self._factCheckers = []
         self._addSubClasses(FactChecker)
 
     def getAllForGame(self, player, game, opponent):
