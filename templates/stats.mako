@@ -59,7 +59,11 @@ plotData = getGamesPerDay(ladder)
             <dt>Total players</dt>
             <dd>${len(ladder.players)}</dd>
             <dt>Active players</dt>
-            <dd>${activePlayers} (${"{:.2%}".format(float(activePlayers) / len(ladder.players))})</dd>
+            <dd>${activePlayers}
+                % if activePlayers > 0:
+                (${"{:.2%}".format(float(activePlayers) / len(ladder.players))})
+                % endif
+            </dd>
           </dl>
         </div>
       </div>
@@ -68,6 +72,7 @@ plotData = getGamesPerDay(ladder)
           <h2 class="panel-title">Records</h2>
         </div>
         <div class="panel-body">
+% if skillBounds['highest']['player'] is not None:
           <dl class="dl-horizontal">
             <dt>Highest ever skill</dt>
             <dd><b>${"{:.3f}".format(skillBounds['highest']['skill'])}</b> (<a href="${self.attr.base}player/${skillBounds['highest']['player'].name}">${skillBounds['highest']['player'].name}</a>, ${self.blocks.render("gameLink", time=skillBounds['highest']['time'], base=self.attr.base)})</dd>
@@ -78,6 +83,9 @@ plotData = getGamesPerDay(ladder)
             <dt>Longest losing streak</dt>
             <dd><b>${streaks['lose']['streak'].count}</b> (<a href="${self.attr.base}player/${streaks['lose']['player'].name}">${streaks['lose']['player'].name}</a>)</dd>
           </dl>
+% else:
+    <p>No records set!</p>
+% endif
         </div>
       </div>
     </div>
