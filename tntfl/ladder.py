@@ -64,7 +64,7 @@ class TableFootballLadder(object):
     # Number of days inactivity after which players are considered inactive
     DAYS_INACTIVE = 60
 
-    def __init__(self, ladderFilePath, useCache = True, timeRange=None):
+    def __init__(self, ladderFilePath, useCache = True, timeRange=None, postGameHooks=[]):
         self.games = []
         self.players = {}
         self.achievements = Achievements()
@@ -74,6 +74,7 @@ class TableFootballLadder(object):
         self._ladderTime = {'now': timeRange == None, 'range': timeRange}
         self._theTime = time.time()
         self._gameStore.loadGames(self, self._ladderTime)
+        self.postGameGooks = postGameHooks
 
     def getPlayer(self, name):
         if name not in self.players:
@@ -187,6 +188,8 @@ class TableFootballLadder(object):
             game = Game(redPlayer, redScore, bluePlayer, blueScore, int(time.time()))
             self.addGame(game)
             self._gameStore.writeGame(game)
+            for hook in self.postGameGooks:
+                hook(game)
         return game
 
     def deleteGame(self, gameTime, deletedBy):

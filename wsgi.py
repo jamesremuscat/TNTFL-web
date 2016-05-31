@@ -4,6 +4,7 @@ from tntfl.ladder import Game, TableFootballLadder
 from tntfl.web import get_template
 
 import time
+import tntfl.hooks as hooks
 import tntfl.templateUtils as utils
 
 
@@ -11,7 +12,7 @@ app = Flask(__name__)
 
 
 def getLadder(timeRange=None):
-    return TableFootballLadder("ladder.txt", timeRange=timeRange)
+    return TableFootballLadder("ladder.txt", timeRange=timeRange, postGameHooks=[hooks.publishToSlack])
 
 
 def jsonny(jsonText):
