@@ -3,7 +3,7 @@ import os
 
 
 def publishToSlack(game):
-    if "SLACK_WEBHOOK_URL" in os.environ:
+    if "SLACK_WEBHOOK_URL" in os.environ and "TNTFL_ROOT_URL" in os.environ:
         webhookURL = os.environ["SLACK_WEBHOOK_URL"]
         rootURL = os.environ["TNTFL_ROOT_URL"]
         title = "{redPlayer} {redScore}-{blueScore} {bluePlayer}".format(
