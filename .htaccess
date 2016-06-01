@@ -32,6 +32,6 @@ RewriteRule ^api(.cgi)?/ api.cgi
 RewriteRule ^stats(.cgi)?/ stats.cgi 
 RewriteRule ^recent(.cgi)?/ recent.cgi
 RewriteRule ^speculate(.cgi)?/ speculate.cgi
-RewriteRule ^historic(.cgi)?/ speculate.cgi
+RewriteRule ^historic(.cgi)?/ historic.cgi
 RewriteRule ^achievements(.cgi)?/ achievements.cgi
 
