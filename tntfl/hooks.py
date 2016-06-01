@@ -48,6 +48,7 @@ def publishToSlack(game):
         message = {
             "attachments": [
                 {
+                    "fallback": title,
                     "pretext": "Final score:",
                     "title": title,
                     "title_link": title_url,
