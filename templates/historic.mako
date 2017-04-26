@@ -14,7 +14,7 @@ from datetime import date
     end = (monthEnd - epoch).total_seconds()
     %>
   <div>
-    <a href="#" onClick='updateLadderTo([${start}, ${end}])'>
+    <a href="#" onClick='updateLadderTo([${start}, ${end}], "${base}")'>
       ${monthStart.strftime('%B')}
     </a>
   </div>
