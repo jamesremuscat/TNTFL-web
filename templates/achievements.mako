@@ -1,6 +1,6 @@
 <%!
 title = "Achievements | "
-base = ""
+base = "../"
 %>
 <%inherit file="html.mako" />
 <%namespace name="blocks" file="blocks.mako" />
