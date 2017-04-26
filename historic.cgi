@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import cgi
+from datetime import date
 from tntfl.web import serve
 from wsgi import historic_range
 

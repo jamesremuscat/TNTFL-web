@@ -66,6 +66,7 @@ from datetime import date
   <script type="text/javascript">
     initHistorySlider(
       "#rangeSlider",
+      ${minDate},
       ${timeRange[0]},
       ${timeRange[1]},
       "${base}"

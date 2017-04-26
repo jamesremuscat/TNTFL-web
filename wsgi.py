@@ -126,7 +126,14 @@ def historic():
 
 
 def historic_range(timeRange):
-    return get_template("historic.mako", base="../", timeRange=timeRange)
+    ladder = getLadder()
+    first_game = ladder.games[0] if ladder.games else None
+    if first_game:
+        min_date = date.fromtimestamp(first_game.time).replace(day=1)
+    else:
+        min_date = date.today().replace(day=1)
+    epoch = date.fromtimestamp(0)
+    return get_template("historic.mako", base="../", timeRange=timeRange, minDate=(min_date - epoch).total_seconds())
 
 
 @app.route("/player/<playerName>/")

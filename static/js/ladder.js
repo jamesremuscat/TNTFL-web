@@ -143,7 +143,7 @@ function updateLadderTo(range, base) {
   $("#rangeSlider").data("ionRangeSlider").update({from: range[0], to: range[1]});
 }
 
-function initHistorySlider(id, fromTime, toTime, base) {
+function initHistorySlider(id, min, fromTime, toTime, base) {
   if (base === undefined) {
     base = "";
   }
@@ -151,7 +151,7 @@ function initHistorySlider(id, fromTime, toTime, base) {
       type: "double",
       grid: true,
       force_edges: true,
-      min: moment(1120176000, 'X').format('X'),
+      min: moment(min, 'X').format('X'),
       max: moment().format('X'),
       from: fromTime,
       to: toTime,
